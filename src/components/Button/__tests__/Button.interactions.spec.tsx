@@ -62,12 +62,12 @@ test.describe(
 
             await expect(button).not.toBeFocused()
 
+            // First Tab → should move focus to button
             await page.keyboard.press('Tab')
-
             await expect(button).toBeFocused()
 
+            // Second Tab → should move focus away from button
             await page.keyboard.press('Tab')
-
             await expect(button).not.toBeFocused()
           })
 
@@ -79,10 +79,12 @@ test.describe(
             await button.focus()
             await button.press('Enter')
 
+            // Updating component props simulates transition to loading
             await button.update(
               <Button isLoading={true} label={defaultProps.label} />
             )
 
+            // Button should drop focus once it becomes loading
             expect(button).not.toBeFocused()
           })
         }
@@ -109,6 +111,8 @@ test.describe(
 
             await expect(button).toBeDisabled()
 
+            // `force: true` bypasses Playwright’s default disabled check;
+            // verifies our component itself blocks the click
             await button.click({ force: true })
 
             expect(clicked).toBe(false)
@@ -121,13 +125,13 @@ test.describe(
             let clicked = false
             let isLoading = true
 
-            // Control timers in the browser context
+            // Mock out time in browser context (deterministic async)
             await page.clock.install({ time: 0 })
 
-            // Create a page-side mutable flag managed by a page-side timer
+            // Set up a page-side variable that flips after timeout
             await TestUtils.setupLoadingTimer(page)
 
-            // Initial mount with current page-side value (will be true at t=0)
+            // Initial mount: isLoading = true
             const button = await mount(
               <Button
                 isLoading={isLoading}
@@ -138,26 +142,23 @@ test.describe(
 
             await expect(button).toBeDisabled()
 
+            // Click forced while disabled → should not fire
             await button.click({ force: true })
-
             expect(clicked).toBe(false)
 
-            // still loading -> still disabled
+            // Advance time: still loading after 500ms
             await page.clock.runFor(500)
-
             isLoading = await TestUtils.getIsLoading(page)
-
             await button.update(
               <Button isLoading={isLoading} label={defaultProps.label} />
             )
-
             await expect(button).toBeDisabled()
 
-            // timeout fires -> loading ends
+            // Advance time until timeout → loading ends
             await page.clock.runFor(1000)
-
             isLoading = await TestUtils.getIsLoading(page)
 
+            // Re-render with updated state (now enabled)
             await button.update(
               <Button
                 isLoading={isLoading}
@@ -166,11 +167,11 @@ test.describe(
               />
             )
 
-            // Now enabled; click should fire
+            // Button should now be enabled; subsequent clicks fire
             await expect(button).not.toBeDisabled()
           })
 
-          test('does not focus via keyboard when disabled or loading', async ({
+          test('does not focus via keyboard when disabled', async ({
             mount,
             page
           }) => {
@@ -179,27 +180,26 @@ test.describe(
             )
 
             await page.keyboard.press('Tab')
-
             await expect(button).not.toBeFocused()
 
+            // Explicit .focus() call is ignored when disabled
             await button.focus()
-
             await expect(button).not.toBeFocused()
+          })
 
-            await button.update(
-              <Button
-                disabled={false}
-                isLoading={true}
-                label={defaultProps.label}
-              />
+          test('does not focus via keyboard when loading', async ({
+            mount,
+            page
+          }) => {
+            const button = await mount(
+              <Button isLoading={true} label={defaultProps.label} />
             )
 
             await page.keyboard.press('Tab')
-
             await expect(button).not.toBeFocused()
 
+            // Explicit .focus() call is ignored when loading
             await button.focus()
-
             await expect(button).not.toBeFocused()
           })
         }

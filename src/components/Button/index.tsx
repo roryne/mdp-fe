@@ -24,37 +24,37 @@ const ButtonBase = React.forwardRef<HTMLButtonElement, TButtonProps>(
     },
     ref
   ) => {
-    const ariaLabel = restProps['aria-label'] || label
     const classes = HtmlUtils.getClassName(
       styles.button,
       styles[`btn--${variant}`],
       styles[`btn--${size}`],
       restProps.className
     )
-    const isDisabled = restProps.disabled || isLoading
-    const hiddenClass = isLoading ? styles.hidden : ''
 
     return (
       <button
-        {...restProps}
         aria-busy={isLoading || undefined}
-        aria-label={ariaLabel}
         className={classes}
-        disabled={isDisabled}
+        disabled={restProps.disabled || isLoading}
         ref={ref}
+        {...restProps}
       >
-        <Icon isHidden={isLoading} icon={iconLeft} testId="btn--icon-left" />
-        <span className={hiddenClass}>{label}</span>
+        <Icon data-test="btn--icon-left" icon={iconLeft} isHidden={isLoading} />
+        <span className={getHiddenClass(isLoading)}>{label}</span>
         <Spinner shouldShow={isLoading} />
-        <Icon isHidden={isLoading} icon={iconRight} testId="btn--icon-right" />
+        <Icon
+          data-test="btn--icon-right"
+          icon={iconRight}
+          isHidden={isLoading}
+        />
       </button>
     )
   }
-) as TButton
+)
 
 ButtonBase.displayName = 'Button'
 
-const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, testId }) => {
+const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, ...restProps }) => {
   if (!icon) return null
 
   const className = HtmlUtils.getClassName(
@@ -63,7 +63,7 @@ const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, testId }) => {
   )
 
   return (
-    <span aria-hidden="true" className={className} data-testid={testId}>
+    <span aria-hidden="true" className={className} {...restProps}>
       {icon}
     </span>
   )
@@ -71,20 +71,24 @@ const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, testId }) => {
 
 Icon.displayName = 'Button Icon'
 
-const Spinner: React.FC<TButtonSpinnerProps> = ({ shouldShow }) => {
+const Spinner: React.FC<TButtonSpinnerProps> = ({
+  shouldShow,
+  ...restProps
+}) => {
   if (!shouldShow) return null
 
   return (
     <span
       aria-hidden="true"
       className={styles.spinner}
-      data-testid="btn--spinner"
+      data-test="btn--spinner"
+      {...restProps}
     />
   )
 }
 
 Spinner.displayName = 'Button Spinner'
 
-const Button = Object.assign(ButtonBase, { Icon, Spinner })
+const Button: TButton = Object.assign(ButtonBase, { Icon, Spinner })
 
 export default Button

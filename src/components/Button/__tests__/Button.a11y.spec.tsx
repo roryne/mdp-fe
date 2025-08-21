@@ -37,22 +37,24 @@ test.describe(
 
         const button = page.getByRole('button', { name: ariaLabel })
 
-        await expect(button).toBeVisible()
+        await expect(button).toHaveText(defaultProps.label)
       })
 
       test('aria-hidden buttons are not in accessibility tree', async ({
         mount,
         page
       }) => {
-        await mount(<Button label={defaultProps.label} aria-hidden="true" />)
+        await mount(<Button aria-hidden="true" label={defaultProps.label} />)
 
+        // aria-hidden should fully remove the element from the a11y tree,
+        // so role query must return nothing
         await expect(
           page.getByRole('button', { name: defaultProps.label })
         ).toHaveCount(0)
       })
 
       test('loading button exposes busy state', async ({ mount, page }) => {
-        await mount(<Button label={defaultProps.label} isLoading />)
+        await mount(<Button isLoading label={defaultProps.label} />)
 
         const button = page.getByRole('button', { name: defaultProps.label })
         await expect(button).toHaveAttribute('aria-busy', 'true')
@@ -63,6 +65,8 @@ test.describe(
         { tag: ['@visual'] },
         async ({ mount, page }) => {
           await mount(<Button label={defaultProps.label} />)
+
+          // Forces Windows "high contrast" media feature
           await page.emulateMedia({ contrast: 'more' })
 
           const button = page.getByRole('button', { name: defaultProps.label })
@@ -71,6 +75,7 @@ test.describe(
         }
       )
 
+      // Run axe-core a11y checks across all prop combinations
       for (const props of allCases) {
         const title = TestUtils.getTitleFromCases({
           props,
@@ -82,16 +87,16 @@ test.describe(
         test(`axe (default) - ${title}`, async ({ mount, page }) => {
           await mount(<Button {...props} label={defaultProps.label} />)
 
+          // Restrict to WCAG 2 A/AA rules only
           const results = await new AxeBuilder({ page })
             .withTags(['wcag2a', 'wcag2aa'])
             .analyze()
 
-          // If violations exist, fail the test
           expect(results.violations).toEqual([])
         })
       }
 
-      // Focused state
+      // Same axe checks, but after focusing the button
       for (const props of allCases) {
         const title = TestUtils.getTitleFromCases({
           props,
@@ -101,6 +106,7 @@ test.describe(
         })
 
         test(`axe (focused) - ${title}`, async ({ mount, page }) => {
+          // Disabled/loading buttons cannot receive focus → skip them
           if (props.disabled || props.isLoading) return
 
           await mount(<Button {...props} label={defaultProps.label} />)
@@ -115,7 +121,7 @@ test.describe(
         })
       }
 
-      // Hover state
+      // Same axe checks, but after hovering the button
       for (const props of allCases) {
         const title = TestUtils.getTitleFromCases({
           props,

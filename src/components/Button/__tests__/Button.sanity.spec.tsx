@@ -3,6 +3,7 @@ import { TestUtils } from '@/utils'
 import Button from '../'
 import { allCases, defaultProps, viewports } from './common'
 
+// Minimal mock ThemeProvider to wrap buttons for theme-related tests
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => (
   <div data-mock-theme>{children}</div>
 )
@@ -14,6 +15,7 @@ test.describe(
   },
   () => {
     test.describe('Sanity', () => {
+      // Basic render + console error check across multiple viewports
       for (const vp of viewports) {
         test(`correctly renders ${vp.name} without errors`, async ({
           mount,
@@ -22,6 +24,7 @@ test.describe(
           const messages: string[] = []
           const { height, width } = vp
 
+          // Collect all console messages
           page.on('console', (msg) => messages.push(msg.text()))
 
           await page.setViewportSize({ width, height })
@@ -31,12 +34,14 @@ test.describe(
           const button = page.locator('button')
           await expect(button).toHaveCount(1)
 
+          // Fail test if any console message contains "error"
           expect(
             messages.filter((m) => m.toLowerCase().includes('error'))
           ).toHaveLength(0)
         })
       }
 
+      // Render each prop combination to catch warnings/errors
       for (const props of allCases) {
         const title = TestUtils.getTitleFromCases({
           props,
@@ -48,7 +53,7 @@ test.describe(
         test(`renders ${title} without warnings`, async ({ mount, page }) => {
           const errors: string[] = []
 
-          // Listen for console messages
+          // Capture console errors/warnings during mount
           page.on('console', (msg) => {
             if (msg.type() === 'error' || msg.type() === 'warning') {
               errors.push(msg.text())
@@ -56,12 +61,13 @@ test.describe(
           })
 
           await mount(<Button {...props} />)
-          await page.waitForTimeout(50)
+          await page.waitForTimeout(50) // brief delay to catch async logs
 
           expect(errors).toHaveLength(0)
         })
       }
 
+      // Responsive render + screenshot checks
       for (const vp of viewports) {
         test(`renders correctly at ${vp.width}x${vp.height}`, async ({
           page,
@@ -71,12 +77,12 @@ test.describe(
 
           const button = await mount(<Button label="Responsive test" />)
 
-          // At minimum: should be visible, not clipped, not overflowing
           await expect(button).toBeVisible()
           await expect(button).toHaveScreenshot()
         })
       }
 
+      // Stress test: render 500 buttons simultaneously
       test('renders a large number of buttons without console errors', async ({
         mount,
         page
@@ -92,11 +98,13 @@ test.describe(
         const count = await page.locator('button').count()
         expect(count).toBe(500)
 
+        // Ensure no console errors occurred
         expect(
           messages.filter((m) => m.toLowerCase().includes('error'))
         ).toHaveLength(0)
       })
 
+      // Rapid prop changes to verify stability / no console errors
       test('rapid state changes do not throw errors', async ({
         mount,
         page
@@ -105,6 +113,7 @@ test.describe(
 
         page.on('console', (msg) => messages.push(msg.text()))
 
+        // Temporary ref object for button
         const btnRef: React.Ref<HTMLButtonElement> | null = { current: null }
 
         await mount(
@@ -118,6 +127,7 @@ test.describe(
 
         if (btnRef === null) throw new Error('Button ref not accessible')
 
+        // Simulate rapid toggling of loading/disabled states
         for (let i = 0; i < 50; i++) {
           btnRef.current?.setAttribute('data-loading', `${i % 2 === 0}`)
           btnRef.current?.setAttribute('disabled', `${i % 3 === 0}`)
@@ -128,15 +138,16 @@ test.describe(
         ).toHaveLength(0)
       })
 
+      // Theme support placeholder
       test.describe('Theme support', { tag: ['@theme'] }, () => {
-        // When theming is implemented, expand this matrix
+        // TODO: Expand when theming is implemented
         const themes = ['light', 'dark'] // extend with highContrast, custom, etc.
 
         for (const theme of themes) {
           test.skip(`renders correctly in ${theme} theme`, async ({
             mount
           }) => {
-            // TODO: Replace with real theme provider once implemented
+            // Mount wrapped in mock ThemeProvider
             const button = await mount(
               <ThemeProvider>
                 <Button label="Theme test" />
