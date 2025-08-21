@@ -1,0 +1,76 @@
+import { Canvas, Controls, Meta, Story } from '@storybook/addon-docs/blocks'
+import { StorybookExample, StorybookSection } from '@/storybook/components'
+import meta, * as ButtonStories from './Button.stories'
+
+<Meta of={meta} title="Components/Button" />
+
+# Button
+
+The `Button` component is a flexible, accessible, and customizable UI element designed for a wide range of interactive scenarios. It supports multiple **sizes** (`Small`, `Medium`, `Large`) and **variants** (`Primary`, `Secondary`, `Warning`), optional **left and right icons**, and a **loading state**. The component handles proper focus management, `aria-*` attributes, and ref forwarding for integration with forms or higher-order components.
+
+<Canvas of={ButtonStories.Base} />
+<Controls of={ButtonStories.Base} sort="requiredFirst" />
+
+## Icons
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={ButtonStories.PrimaryWithLeftIcon} />
+    <span>Left</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.PrimaryWithRightIcon} />
+    <span>Right</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.PrimaryWithBothIcons} />
+    <span>Both</span>
+  </StorybookExample>
+</StorybookSection>
+
+## Sizes
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={ButtonStories.SmallPrimary} />
+    <span>Small</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.MediumPrimary} />
+    <span>Medium</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.LargePrimary} />
+    <span>Large</span>
+  </StorybookExample>
+</StorybookSection>
+
+## States
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={ButtonStories.PrimaryDisabled} />
+    <span>Disabled</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.PrimaryLoading} />
+    <span>Loading</span>
+  </StorybookExample>
+</StorybookSection>
+
+## Variants
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={ButtonStories.Primary} />
+    <span>Primary</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.Secondary} />
+    <span>Secondary</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={ButtonStories.Warning} />
+    <span>Warning</span>
+  </StorybookExample>
+</StorybookSection>
