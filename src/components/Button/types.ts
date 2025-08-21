@@ -9,13 +9,14 @@ export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: (typeof EButton.Variant)[keyof typeof EButton.Variant]
 }
 
-export type TButtonIconProps = {
+export type TButtonIconProps = React.HTMLAttributes<HTMLSpanElement> & {
   icon: React.ReactNode
   isHidden: boolean
-  testId: string
 }
 
-export type TButtonSpinnerProps = { shouldShow: boolean }
+export type TButtonSpinnerProps = React.HTMLAttributes<HTMLSpanElement> & {
+  shouldShow: boolean
+}
 
 export type TButton = React.ForwardRefExoticComponent<
   TButtonProps & React.RefAttributes<HTMLButtonElement>
