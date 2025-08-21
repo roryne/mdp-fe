@@ -9,13 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "pw:ct": "npx playwright test -c playwright-ct.config.ts",
-    "pw:ct:ui": "npx playwright test -c playwright-ct.config.ts --ui",
     "pw:t": "npx playwright test -c playwright.config.ts",
-    "pw:ui": "npx playwright test -c playwright.config.ts --ui",
     "sb": "storybook dev -p 6006",
-    "sb:docs": "storybook dev -p 6006 --docs",
-    "sb:build": "storybook build",
-    "vt": "npx vitest --reporter verbose"
+    "sb:build": "storybook build"
   },
   "dependencies": {
     "react": "^19.1.0",
