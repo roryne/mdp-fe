@@ -1,17 +1,17 @@
-name: Component Tests
+name: CI Tests
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  tests:
+  test:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
     steps:
       - uses: actions/checkout@v3
 
@@ -19,14 +19,34 @@ jobs:
         with:
           node-version: 20
 
+      # Cache node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: node-modules-
+
       - run: npm ci
 
-      - name: Run Component Tests
+      # Cache Playwright browsers
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ hashFiles('package-lock.json') }}
+          restore-keys: playwright-browsers-
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Tests
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # Sanity tests only on PR
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "Running sanity tests only for PR"
             npm run pw:ct -- --grep @sanity --reporter=dot
           else
-            # Full suite minus sanity on push to main
+            echo "Running full suite on main branch"
             npm run pw:ct -- --grep-invert @sanity --reporter=dot
-          fi
