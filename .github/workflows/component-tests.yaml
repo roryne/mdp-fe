@@ -1,4 +1,4 @@
-name: Component Tests
+name: CI Tests
 
 on:
   pull_request:
@@ -8,51 +8,43 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
-    name: Setup Environment
+  setup-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      cache-hit: ${{ steps.cache.outputs.cache-hit }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Checkout repo into workspace root
+      - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      # Setup Node
+      - uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      - name: Cache node_modules
-        id: cache
+      # Cache node_modules
+      - name: Cache npm modules
         uses: actions/cache@v3
         with:
-          path: |
-            **/node_modules
+          path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      # Install dependencies
+      - run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install
+      # Cache Playwright browsers
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
-  sanity:
-    name: Sanity Tests (PR)
-    needs: setup
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Sanity Tests
-        run: npm run pw:ct -- --grep @sanity --reporter=dot
-
-  full-suite:
-    name: Full Suite Tests (Main)
-    needs: setup
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Full Suite (excluding sanity)
-        run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
+      # Run Sanity tests on PRs, full suite on main
+      - name: Run Tests
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npm run pw:ct -- --grep @sanity --reporter=dot
+          else
+            npm run pw:ct -- --grep-invert @sanity --reporter=dot
+          fi
