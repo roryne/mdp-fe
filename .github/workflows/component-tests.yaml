@@ -10,26 +10,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-tests:
+  tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Run Playwright Component Tests
+      - name: Run Component Tests
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "Running sanity tests only for PR"
-            npm run pw:ct -- --grep '@sanity' --reporter=dot
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # Sanity tests only on PR
+            npm run pw:ct -- --grep @sanity --reporter=dot
           else
-            echo "Running full suite minus sanity on main push"
-            npm run pw:ct -- --grep-invert '@sanity' --reporter=dot
+            # Full suite minus sanity on push to main
+            npm run pw:ct -- --grep-invert @sanity --reporter=dot
           fi
