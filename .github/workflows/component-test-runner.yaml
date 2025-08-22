@@ -35,6 +35,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: ${{ inputs.run-tag && inputs.run-tag != '' && inputs.run-tag[1:] || 'tests' }}-results
+          name: ${{ inputs.run-tag }}-results
           path: test-results/
           retention-days: 30
