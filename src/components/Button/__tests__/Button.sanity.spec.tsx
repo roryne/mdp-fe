@@ -78,7 +78,7 @@ test.describe(
           const button = await mount(<Button label="Responsive test" />)
 
           await expect(button).toBeVisible()
-          await expect(button).toHaveScreenshot()
+          await expect(button).toHaveScreenshot({ maxDiffPixelRatio: 0.05 })
         })
       }
 

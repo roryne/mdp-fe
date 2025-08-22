@@ -1,0 +1,44 @@
+name: Component Test
+
+concurrency:
+  group: component-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    uses: ./.github/workflows/project-setup.yaml
+
+  sanity-tests:
+    if: github.event_name == 'pull_request'
+    needs: setup
+    uses: ./.github/workflows/component-test-runner.yaml
+    with:
+      run-tag: '@sanity'
+
+  a11y-tests:
+    if: github.event_name == 'push'
+    needs: setup
+    uses: ./.github/workflows/component-test-runner.yaml
+    with:
+      run-tag: '@a11y'
+
+  visual-tests:
+    if: github.event_name == 'push'
+    needs: setup
+    uses: ./.github/workflows/component-test-runner.yaml
+    with:
+      run-tag: '@visual'
+
+  interaction-tests:
+    if: github.event_name == 'push'
+    needs: setup
+    uses: ./.github/workflows/component-test-runner.yaml
+    with:
+      run-tag: '@interaction'
