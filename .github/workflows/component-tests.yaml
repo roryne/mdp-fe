@@ -7,57 +7,34 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Set default working directory for all run steps
-defaults:
-  run:
-    working-directory: . # repo root
-
 jobs:
-  setup:
-    name: Setup Environment
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      cache-hit: ${{ steps.cache.outputs.cache-hit }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: lts/*
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      # Cache Playwright browsers
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
-      - name: Install Playwright browsers
-        run: npx playwright install
-
-  sanity:
-    name: Sanity Tests (PR)
-    needs: setup
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Sanity Tests
+      - name: Sanity Tests (PR)
+        if: github.event_name == 'pull_request'
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
-  full-suite:
-    name: Full Suite Tests (Main)
-    needs: setup
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Full Suite (excluding sanity)
+      - name: Sanity Tests (PR)
+        if: github.event_name == 'push'
         run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
