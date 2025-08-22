@@ -7,7 +7,7 @@ on:
         type: string
 
 jobs:
-  setup:
+  common-setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
