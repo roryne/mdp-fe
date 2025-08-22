@@ -19,6 +19,8 @@
   }
   &:hover:not(:disabled) {
     background-color: var(--btn-bg-hover);
+    border: var(--btn-border-hover);
+    color: var(--btn-text-hover);
 
     &:active {
       background-color: var(--btn-bg-active);
@@ -36,7 +38,9 @@
   --btn-bg-color: var(--color-blue);
   --btn-bg-hover: var(--color-blue-s1);
   --btn-border: none;
+  --btn-border-hover: none;
   --btn-text: white;
+  --btn-text-hover: white;
 }
 .btn--secondary,
 .btn--warning {
@@ -46,11 +50,15 @@
 }
 .btn--secondary {
   --btn-border: 0.0625rem solid var(--color-blue);
+  --btn-border-hover: 0.0625rem solid var(--color-blue-s1);
   --btn-text: var(--color-blue);
+  --btn-text-hover: var(--color-blue-s1);
 }
 .btn--warning {
   --btn-border: 0.125rem solid var(--color-red);
+  --btn-border-hover: 0.125rem solid var(--color-red);
   --btn-text: var(--color-red);
+  --btn-text-hover: var(--color-red);
 }
 
 /* Size modifiers */
