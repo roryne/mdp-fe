@@ -11,7 +11,6 @@ jobs:
   a11y-tests:
     if: github.event_name == 'push'
     uses: ./.github/workflows/common-setup.yaml
-    secrets: inherit
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +41,6 @@ jobs:
   interaction-tests:
     if: github.event_name == 'push'
     uses: ./.github/workflows/common-setup.yaml
-    secrets: inherit
     steps:
       - uses: actions/checkout@v4
 
@@ -73,7 +71,6 @@ jobs:
   sanity-tests:
     if: github.event_name == 'pull_request'
     uses: ./.github/workflows/common-setup.yaml
-    secrets: inherit
     steps:
       - uses: actions/checkout@v4
 
@@ -104,7 +101,6 @@ jobs:
   visual-tests:
     if: github.event_name == 'push'
     uses: ./.github/workflows/common-setup.yaml
-    secrets: inherit
     outputs:
       deps-artifact: ${{ needs.setup.outputs.deps-artifact }}
       playwright-key: ${{ needs.setup.outputs.playwright-key }}
