@@ -7,10 +7,17 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Set default working directory for all run steps
+defaults:
+  run:
+    working-directory: . # repo root
+
 jobs:
   setup:
     name: Setup Environment
     runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -19,23 +26,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Cache node_modules
-        id: node-cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
 
+      # Cache Playwright browsers
       - name: Cache Playwright browsers
-        id: pw-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
@@ -43,25 +42,22 @@ jobs:
             ${{ runner.os }}-playwright-
 
       - name: Install Playwright browsers
-        if: steps.pw-cache.outputs.cache-hit != 'true'
         run: npx playwright install
 
   sanity:
-    name: Sanity Tests (PR Open)
+    name: Sanity Tests (PR)
     needs: setup
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - name: Run Sanity Tests
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
   full-suite:
-    name: Full Suite Tests (PR Merge)
+    name: Full Suite Tests (Main)
     needs: setup
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - name: Run Full Suite (excluding sanity)
         run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
