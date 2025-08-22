@@ -1,4 +1,4 @@
-name: Common Setup & Run Tests
+name: Run Tests
 
 on:
   workflow_call:
@@ -8,41 +8,106 @@ on:
         type: string
 
 jobs:
-  run-tests:
+  setup:
+    uses: ./.github/workflows/project-setup.yaml
+    # runs-on: ubuntu-latest
+    # steps:
+    #   - uses: actions/checkout@v4
+
+    #   - uses: actions/setup-node@v4
+    #     with:
+    #       node-version: lts/*
+    #       cache: 'npm'
+    #       cache-dependency-path: package-lock.json
+
+    #   - name: Install dependencies
+    #     run: npm ci
+
+    #   - name: Cache Playwright browsers
+    #     id: playwright-cache
+    #     uses: actions/cache@v4
+    #     with:
+    #       path: ~/.cache/ms-playwright
+    #       key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+    #   - name: Install Playwright browsers (if not cached)
+    #     if: steps.playwright-cache.outputs.cache-hit != 'true'
+    #     run: npx playwright install --with-deps
+
+    #   - name: Upload deps
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: deps
+    #       path: ./
+    #       retention-days: 30
+
+  tests:
+    needs: setup
     runs-on: ubuntu-latest
-    outputs:
-      test-results-path: ${{ steps.upload-artifact.outputs.path }}
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download deps
+        uses: actions/download-artifact@v4
         with:
-          node-version: lts/*
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
+          name: deps
+          path: ./
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      - name: Cache Playwright browsers
-        id: playwright-cache
+      - name: Restore Playwright cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Install Playwright browsers if not cached
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-
-      - name: Run tests
+      - name: Run sanity tests
         run: npm run pw:ct -- --grep ${{ inputs.run-tag }} --reporter=dot
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
-          name: test-results
+          name: sanity-test-results
           path: test-results/
           retention-days: 30
+
+  # run-tests:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     test-results-path: ${{ steps.upload-artifact.outputs.path }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: lts/*
+  #         cache: 'npm'
+  #         cache-dependency-path: package-lock.json
+
+  #     - name: Install dependencies
+  #       run: npm ci
+
+  #     - name: Cache Playwright browsers
+  #       id: playwright-cache
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.cache/ms-playwright
+  #         key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+  #     - name: Install Playwright browsers if not cached
+  #       if: steps.playwright-cache.outputs.cache-hit != 'true'
+  #       run: npx playwright install --with-deps
+
+  #     - name: Run tests
+  #       run: npm run pw:ct -- --grep ${{ inputs.run-tag }} --reporter=dot
+
+  #     - name: Upload test results
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: test-results
+  #         path: test-results/
+  #         retention-days: 30
