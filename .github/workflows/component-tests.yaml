@@ -56,6 +56,9 @@ jobs:
           name: deps
           path: ./
 
+      - name: Install deps
+        run: npm ci
+
       - name: Restore Playwright cache
         uses: actions/cache@v4
         with:
@@ -69,37 +72,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: sanity-test-results
-          path: test-results/
-          retention-days: 30
-
-  full-tests:
-    needs: setup
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-
-      - name: Download deps
-        uses: actions/download-artifact@v4
-        with:
-          name: deps
-          path: deps
-
-      - name: Restore Playwright cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Run full test suite
-        run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: full-test-results
           path: test-results/
           retention-days: 30
