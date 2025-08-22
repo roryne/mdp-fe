@@ -32,9 +32,9 @@
 
 /* Variant modifiers */
 .btn--primary {
-  --btn-bg-active: var(--color-blue-s1);
+  --btn-bg-active: var(--color-blue-s2);
   --btn-bg-color: var(--color-blue);
-  --btn-bg-hover: var(--color-blue-t1);
+  --btn-bg-hover: var(--color-blue-s1);
   --btn-border: none;
   --btn-text: white;
 }
