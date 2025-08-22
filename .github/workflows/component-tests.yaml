@@ -8,13 +8,106 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  a11y-tests:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/common-setup.yaml
-    with:
-      run-id: ${{ github.run_id }}
+    secrets: inherit
+    steps:
+      - uses: actions/checkout@v4
 
-  tests:
-    needs: setup
+      - name: Download deps
+        uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: ./
+
+      - name: Restore Playwright cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ needs.visual-tests.outputs.playwright-key }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run a11y tests
+        run: npm run pw:ct -- --grep @a11y --reporter=dot
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a11y-test-results
+          path: test-results/
+          retention-days: 30
+
+  interaction-tests:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/common-setup.yaml
+    secrets: inherit
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download deps
+        uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: ./
+
+      - name: Restore Playwright cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ needs.visual-tests.outputs.playwright-key }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run interaction tests
+        run: npm run pw:ct -- --grep @interaction --reporter=dot
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: interaction-test-results
+          path: test-results/
+          retention-days: 30
+
+  sanity-tests:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/common-setup.yaml
+    secrets: inherit
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download deps
+        uses: actions/download-artifact@v4
+        with:
+          name: deps
+          path: ./
+
+      - name: Restore Playwright cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ needs.visual-tests.outputs.playwright-key }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run interaction tests
+        run: npm run pw:ct -- --grep @sanity --reporter=dot
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: interaction-test-results
+          path: test-results/
+          retention-days: 30
+
+  visual-tests:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/common-setup.yaml
+    secrets: inherit
+    outputs:
+      deps-artifact: ${{ needs.setup.outputs.deps-artifact }}
+      playwright-key: ${{ needs.setup.outputs.playwright-key }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,26 +118,20 @@ jobs:
           name: deps
           path: ./
 
-      - name: Install deps
-        run: npm ci
-
       - name: Restore Playwright cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ needs.setup.outputs.playwright-key }}
 
-      - name: Run sanity tests
-        if: github.event_name == 'pull_request'
-        run: npm run pw:ct -- --grep @sanity --reporter=dot
+      - name: Install deps
+        run: npm ci
 
-      - name: Run full test suite
-        if: github.event_name == 'push'
-        run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
+      - name: Run visual tests
+        run: npm run pw:ct -- --grep @visual --reporter=dot
 
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: visual-test-results
           path: test-results/
           retention-days: 30

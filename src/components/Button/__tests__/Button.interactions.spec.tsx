@@ -6,7 +6,7 @@ import { defaultProps } from './common'
 test.describe(
   'Component/Button',
   {
-    tag: ['@component', '@button']
+    tag: ['@component', '@button', '@interaction']
   },
   () => {
     test.describe('Interactions', () => {

@@ -1,38 +1,40 @@
+# This file only defines the reusable setup job
 name: Common Setup
+
 on:
-  workflow_call: # allows other workflows to call this
-    inputs:
-      run-id:
-        required: true
-        type: string
+  workflow_call:
 
 jobs:
-  common-setup:
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      deps-artifact: ${{ steps.upload-deps.outputs.artifact-name }}
+      playwright-key: ${{ steps.cache-playwright.outputs.cache-key }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: npm
+          cache: 'npm'
           cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
       - name: Cache Playwright browsers
-        id: playwright-cache
+        id: cache-playwright
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Install Playwright browsers (if not cached)
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install Playwright browsers if needed
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-      - name: Upload deps
+      - name: Upload deps artifact
+        id: upload-deps
         uses: actions/upload-artifact@v4
         with:
           name: deps
