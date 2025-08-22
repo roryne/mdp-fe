@@ -24,11 +24,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Sanity Tests (PR)
+      - name: Sanity Tests (PR Open)
         if: github.event_name == 'pull_request'
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
-      - name: Sanity Tests (PR)
+      - name: Sanity Tests (PR Merged)
         if: github.event_name == 'push'
         run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
 
