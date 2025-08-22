@@ -7,6 +7,7 @@ import markdown from '@eslint/markdown'
 import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
+  reactPlugin.configs.flat['jsx-runtime'],
   {
     files: ['**/*.json'],
     language: 'json/json',
