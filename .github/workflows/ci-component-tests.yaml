@@ -10,24 +10,24 @@ on:
 jobs:
   sanity-tests:
     if: github.event_name == 'pull_request'
-    uses: ./.github/workflows/common-setup.yaml
+    uses: ./.github/workflows/component-test-runner.yaml
     with:
       run-tag: '@sanity'
 
   a11y-tests:
     if: github.event_name == 'push'
-    uses: ./.github/workflows/common-setup.yaml
+    uses: ./.github/workflows/component-test-runner.yaml
     with:
       run-tag: '@a11y'
 
   visual-tests:
     if: github.event_name == 'push'
-    uses: ./.github/workflows/common-setup.yaml
+    uses: ./.github/workflows/component-test-runner.yaml
     with:
       run-tag: '@visual'
 
   interaction-tests:
     if: github.event_name == 'push'
-    uses: ./.github/workflows/common-setup.yaml
+    uses: ./.github/workflows/component-test-runner.yaml
     with:
       run-tag: '@interaction'
