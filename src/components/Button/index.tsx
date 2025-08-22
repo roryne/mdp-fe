@@ -9,7 +9,7 @@ import type {
   TButtonSpinnerProps
 } from './types'
 
-const getHiddenClass = (isHidden?: boolean) => (isHidden ? styles.hidden : '')
+const getHiddenClass = (isHidden: boolean) => (isHidden ? styles.hidden : '')
 
 const ButtonBase = React.forwardRef<HTMLButtonElement, TButtonProps>(
   (

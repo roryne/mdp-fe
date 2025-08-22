@@ -1,18 +1,34 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from 'eslint-plugin-storybook'
-
 import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+import tseslintparser from '@typescript-eslint/parser'
 import pluginReact from 'eslint-plugin-react'
 import json from '@eslint/json'
 import markdown from '@eslint/markdown'
 import css from '@eslint/css'
 import { defineConfig } from 'eslint/config'
+import prettier from 'eslint-plugin-prettier'
 
 export default defineConfig([
+  pluginReact.configs.flat.recommended,
   {
-    files: ['**/*.{js,mdx,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    ...tseslint.configs.recommended,
+    files: ['**/*.{cts,mts,ts,tsx}'],
+    languageOptions: {
+      parser: tseslintparser,
+      parserOptions: {
+        project: './tsconfig.json'
+      }
+    },
+    plugins: {
+      prettier
+    },
+    rules: {
+      'prettier/prettier': 'error'
+    }
+  },
+  {
+    files: ['**/*.{js,mdx,mjs,cjs,jsx,tsx}'],
     plugins: { js },
     extends: ['eslint:recommended', 'prettier'],
     languageOptions: { globals: globals.browser },
@@ -20,9 +36,6 @@ export default defineConfig([
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
     }
   },
-  // @ts-ignore
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
   {
     files: ['**/*.json'],
     plugins: { json },

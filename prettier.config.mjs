@@ -1,5 +1,6 @@
 /** @type {import("prettier").Config} */
-export default {
+
+const config = {
   experimentalTernaries: true,
   printWidth: 80,
   semi: false,
@@ -7,3 +8,5 @@ export default {
   tabWidth: 2,
   trailingComma: 'none'
 }
+
+export default config
