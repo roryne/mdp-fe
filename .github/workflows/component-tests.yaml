@@ -34,11 +34,11 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-      - name: Sanity Tests (PR Open)
+      - name: Sanity Tests (PR Opened)
         if: github.event_name == 'pull_request'
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
-      - name: Sanity Tests (PR Merged)
+      - name: Tests (PR Merged)
         if: github.event_name == 'push'
         run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
 
@@ -47,4 +47,11 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-test-results
+          path: test-results/
           retention-days: 30
