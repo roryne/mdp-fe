@@ -8,6 +8,12 @@ export default defineConfig({
   testDir: 'src/components',
   testIgnore: ['**\/__tests__/*.{test,stories}.{ts,tsx}'],
   timeout: 3 * 1000,
+  expect: {
+    timeout: 1 * 1000,
+    toMatchSnapshot: {
+      maxDiffPixelRatio: 0.05
+    }
+  },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
