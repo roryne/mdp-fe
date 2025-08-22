@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download deps
+      - name: Download cached project
         uses: actions/download-artifact@v4
         with:
           name: deps
@@ -28,12 +28,15 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
 
       - name: Run sanity tests
-        run: npm run pw:ct -- --grep ${{ inputs.run-tag }} --reporter=dot
+        run: npm run pw:ct -- --grep ${{ inputs.run-tag }}
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.run-tag }}-results
           path: test-results/

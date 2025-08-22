@@ -4,19 +4,18 @@ on:
   workflow_call:
 
 jobs:
-  setup:
+  start:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up or restore cached Node
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
           cache-dependency-path: package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Cache Playwright browsers
         id: playwright-cache
@@ -24,12 +23,17 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Install Playwright browsers (if not cached)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-      - name: Upload deps
+      - name: Upload deps for other workflows
         uses: actions/upload-artifact@v4
         with:
           name: deps
