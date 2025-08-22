@@ -40,15 +40,12 @@ jobs:
           path: ./
           retention-days: 30
 
-  sanity-tests:
+  tests:
     needs: setup
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: lts/*
 
       - name: Download deps
         uses: actions/download-artifact@v4
@@ -65,10 +62,16 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Run sanity tests
+      - name: Run sanity test suite on PR open
+        if: github.event_name == 'pull_request'
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
-      - uses: actions/upload-artifact@v4
+      - name: Run full test suite on PR merge
+        if: github.event_name == 'push'
+        run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
+
+      - name: Upload any test result artifacts
+        uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: sanity-test-results
