@@ -9,40 +9,12 @@ on:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Install Playwright browsers (if not cached)
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-
-      - name: Upload deps
-        uses: actions/upload-artifact@v4
-        with:
-          name: deps
-          path: ./
-          retention-days: 30
+    uses: ./.github/workflows/common-setup.yaml
+    with:
+      run-id: ${{ github.run_id }}
 
   tests:
     needs: setup
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,18 +34,17 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Run sanity test suite on PR open
+      - name: Run sanity tests
         if: github.event_name == 'pull_request'
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
-      - name: Run full test suite on PR merge
+      - name: Run full test suite
         if: github.event_name == 'push'
         run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
 
-      - name: Upload any test result artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: sanity-test-results
+          name: playwright-report
           path: test-results/
           retention-days: 30
