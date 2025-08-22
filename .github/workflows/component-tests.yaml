@@ -47,21 +47,21 @@ jobs:
         run: npx playwright install
 
   sanity:
-    name: Sanity Tests (PR)
-    if: github.event_name == 'pull_request'
+    name: Sanity Tests (PR Open)
     needs: setup
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    uses: actions/checkout@v3
     steps:
+      - uses: actions/checkout@v3
       - name: Run Sanity Tests
         run: npm run pw:ct -- --grep @sanity --reporter=dot
 
   full-suite:
-    name: Full Suite Tests (Main)
-    if: github.event_name == 'push'
+    name: Full Suite Tests (PR Merge)
     needs: setup
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    uses: actions/checkout@v3
     steps:
+      - uses: actions/checkout@v3
       - name: Run Full Suite (excluding sanity)
         run: npm run pw:ct -- --grep-invert @sanity --reporter=dot
