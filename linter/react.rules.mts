@@ -70,7 +70,6 @@ const react: Linter.RulesRecord = {
   'react/prefer-exact-props': 'error',
   'react/prefer-read-only-props': 'error',
   'react/prefer-stateless-function': 'error',
-  'react/prop-types': 'error',
   'react/react-in-jsx-scope': 'off',
   'react/require-default-props': 'error',
   'react/require-optimization': 'error',
