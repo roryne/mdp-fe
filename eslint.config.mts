@@ -1,13 +1,16 @@
 import parser from '@typescript-eslint/parser'
-import { defineConfig } from 'eslint/config'
+import eslint from '@eslint/js'
 import globals from 'globals'
+import tsEslint from 'typescript-eslint'
 
-import { plugins, rules } from './linter'
+import { plugins, rules as linterRules } from './linter'
 
-export default defineConfig([
+export default tsEslint.config([
+  eslint.configs.recommended,
+  tsEslint.configs.strictTypeChecked,
   {
     files: ['./src/**/*.{mjs,mts,ts,tsx}', './linter/**/*.{mjs,mts,ts,tsx}'],
-    ignores: ['**/build/**', '**/dist/**'],
+    ignores: ['**/build/**', '**/dist/**', './src/**/*.css'],
     languageOptions: {
       ecmaVersion: 'latest',
       globals: {
@@ -27,9 +30,14 @@ export default defineConfig([
       react: plugins.react,
       'react-hooks': plugins['react-hooks']
     },
-    rules,
+    rules: { ...linterRules },
     settings: {
       react: { version: 'detect' }
     }
   }
+  // {
+  //   files: ['./src/**/*.css'],
+  //   plugins: { css: plugins.css },
+  //   rules: { ...cssRules }
+  // }
 ])

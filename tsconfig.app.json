@@ -45,7 +45,7 @@
     "noFallthroughCasesInSwitch": false, // eslint: no-fallthrough
 
     /* Stylistic / preference checks (can enforce in TS or ESLint depending on team choice) */
-    "noImplicitReturns": false, // ESLint handles return consistency (`consistent-return`)
+    "noImplicitReturns": false,
     "noPropertyAccessFromIndexSignature": false // stylistic: `[key]` vs `.key` — not safety-critical
   }
 }
