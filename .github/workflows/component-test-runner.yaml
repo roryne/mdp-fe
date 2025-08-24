@@ -1,5 +1,3 @@
-name: Component test runner
-
 on:
   workflow_call:
     inputs:
@@ -10,18 +8,29 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run tests
-        run: npm run pw:ct -- --grep ${{ inputs.run-tag }}
+      - name: Setup environment
+        run: npm ci
 
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v4
+      - name: Check Playwright cache
+        id: playwright-cache
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+        uses: actions/cache@v4
         with:
-          name: ${{ inputs.run-tag }}-results
-          path: test-results/
-          retention-days: 30
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browsers if needed
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+        run: npx playwright install --with-deps
+
+      - name: Run sanity tests
+        run: npm run pw:ct -- --grep ${{ inputs.run-tag }}

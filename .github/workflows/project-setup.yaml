@@ -7,24 +7,18 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      node-modules-cache-hit: ${{ steps.node-cache.outputs.cache-hit }}
       playwright-cache-hit: ${{ steps.playwright-cache.outputs.cache-hit }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore Node modules cache
-        id: node-cache
-        uses: actions/cache@v4
+      - name: Node setup
+        uses: actions/setup-node@v4
         with:
-          path: ~/.npm
-          key: node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: node-modules-
-
-      - name: Install dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm ci
+          cache:
+          node-version: lts/*
+      - run: npm ci
 
       - name: Restore Playwright cache
         id: playwright-cache
