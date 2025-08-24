@@ -4,7 +4,6 @@ import type { Linter } from 'eslint'
 const ts: Linter.RulesRecord = {
   '@typescript-eslint/adjacent-overload-signatures': 'error',
   '@typescript-eslint/array-type': 'error',
-  '@typescript-eslint/await-thenable': 'error',
   '@typescript-eslint/ban-ts-comment': 'error',
   '@typescript-eslint/class-literal-property-style': ['error', 'getters'],
   '@typescript-eslint/class-methods-use-this': 'error',
