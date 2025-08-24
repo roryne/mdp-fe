@@ -1,4 +1,4 @@
-name: Component Test
+name: Run component tests
 
 concurrency:
   group: component-tests-${{ github.ref }}

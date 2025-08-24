@@ -1,4 +1,4 @@
-name: Run Tests
+name: Component test runner
 
 on:
   workflow_call:
@@ -20,12 +20,11 @@ jobs:
       #     name: deps
       #     path: ./
 
-      # - name: Install deps
-      #   run: npm ci
+      - name: Install deps
+        run: npm ci
 
-      # - name: Install Playwright browsers (if not cached)
-      #   if: steps.playwright-cache.outputs.cache-hit != 'true'
-      #   run: npx playwright install --with-deps
+      - name: Install Playwright browsers if needed
+        run: npx playwright install --with-deps
 
       # - name: Restore Playwright cache
       #   uses: actions/cache@v4

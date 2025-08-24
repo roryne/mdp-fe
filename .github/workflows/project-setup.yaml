@@ -17,7 +17,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
-      - name: Cache Playwright browsers
+      - name: Check Playwright cache
         id: playwright-cache
         uses: actions/cache@v4
         with:
@@ -26,17 +26,9 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
-      - name: Install dependencies
-        run: npm ci
+      # - name: Install dependencies
+      #   run: npm ci
 
-      - name: Install Playwright browsers (if not cached)
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-
-      # TODO look into actions/cache instead of upload-artifact
-      # - name: Upload deps for other workflows
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: deps
-      #     path: ./
-      #     retention-days: 30
+      # - name: Install Playwright browsers (if not cached)
+      #   if: steps.playwright-cache.outputs.cache-hit != 'true'
+      #   run: npx playwright install --with-deps
