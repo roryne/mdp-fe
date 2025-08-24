@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "pw:ct": "npx playwright test -c playwright-ct.config.ts",
     "pw:t": "npx playwright test -c playwright.config.ts",
-    "storybook": "storybook dev -p 6006"
+    "storybook": "storybook dev -p 6006",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
