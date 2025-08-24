@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 import type { Linter } from 'eslint'
 
 const ts: Linter.RulesRecord = {
@@ -36,7 +37,10 @@ const ts: Linter.RulesRecord = {
   'no-unsafe-negation': 'error',
   'no-unsafe-optional-chaining': 'error',
   'no-unused-private-class-members': 'error',
-  'no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
+  'no-unused-vars': [
+    'error',
+    { argssIgnorePattern: '^_', varsIgnorePattern: '^_' }
+  ],
   'no-use-before-define': 'error',
   'no-useless-assignment': 'error',
   'no-useless-backreference': 'error',
