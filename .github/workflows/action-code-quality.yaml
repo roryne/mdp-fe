@@ -11,10 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run lint-staged (ESLint + Prettier)
-        run: npx lint-staged --formatter github-actions
+        run: npx lint-staged
 
       - name: Run TypeScript typecheck
-        run: npx tsc --noEmit
-
-      - name: Run type check
         run: npm run typecheck
