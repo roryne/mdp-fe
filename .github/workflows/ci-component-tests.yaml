@@ -7,8 +7,8 @@ concurrency:
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
+  pull_request_review:
+    types: [submitted] # Trigger when a review is submitted
   workflow_dispatch:
 
 jobs:
@@ -28,21 +28,21 @@ jobs:
       run-tag: '@sanity'
 
   a11y-tests:
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     needs: setup
     uses: ./.github/workflows/component-test-runner.yaml
     with:
       run-tag: '@a11y'
 
   visual-tests:
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     needs: setup
     uses: ./.github/workflows/component-test-runner.yaml
     with:
       run-tag: '@visual'
 
   interaction-tests:
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     needs: setup
     uses: ./.github/workflows/component-test-runner.yaml
     with:
