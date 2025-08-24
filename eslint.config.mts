@@ -36,12 +36,10 @@ export default tsEslint.config([
     },
     rules: { ...linterRules },
     settings: {
-      react: { version: 'detect' }
+      react: {
+        runtime: 'automatic',
+        version: 'detect'
+      }
     }
   }
-  // {
-  //   files: ['./src/**/*.css'],
-  //   plugins: { css: plugins.css },
-  //   rules: { ...cssRules }
-  // }
 ])
