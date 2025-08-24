@@ -15,6 +15,11 @@ jobs:
   setup:
     uses: ./.github/workflows/project-setup.yaml
 
+  type-check:
+    if: github.event_name == 'pull_request'
+    needs: setup
+    uses: ./.github/workflows/typecheck.yaml
+
   sanity-tests:
     if: github.event_name == 'pull_request'
     needs: setup

@@ -5,6 +5,7 @@ import globals from 'globals'
 import { plugins, rules } from './linter'
 
 export default defineConfig([
+  pluginReact.configs.flat.recommended,
   {
     files: ['./src/**/*.{mjs,mts,ts,tsx}', './linter/**/*.{mjs,mts,ts,tsx}'],
     ignores: ['**/build/**', '**/dist/**'],
