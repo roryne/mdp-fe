@@ -1,15 +1,15 @@
 import React from 'react'
+
 import { HtmlUtils } from '@/utils'
+
+import Icon from './Button.Icon'
+import Spinner from './Button.Spinner'
 import styles from './Button.module.css'
 import { EButton } from './enums'
-import type {
-  TButton,
-  TButtonIconProps,
-  TButtonProps,
-  TButtonSpinnerProps
-} from './types'
+import type { TButton, TButtonProps } from './types'
 
-const getHiddenClass = (isHidden: boolean) => (isHidden ? styles.hidden : '')
+export const getHiddenClass = (isHidden?: boolean) =>
+  isHidden ? styles.hidden : ''
 
 const ButtonBase = React.forwardRef<HTMLButtonElement, TButtonProps>(
   (
@@ -53,41 +53,6 @@ const ButtonBase = React.forwardRef<HTMLButtonElement, TButtonProps>(
 )
 
 ButtonBase.displayName = 'Button'
-
-const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, ...restProps }) => {
-  if (!icon) return null
-
-  const className = HtmlUtils.getClassName(
-    styles.iconWrapper,
-    getHiddenClass(isHidden)
-  )
-
-  return (
-    <span aria-hidden="true" className={className} {...restProps}>
-      {icon}
-    </span>
-  )
-}
-
-Icon.displayName = 'Button Icon'
-
-const Spinner: React.FC<TButtonSpinnerProps> = ({
-  shouldShow,
-  ...restProps
-}) => {
-  if (!shouldShow) return null
-
-  return (
-    <span
-      aria-hidden="true"
-      className={styles.spinner}
-      data-test="btn--spinner"
-      {...restProps}
-    />
-  )
-}
-
-Spinner.displayName = 'Button Spinner'
 
 const Button: TButton = Object.assign(ButtonBase, { Icon, Spinner })
 

@@ -1,34 +1,51 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2022",
-    "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "esnext",
-    "skipLibCheck": true,
-    "types": ["node", "vitest/globals", "react", "react-dom"],
+    "skipLibCheck": true, // speeds up builds, but means type errors in .d.ts files are ignored
+    "target": "ES2022",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "types": ["node", "react", "react-dom"],
+    "useDefineForClassFields": true, // aligns TS with JS class field semantics
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
+    /* Bundler mode (Vite/Webpack-style setup, no emit, leave transforms to bundler) */
+    "allowImportingTsExtensions": true, // allow `import './file.ts'` (useful in ESM projects)
+    "jsx": "react-jsx", // modern JSX transform, no `import React` needed
+    "moduleDetection": "auto", // TS infers module vs script automatically
+    "moduleResolution": "bundler", // matches Node ESM/bundler resolution, not TS classic
+    "noEmit": true, // TS only type-checks, doesn’t output JS
+    "verbatimModuleSyntax": true, // preserves `import/export` syntax exactly (no TS rewriting)
 
-    /* Paths */
+    /* Paths (shortcuts for cleaner imports) */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": false,
-    "noUncheckedSideEffectImports": true
-  },
-  "include": ["src"]
+    /* Strict type checking (TS-only, complements ESLint but not duplicated there) */
+    "alwaysStrict": true, // force `"use strict"` semantics in all files
+    "exactOptionalPropertyTypes": true, // `foo?: string` ≠ `foo: string | undefined`
+    "noImplicitAny": true, // require explicit types instead of silently inferring `any`
+    "noImplicitOverride": true, // enforce `override` keyword when overriding base methods
+    "noImplicitThis": true, // disallow `this` being inferred as `any`
+    "noUncheckedIndexedAccess": false, // when true: index access is T | undefined — stricter but noisier
+    "strict": true, // enables all strict mode checks as a baseline
+    "strictBindCallApply": true, // enforces correct argument lists for `bind`, `call`, `apply`
+    "strictBuiltinIteratorReturn": true, // require correct return types on built-in iterators
+    "strictFunctionTypes": true, // enforces function parameter bivariance checks
+    "strictNullChecks": true, // distinguish nullable (`null`/`undefined`) from other types
+    "strictPropertyInitialization": true, // require class fields to be initialized or marked optional
+    "useUnknownInCatchVariables": true, // catch variables default to `unknown` (forces type narrowing)
+
+    /* Disabled in TS (ESLint enforces these instead to avoid duplicate errors) */
+    "allowUnreachableCode": true, // eslint: no-unreachable
+    "allowUnusedLabels": true, // eslint: no-unused-labels
+    "noUnusedLocals": false, // eslint: no-unused-vars (locals)
+    "noUnusedParameters": false, // eslint: no-unused-vars (params)
+    "noFallthroughCasesInSwitch": false, // eslint: no-fallthrough
+
+    /* Stylistic / preference checks (can enforce in TS or ESLint depending on team choice) */
+    "noImplicitReturns": false, // ESLint handles return consistency (`consistent-return`)
+    "noPropertyAccessFromIndexSignature": false // stylistic: `[key]` vs `.key` — not safety-critical
+  }
 }

@@ -1,8 +1,8 @@
 export const EButton = {
   Size: {
-    Small: 'small',
+    Large: 'large',
     Medium: 'medium',
-    Large: 'large'
+    Small: 'small'
   },
   Variant: {
     Primary: 'primary',

@@ -1,57 +1,35 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
-import tseslintparser from '@typescript-eslint/parser'
-import pluginReact from 'eslint-plugin-react'
-import json from '@eslint/json'
-import markdown from '@eslint/markdown'
-import css from '@eslint/css'
+import parser from '@typescript-eslint/parser'
 import { defineConfig } from 'eslint/config'
-import prettier from 'eslint-plugin-prettier'
+import globals from 'globals'
+
+import { plugins, rules } from './linter'
 
 export default defineConfig([
-  pluginReact.configs.flat.recommended,
   {
-    ...tseslint.configs.recommended,
-    files: ['**/*.{cts,mts,ts,tsx}'],
+    files: ['./src/**/*.{mjs,mts,ts,tsx}', './linter/**/*.{mjs,mts,ts,tsx}'],
+    ignores: ['**/build/**', '**/dist/**'],
     languageOptions: {
-      parser: tseslintparser,
+      ecmaVersion: 'latest',
+      globals: {
+        ...globals.browser,
+        ...globals.serviceworker
+      },
+      parser,
       parserOptions: {
-        project: './tsconfig.json'
-      }
+        ecmaFeatures: { jsx: true },
+        project: './tsconfig.eslint.json'
+      },
+      sourceType: 'module'
     },
     plugins: {
-      prettier
+      import: plugins.import,
+      'jsx-a11y': plugins.jsxA11y,
+      react: plugins.react,
+      'react-hooks': plugins['react-hooks']
     },
-    rules: {
-      'prettier/prettier': 'error'
+    rules,
+    settings: {
+      react: { version: 'detect' }
     }
-  },
-  {
-    files: ['**/*.{js,mdx,mjs,cjs,jsx,tsx}'],
-    plugins: { js },
-    extends: ['eslint:recommended', 'prettier'],
-    languageOptions: { globals: globals.browser },
-    rules: {
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
-    }
-  },
-  {
-    files: ['**/*.json'],
-    plugins: { json },
-    language: 'json/json',
-    extends: ['json/recommended']
-  },
-  {
-    files: ['**/*.md'],
-    plugins: { markdown },
-    language: 'markdown/commonmark',
-    extends: ['markdown/recommended']
-  },
-  {
-    files: ['**/*.css'],
-    plugins: { css },
-    language: 'css/css',
-    extends: ['css/recommended']
   }
 ])
