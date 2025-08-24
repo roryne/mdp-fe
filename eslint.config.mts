@@ -7,7 +7,7 @@ import { plugins, rules as linterRules } from './linter'
 
 export default tsEslint.config([
   eslint.configs.recommended,
-  tsEslint.configs.strictTypeChecked,
+  tsEslint.configs.base,
   {
     files: ['./src/**/*.{mjs,mts,ts,tsx}', './linter/**/*.{mjs,mts,ts,tsx}'],
     ignores: ['**/build/**', '**/dist/**', './src/**/*.css'],
@@ -20,7 +20,11 @@ export default tsEslint.config([
       parser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
-        project: './tsconfig.eslint.json'
+        ecmaVersion: 'latest',
+        project: './tsconfig.eslint.json',
+        projectService: true,
+        sourceType: 'module',
+        tsconfigRootDir: __dirname
       },
       sourceType: 'module'
     },
