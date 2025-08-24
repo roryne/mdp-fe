@@ -2,7 +2,6 @@ import type { Linter } from 'eslint'
 
 const react: Linter.RulesRecord = {
   'react/boolean-prop-naming': 'error',
-  'react/button-has-type': 'error',
   'react/checked-requires-onchange-or-readonly': 'error',
   'react/destructuring-assignment': 'error',
   'react/display-name': 'error',
