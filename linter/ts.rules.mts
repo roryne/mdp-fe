@@ -39,7 +39,7 @@ const ts: Linter.RulesRecord = {
   'no-unused-private-class-members': 'error',
   'no-unused-vars': [
     'error',
-    { argssIgnorePattern: '^_', varsIgnorePattern: '^_' }
+    { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }
   ],
   'no-use-before-define': 'error',
   'no-useless-assignment': 'error',
