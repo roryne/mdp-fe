@@ -37,11 +37,21 @@ const ts: Linter.RulesRecord = {
   'no-unsafe-negation': 'error',
   'no-unsafe-optional-chaining': 'error',
   'no-unused-private-class-members': 'error',
-  'no-unused-vars': [
+  'no-unused-vars': 'off',
+  '@typescript-eslint/no-unused-vars': [
     'error',
-    { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }
+    {
+      args: 'all',
+      argsIgnorePattern: '^_',
+      caughtErrors: 'all',
+      caughtErrorsIgnorePattern: '^_',
+      destructuredArrayIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+      ignoreRestSiblings: true
+    }
   ],
-  'no-use-before-define': 'error',
+  'no-use-before-define': 'off',
+  '@typescript-eslint/no-use-before-define': 'error',
   'no-useless-assignment': 'error',
   'no-useless-backreference': 'error',
   'require-atomic-updates': 'error',
@@ -55,7 +65,8 @@ const ts: Linter.RulesRecord = {
   'default-case': 'error',
   'default-case-last': 'error',
   'default-param-last': 'error',
-  'dot-notation': 'error',
+  'dot-notation': 'off',
+  '@typescript-eslint/dot-notation': 'error',
   eqeqeq: 'error',
   'func-name-matching': 'error',
   'func-names': ['error', 'as-needed'],
