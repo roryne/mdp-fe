@@ -1,8 +1,8 @@
 import type { Linter } from 'eslint'
 
 const reactHooks: Linter.RulesRecord = {
-  'react-hooks/rules-of-hooks': 'error',
-  'react-hooks/exhaustive-deps': 'error'
+  'react-hooks/exhaustive-deps': 'error',
+  'react-hooks/rules-of-hooks': 'error'
 }
 
 export default reactHooks
