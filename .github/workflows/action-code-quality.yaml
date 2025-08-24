@@ -4,14 +4,31 @@ on:
   workflow_call:
 
 jobs:
-  check-quality:
+  formatter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run lint-staged (ESLint + Prettier)
-        run: npx lint-staged
+      - name: Run Prettier
+        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run ESLint
+        run: |
+          npx eslint "src/**/*.{ts,tsx,js,jsx}" --max-warnings=0
+          npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Run TypeScript typecheck
         run: npm run typecheck
