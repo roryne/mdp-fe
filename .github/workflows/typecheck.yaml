@@ -7,17 +7,17 @@ jobs:
   typecheck:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      # - name: Checkout repo
+      #   uses: actions/checkout@v4
 
-      - name: Download cached project
-        uses: actions/download-artifact@v4
-        with:
-          name: deps
-          path: ./
+      # - name: Download cached project
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: deps
+      #     path: ./
 
-      - name: Install deps
-        run: npm ci
+      # - name: Install deps
+      #   run: npm ci
 
       - name: Run type check
         run: npm run typecheck
