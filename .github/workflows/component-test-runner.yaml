@@ -23,16 +23,18 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Check Playwright cache
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Install Playwright browsers if needed
         run: npx playwright install --with-deps
-
-      # - name: Restore Playwright cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.cache/ms-playwright
-      #     key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      #     restore-keys: |
-      #       playwright-${{ runner.os }}-
 
       - name: Run sanity tests
         run: npm run pw:ct -- --grep ${{ inputs.run-tag }}
