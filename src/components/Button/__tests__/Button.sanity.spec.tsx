@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/experimental-ct-react'
-import { TestUtils } from '@/utils'
+import type * as React from 'react'
+
+import { getTitleFromCases } from '@/utils/test/pageHelpers'
+
 import Button from '../'
 import { allCases, defaultProps, viewports } from './common'
 
 // Minimal mock ThemeProvider to wrap buttons for theme-related tests
-const ThemeProvider = ({ children }: { children: React.ReactNode }) => (
+const ThemeProvider = ({ children }: React.PropsWithChildren) => (
   <div data-mock-theme>{children}</div>
 )
 
@@ -27,7 +30,7 @@ test.describe(
           // Collect all console messages
           page.on('console', (msg) => messages.push(msg.text()))
 
-          await page.setViewportSize({ width, height })
+          await page.setViewportSize({ height, width })
 
           await mount(<Button label={defaultProps.label} />)
 
@@ -43,10 +46,10 @@ test.describe(
 
       // Render each prop combination to catch warnings/errors
       for (const props of allCases) {
-        const title = TestUtils.getTitleFromCases({
-          props,
+        const title = getTitleFromCases({
           ignoredKeys: ['label'],
           keysFromPartialMatch: ['icon'],
+          props,
           returnKeys: ['disabled', 'isLoading']
         })
 
@@ -118,14 +121,12 @@ test.describe(
 
         await mount(
           <Button
-            ref={btnRef}
-            label={defaultProps.label}
-            isLoading={false}
             disabled={false}
+            isLoading={false}
+            label={defaultProps.label}
+            ref={btnRef}
           />
         )
-
-        if (btnRef === null) throw new Error('Button ref not accessible')
 
         // Simulate rapid toggling of loading/disabled states
         for (let i = 0; i < 50; i++) {

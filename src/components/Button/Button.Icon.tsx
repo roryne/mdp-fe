@@ -1,15 +1,16 @@
-import { HtmlUtils } from '@/utils'
+import type { FC } from 'react'
 
-import { getHiddenClass } from '.'
+import { conditionalClass, mergeClasses } from '@/utils/html'
+
 import styles from './Button.module.css'
 import type { TButtonIconProps } from './types'
 
-const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, ...restProps }) => {
-  if (!icon) return null
+const Icon: FC<TButtonIconProps> = ({ icon, isHidden, ...restProps }) => {
+  if (icon === undefined) return null
 
-  const className = HtmlUtils.getClassName(
+  const className = mergeClasses(
     styles.iconWrapper,
-    getHiddenClass(isHidden)
+    conditionalClass('hidden', isHidden)
   )
 
   return (

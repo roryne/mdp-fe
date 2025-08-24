@@ -1,7 +1,13 @@
 import { test, expect } from '@playwright/experimental-ct-react'
-import { TestUtils } from '@/utils'
+
+import { isWindowLoading, setupLoadingTimer } from '@/utils/test/pageHelpers'
+import { Spy } from '@/utils/test/spy'
+
 import Button from '..'
 import { defaultProps } from './common'
+
+const spy = new Spy()
+const handleClickSpy = spy.fn
 
 test.describe(
   'Component/Button',
@@ -10,6 +16,10 @@ test.describe(
   },
   () => {
     test.describe('Interactions', () => {
+      test.beforeEach('Initialize spy', () => {
+        spy.reset()
+      })
+
       test.describe(
         'Happy Paths',
         {
@@ -17,41 +27,31 @@ test.describe(
         },
         () => {
           test('fires onClick when clicked', async ({ mount }) => {
-            let clicked = false
             const button = await mount(
-              <Button
-                label={defaultProps.label}
-                onClick={() => (clicked = true)}
-              />
+              <Button label={defaultProps.label} onClick={handleClickSpy} />
             )
 
             await button.click()
 
-            expect(clicked).toBe(true)
+            expect(spy.called).toBe(true)
           })
 
           test('fires onClick when activated by Enter/Space via keyboard', async ({
             mount
           }) => {
-            let clicked = false
             const button = await mount(
-              <Button
-                label={defaultProps.label}
-                onClick={() => (clicked = true)}
-              />
+              <Button label={defaultProps.label} onClick={handleClickSpy} />
             )
 
             await button.focus()
             await button.press('Enter')
 
-            expect(clicked).toBe(true)
-
-            clicked = false
+            expect(spy.callCount).toBe(1)
 
             await button.focus()
             await button.press(' ')
 
-            expect(clicked).toBe(true)
+            expect(spy.callCount).toBe(2)
           })
 
           test('focuses/blurs via keyboard tab navigation', async ({
@@ -85,7 +85,7 @@ test.describe(
             )
 
             // Button should drop focus once it becomes loading
-            expect(button).not.toBeFocused()
+            await expect(button).not.toBeFocused()
           })
         }
       )
@@ -99,13 +99,11 @@ test.describe(
           test('does not fire onClick when disabled and clicked', async ({
             mount
           }) => {
-            let clicked = false
-
             const button = await mount(
               <Button
                 disabled
                 label={defaultProps.label}
-                onClick={() => (clicked = true)}
+                onClick={handleClickSpy}
               />
             )
 
@@ -115,28 +113,27 @@ test.describe(
             // verifies our component itself blocks the click
             await button.click({ force: true })
 
-            expect(clicked).toBe(false)
+            expect(spy.called).toBe(false)
           })
 
           test('does not fire onClick when loading and clicked', async ({
             mount,
             page
           }) => {
-            let clicked = false
             let isLoading = true
 
             // Mock out time in browser context (deterministic async)
             await page.clock.install({ time: 0 })
 
             // Set up a page-side variable that flips after timeout
-            await TestUtils.setupLoadingTimer(page)
+            await setupLoadingTimer(page)
 
             // Initial mount: isLoading = true
             const button = await mount(
               <Button
                 isLoading={isLoading}
                 label={defaultProps.label}
-                onClick={() => (clicked = true)}
+                onClick={handleClickSpy}
               />
             )
 
@@ -144,11 +141,12 @@ test.describe(
 
             // Click forced while disabled → should not fire
             await button.click({ force: true })
-            expect(clicked).toBe(false)
+            expect(spy.called).toBe(false)
 
             // Advance time: still loading after 500ms
             await page.clock.runFor(500)
-            isLoading = await TestUtils.getIsLoading(page)
+            isLoading = await isWindowLoading(page)
+
             await button.update(
               <Button isLoading={isLoading} label={defaultProps.label} />
             )
@@ -156,15 +154,11 @@ test.describe(
 
             // Advance time until timeout → loading ends
             await page.clock.runFor(1000)
-            isLoading = await TestUtils.getIsLoading(page)
+            isLoading = await isWindowLoading(page)
 
             // Re-render with updated state (now enabled)
             await button.update(
-              <Button
-                isLoading={isLoading}
-                label={defaultProps.label}
-                onClick={() => (clicked = true)}
-              />
+              <Button isLoading={isLoading} label={defaultProps.label} />
             )
 
             // Button should now be enabled; subsequent clicks fire
