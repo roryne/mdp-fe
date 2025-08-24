@@ -1,3 +1,5 @@
+import type * as React from 'react'
+
 import styles from './Button.module.css'
 import type { TButtonSpinnerProps } from './types'
 
