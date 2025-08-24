@@ -15,16 +15,13 @@ jobs:
       - name: Setup environment
         run: npm ci
 
-      - name: Check Playwright cache
-        id: playwright-cache
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+      - name: Restore Playwright cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            playwright-${{ runner.os }}-
 
       - name: Install Playwright browsers if needed
         if: steps.playwright-cache.outputs.cache-hit != 'true'

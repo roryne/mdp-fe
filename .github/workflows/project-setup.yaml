@@ -4,35 +4,39 @@ on:
   workflow_call:
 
 jobs:
-  setup:
+  start:
     runs-on: ubuntu-latest
-    outputs:
-      playwright-cache-hit: ${{ steps.playwright-cache.outputs.cache-hit }}
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Node setup
+      - name: Set up or restore cached Node
         uses: actions/setup-node@v4
         with:
-          cache:
           node-version: lts/*
-      - run: npm ci
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
-      - name: Restore Playwright cache
+      - name: Cache Playwright browsers
         id: playwright-cache
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            playwright-${{ runner.os }}-
 
-      - name: Install Playwright browsers
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers (if not cached)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         run: npx playwright install --with-deps
+
+      # # TODO look into actions/cache instead of upload-artifact
+      # - name: Upload deps for other workflows
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: deps
+      #     path: ./
+      #     retention-days: 30
