@@ -1,6 +1,8 @@
 import type { Page } from 'playwright/test'
 
 declare global {
+  // Augment the global Window interface
+  // eslint-disable-next-line
   interface Window {
     __isLoading: boolean
   }
@@ -34,7 +36,7 @@ export default class TestUtils {
   }) {
     return Object.entries(props)
       .map(([key, value]) => {
-        if (ignoredKeys?.includes(key)) return
+        if (ignoredKeys?.includes(key)) return null
 
         const shouldReturnKey =
           returnKeys?.includes(key) ||

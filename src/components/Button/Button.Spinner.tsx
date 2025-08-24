@@ -1,5 +1,5 @@
-import type { TButtonSpinnerProps } from './types'
 import styles from './Button.module.css'
+import type { TButtonSpinnerProps } from './types'
 
 const Spinner: React.FC<TButtonSpinnerProps> = ({
   shouldShow,

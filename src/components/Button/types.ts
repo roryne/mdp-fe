@@ -1,21 +1,21 @@
 import { EButton } from './enums'
 
 export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  iconLeft?: React.ReactNode
-  iconRight?: React.ReactNode
-  isLoading?: boolean
-  size?: (typeof EButton.Size)[keyof typeof EButton.Size]
-  label: string
-  variant?: (typeof EButton.Variant)[keyof typeof EButton.Variant]
+  readonly iconLeft?: React.ReactNode
+  readonly iconRight?: React.ReactNode
+  readonly isLoading?: boolean
+  readonly size?: (typeof EButton.Size)[keyof typeof EButton.Size]
+  readonly label: string
+  readonly variant?: (typeof EButton.Variant)[keyof typeof EButton.Variant]
 }
 
 export type TButtonIconProps = React.HTMLAttributes<HTMLSpanElement> & {
-  icon: React.ReactNode
-  isHidden: boolean
+  readonly icon: React.ReactNode
+  readonly isHidden: boolean
 }
 
 export type TButtonSpinnerProps = React.HTMLAttributes<HTMLSpanElement> & {
-  shouldShow: boolean
+  readonly shouldShow: boolean
 }
 
 export type TButton = React.ForwardRefExoticComponent<

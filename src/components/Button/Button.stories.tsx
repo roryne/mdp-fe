@@ -1,22 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { LeftChevronWhite, RightChevronWhite } from '@/assets'
 import { Button } from '@/components'
+
+import { EIcon, getIconSizePx } from './__tests__/common'
 import { EButton } from './enums'
 import type { TButtonProps } from './types'
-import { EIcon, getIconSizePx } from './__tests__/common'
 
-const LeftIcon = ({ size }: { size: TButtonProps['size'] }) => (
+const LeftIcon = ({ size }: { readonly size: TButtonProps['size'] }) => (
   <img
-    src={LeftChevronWhite}
     alt="Left Arrow Icon"
+    src={LeftChevronWhite}
     width={getIconSizePx(size)}
   />
 )
 
-const RightIcon = ({ size }: { size: TButtonProps['size'] }) => (
+const RightIcon = ({ size }: { readonly size: TButtonProps['size'] }) => (
   <img
-    src={RightChevronWhite}
     alt="Right Arrow Icon"
+    src={RightChevronWhite}
     width={getIconSizePx(size)}
   />
 )
@@ -28,8 +30,8 @@ const meta = {
       control: { type: '-' },
       table: {
         category: 'Appearance',
-        type: { summary: 'ReactNode' },
-        defaultValue: { summary: 'null' }
+        defaultValue: { summary: 'null' },
+        type: { summary: 'ReactNode' }
       }
     },
     iconRight: {
@@ -37,8 +39,8 @@ const meta = {
       control: { type: '-' },
       table: {
         category: 'Appearance',
-        type: { summary: 'ReactNode' },
-        defaultValue: { summary: 'null' }
+        defaultValue: { summary: 'null' },
+        type: { summary: 'ReactNode' }
       }
     },
     isLoading: {
@@ -46,8 +48,8 @@ const meta = {
       description: 'Show loading spinner',
       table: {
         category: 'State',
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' }
+        defaultValue: { summary: 'false' },
+        type: { summary: 'boolean' }
       }
     },
     label: {

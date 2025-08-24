@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { HtmlUtils } from '@/utils'
+
 import Icon from './Button.Icon'
 import Spinner from './Button.Spinner'
 import styles from './Button.module.css'
 import { EButton } from './enums'
-
 import type { TButton, TButtonProps } from './types'
 
 export const getHiddenClass = (isHidden?: boolean) =>

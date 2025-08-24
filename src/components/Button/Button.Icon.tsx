@@ -1,7 +1,8 @@
 import { HtmlUtils } from '@/utils'
+
+import { getHiddenClass } from '.'
 import styles from './Button.module.css'
 import type { TButtonIconProps } from './types'
-import { getHiddenClass } from '.'
 
 const Icon: React.FC<TButtonIconProps> = ({ icon, isHidden, ...restProps }) => {
   if (!icon) return null
