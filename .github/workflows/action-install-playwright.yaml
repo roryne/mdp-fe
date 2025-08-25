@@ -5,10 +5,10 @@ on:
     outputs:
       playwright-version:
         description: 'Current Playwright version'
-        value: ${{ jobs.start.outputs.pw-version }}
+        value: ${{ jobs.install-playwright.outputs.pw-version }}
       playwright-path:
         description: 'Playwright path for downstream reference'
-        value: ${{ jobs.start.outputs.pw-path }}
+        value: ${{ jobs.install-playwright.outputs.pw-path }}
 
 jobs:
   install-playwright:
