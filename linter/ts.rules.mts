@@ -78,7 +78,7 @@ const ts: Linter.RulesRecord = {
   '@typescript-eslint/prefer-reduce-type-parameter': 'error',
   '@typescript-eslint/promise-function-async': 'error',
   '@typescript-eslint/require-array-sort-compare': 'error',
-  '@typescript-eslint/require-await': 'error',
+  '@typescript-eslint/require-await': 'off',
   '@typescript-eslint/restrict-plus-operands': 'error',
   '@typescript-eslint/sort-type-constituents': 'error',
   '@typescript-eslint/strict-boolean-expressions': [

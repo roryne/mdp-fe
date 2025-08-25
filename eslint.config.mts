@@ -7,10 +7,10 @@ import { plugins, rules as linterRules } from './linter'
 
 export default tsEslint.config([
   eslint.configs.recommended,
-  tsEslint.configs.base,
+  tsEslint.configs.recommended,
   {
     files: ['./src/**/*.{mjs,mts,ts,tsx}', './linter/**/*.{mjs,mts,ts,tsx}'],
-    ignores: ['**/build/**', '**/dist/**', './src/**/*.css'],
+    ignores: ['**/build/**', '**/dist/**', 'src/**/*.css'],
     languageOptions: {
       ecmaVersion: 'latest',
       globals: {
@@ -20,11 +20,7 @@ export default tsEslint.config([
       parser,
       parserOptions: {
         ecmaFeatures: { jsx: true },
-        ecmaVersion: 'latest',
-        project: './tsconfig.eslint.json',
-        projectService: true,
-        sourceType: 'module',
-        tsconfigRootDir: __dirname
+        project: './tsconfig.eslint.json'
       },
       sourceType: 'module'
     },
@@ -36,10 +32,7 @@ export default tsEslint.config([
     },
     rules: { ...linterRules },
     settings: {
-      react: {
-        runtime: 'automatic',
-        version: 'detect'
-      }
+      react: { version: 'detect' }
     }
   }
 ])
