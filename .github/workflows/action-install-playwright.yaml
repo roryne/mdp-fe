@@ -5,10 +5,10 @@ on:
     outputs:
       playwright-version:
         description: 'Current Playwright version'
-        value: ${{ jobs.install-playwright.outputs.version }}
+        value: ${{ jobs.install-playwright.outputs.pw-version }}
       playwright-path:
         description: 'Playwright path for downstream reference'
-        value: ${{ jobs.install-playwright.outputs.path }}
+        value: ${{ jobs.install-playwright.outputs.pw-path }}
 
 jobs:
   install-playwright:
@@ -20,8 +20,8 @@ jobs:
 
     # Map job outputs from step outputs
     outputs:
-      playwright-version: ${{ steps.get-pw-version.outputs.version }}
-      playwright-path: ${{ steps.set-pw-path.outputs.path }}
+      pw-version: ${{ steps.get-pw-version.outputs.version }}
+      pw-path: ${{ steps.set-pw-path.outputs.path }}
 
     steps:
       - name: Checkout repository
@@ -37,28 +37,19 @@ jobs:
         run: |
           version=$(npx playwright --version | awk '{print $2}')
           echo "version=$version" >> $GITHUB_OUTPUT
-          echo "PLAYWRIGHT_VERSION=$version" >> $GITHUB_ENV
 
-      - name: Set Playwright browsers path env
+      - name: Set Playwright browsers path
         id: set-pw-path
         run: |
           path="${RUNNER_TEMP}/ms-playwright"
-          echo "PLAYWRIGHT_BROWSERS_PATH=$path" >> $GITHUB_ENV
           echo "path=$path" >> $GITHUB_OUTPUT
 
-      - name: Debug Playwright outputs
-        run: |
-          echo "Playwright version (step output): ${{ steps.get-pw-version.outputs.version }}"
-          echo "Playwright version (env): $PLAYWRIGHT_VERSION"
-          echo "Playwright path (step output): ${{ steps.set-pw-path.outputs.path }}"
-          echo "Playwright path (env): $PLAYWRIGHT_BROWSERS_PATH"
-
-      - name: Restore Playwright browsers from cache if able
+      - name: Restore Playwright browsers from cache
         id: pw-cache
         uses: actions/cache@v4
         with:
-          path: '${{ env.PLAYWRIGHT_BROWSERS_PATH }}'
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+          path: '${{ steps.set-pw-path.outputs.path }}'
+          key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
           restore-keys: playwright-browsers-
 
       - name: Determine if cache really missed
@@ -79,4 +70,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-browsers
-          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          path: ${{ steps.set-pw-path.outputs.path }}
