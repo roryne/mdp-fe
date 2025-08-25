@@ -10,16 +10,91 @@ on:
         type: string
 
 jobs:
-  # setup:
-  # uses: ./.github/workflows/action-project-setup.yaml
+  formatter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
 
-  # code-quality:
-  #   needs: setup
-  #   uses: ./.github/workflows/action-code-quality.yaml
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
 
-  component-tests:
-    # needs: setup
-    uses: ./.github/workflows/action-run-component-tests.yaml
-    with:
-      event-name: ${{ inputs.event-name }}
-      ref-name: ${{ inputs.ref-name }}
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run Prettier
+        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npx eslint "src/**/*.{ts,tsx,js,jsx}" --max-warnings=0
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run TypeScript typecheck
+        run: npm run typecheck
+
+  playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run @sanity tests
+        run: npm run pw:ct -- --grep @sanity
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          if-no-files-found: 'ignore'
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 10
