@@ -17,6 +17,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
+      - name: Install project dependencies
+        run: npm ci
+
       - name: Get Playwright version
         id: playwright-version
         run: |
@@ -26,16 +29,12 @@ jobs:
         id: playwright-cache
         uses: actions/cache@v4
         with:
-          path: ~/.cache/ms-playwright
+          path: ${{ runner.temp }}/ms-playwright
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-          restore-keys: |
-            playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-
-      - name: Install project dependencies
-        run: npm ci
+          restore-keys: playwright-browsers-
 
       - name: Install Playwright browsers if cache missed
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
         run: npx playwright install --with-deps

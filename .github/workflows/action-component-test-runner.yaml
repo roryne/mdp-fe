@@ -20,19 +20,18 @@ jobs:
         run: |
           echo "PLAYWRIGHT_VERSION=$(jq -r '.devDependencies.playwright // .dependencies.playwright' package.json)" >> $GITHUB_ENV
 
-      - name: Restore Playwright browser cache
+      - name: Restore or cache Playwright browsers
         id: playwright-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
-          path: ~/.cache/ms-playwright
+          path: ${{ runner.temp }}/ms-playwright
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-          restore-keys: |
-            playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+          restore-keys: playwright-browsers-
 
       - name: Install Playwright browsers if cache missed
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
         run: npx playwright install --with-deps
 
       - name: Run component tests matching input tag
