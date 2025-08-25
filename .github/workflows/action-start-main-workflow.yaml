@@ -88,7 +88,7 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps --only-shell chromium
 
-      - name: Run @sanity tests
+      - name: Run @sanity tests pre-merge
         run: npm run pw:ct -- --grep @sanity --only-changed=origin/$GITHUB_BASE_REF
 
       - uses: actions/upload-artifact@v4
