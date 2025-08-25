@@ -11,9 +11,6 @@ jobs:
       run:
         shell: bash
 
-    outputs:
-      node-cache-key: ${{ steps.node-cache-key.outputs.key || '' }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

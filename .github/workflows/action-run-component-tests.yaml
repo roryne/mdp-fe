@@ -1,4 +1,4 @@
-name: Run Component Tests
+name: Playwright Component Tests
 
 on:
   workflow_call:
@@ -7,8 +7,14 @@ on:
         required: true
         type: string
       ref-name:
-        required: false
+        required: true
         type: string # e.g., github.ref
+      playwright-path:
+        required: true
+        type: string
+      playwright-version:
+        required: true
+        type: string
 
 jobs:
   run-component-tests:
@@ -26,6 +32,24 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Restore browsers from cache (fast path)
+      - name: Restore browsers from cache
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ inputs.playwright-path }}
+          key: |
+            playwright-browsers-${{ inputs.playwright-version }}
+            playwright-browsers-
+
+      # Download artifact if cache missed (ensures browsers are available)
+      - name: Download browsers artifact if cache missed
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-browsers
+          path: ${{ inputs.playwright-path }}
 
       - name: Run changed only
         if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}
