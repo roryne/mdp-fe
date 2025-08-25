@@ -86,7 +86,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --lang=en-US --with-deps chromium --only-changed=$GITHUB_BASE_REF
 
       - name: Run @sanity tests
         run: npm run pw:ct -- --grep @sanity
