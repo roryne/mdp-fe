@@ -2,14 +2,6 @@ name: Install Playwright
 
 on:
   workflow_call:
-    inputs:
-      fetch-deps:
-        description: >
-          Set to true to install project dependencies (via `npm ci`) in this job.
-          Set to false if the caller workflow already installed dependencies.
-        required: false
-        type: boolean
-        default: false
     outputs:
       playwright-version:
         description: 'The version of Playwright installed.'
@@ -33,7 +25,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install project dependencies
-        if: inputs.fetch-deps == true
         run: npm ci
 
       - name: Store Playwright version
