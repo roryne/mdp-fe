@@ -17,6 +17,10 @@ jobs:
     needs: setup
     uses: ./.github/workflows/action-install-playwright.yaml
 
+  code-quality:
+    needs: setup
+    uses: ./.github/workflows/action-code-quality.yaml
+
   component-tests:
     needs: [setup, install-playwright]
     uses: ./.github/workflows/action-run-component-tests.yaml

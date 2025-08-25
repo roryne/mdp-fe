@@ -2,6 +2,13 @@ name: Install Playwright
 
 on:
   workflow_call:
+    outputs:
+      playwright-version:
+        description: 'Current Playwright version'
+        value: ${{ jobs.install-playwright.outputs.version }}
+      playwright-path:
+        description: 'Playwright path for downstream reference'
+        value: ${{ jobs.install-playwright.outputs.path }}
 
 jobs:
   install-playwright:
@@ -11,6 +18,7 @@ jobs:
       run:
         shell: bash
 
+    # Map job outputs from step outputs
     outputs:
       playwright-version: ${{ steps.get-pw-version.outputs.version }}
       playwright-path: ${{ steps.set-pw-path.outputs.path }}
