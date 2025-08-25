@@ -1,5 +1,7 @@
 import type { Page } from 'playwright/test'
 
+import type { TTestTitleProps } from '@/components/Button/types'
+
 /**
  * Check if the global window loading flag is set
  */
@@ -8,33 +10,44 @@ export async function isWindowLoading(page: Page): Promise<boolean> {
   return result
 }
 
+const hasTextMatchWithKey = (
+  targetKey: string,
+  keysFromPartialMatch: string[] = []
+): boolean =>
+  keysFromPartialMatch.some((partial) =>
+    targetKey.toLowerCase().includes(partial.toLowerCase())
+  )
+
 /**
  * Extract a title string from props, with optional filtering
  */
 export function getTitleFromCases({
   props,
-  ignoredKeys,
-  keysFromPartialMatch,
-  returnKeys
-}: {
-  props: Record<string, unknown>
-  ignoredKeys?: string[]
-  keysFromPartialMatch?: string[]
-  returnKeys?: string[]
-}): string {
+  ignoredKeys = [],
+  keysFromPartialMatch = [],
+  returnKeys = []
+}: TTestTitleProps): string {
   return Object.entries(props)
-    .map(([key, value]) => {
-      if (ignoredKeys?.includes(key)) return null
+    .map(([key, value]): string | null => {
+      if (ignoredKeys.includes(key)) return null
 
+      // return the key if explicitly requested or partially matched
       const shouldReturnKey =
-        returnKeys?.includes(key) ??
-        keysFromPartialMatch?.some((partial) =>
-          key.toLowerCase().includes(partial.toLowerCase())
-        )
+        returnKeys.includes(key) ||
+        hasTextMatchWithKey(key, keysFromPartialMatch)
 
       if (shouldReturnKey) return key
 
-      return value
+      if (
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean'
+      ) {
+        return String(value)
+      }
+
+      // ReactNode / JSX / objects are ignored
+      return null
     })
     .filter(Boolean)
     .join('-')

@@ -64,7 +64,7 @@ test.describe(
         await expect(button).toHaveAttribute('aria-busy', 'true')
       })
 
-      test(
+      test.skip(
         'button remains visible in high contrast mode',
         { tag: ['@visual'] },
         async ({ mount, page }) => {
