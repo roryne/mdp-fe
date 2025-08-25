@@ -31,6 +31,8 @@ jobs:
         run: npm ci
 
       - name: Restore browsers from cache
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         id: pw-cache
         uses: actions/cache@v4
         with:
@@ -49,10 +51,6 @@ jobs:
 
       - name: Download browsers artifact if needed
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
-        # uses: actions/download-artifact@v4
-        # with:
-        #   name: playwright-browsers
-        #   path: ~/.cache/ms-playwright
         run: npx playwright install --with-deps chrome
 
       # Run all tests
