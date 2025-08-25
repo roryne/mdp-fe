@@ -18,7 +18,7 @@ jobs:
       run:
         shell: bash
 
-    # Map job outputs from step outputs
+    # Job-level outputs mapped from step outputs
     outputs:
       pw-path: ${{ steps.set-pw-path.outputs.path }}
       pw-version: ${{ steps.get-pw-version.outputs.version }}
@@ -65,6 +65,7 @@ jobs:
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
         run: npx playwright install --with-deps
 
+      # Upload browsers artifact for use by other jobs in the same workflow run
       - name: Upload browsers artifact
         uses: actions/upload-artifact@v4
         with:
