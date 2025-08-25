@@ -5,13 +5,13 @@ on:
     outputs:
       playwright-version:
         description: 'Current Playwright version'
-        value: ${{ jobs.install-playwright.outputs.pw-version }}
+        value: ${{ jobs.start.outputs.pw-version }}
       playwright-path:
         description: 'Playwright path for downstream reference'
-        value: ${{ jobs.install-playwright.outputs.pw-path }}
+        value: ${{ jobs.start.outputs.pw-path }}
 
 jobs:
-  install-playwright:
+  start:
     runs-on: ubuntu-latest
 
     defaults:
@@ -65,8 +65,7 @@ jobs:
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
         run: npx playwright install --with-deps
 
-      - name: Upload browsers artifact if install ran
-        if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
+      - name: Upload browsers artifact
         uses: actions/upload-artifact@v4
         with:
           name: playwright-browsers
