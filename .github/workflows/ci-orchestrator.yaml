@@ -1,9 +1,5 @@
 name: CI Orchestrator
 
-concurrency:
-  group: orchestrator-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   pull_request:
     branches: [main]
@@ -14,15 +10,17 @@ on:
 jobs:
   setup:
     uses: ./.github/workflows/action-project-setup.yaml
-    with:
-      install-playwright: true
 
   code-quality:
     needs: setup
     uses: ./.github/workflows/action-code-quality.yaml
 
-  component-tests:
+  install-playwright:
     needs: setup
+    uses: ./.github/workflows/action-install-playwright.yaml
+
+  component-tests:
+    needs: [setup, install-playwright]
     uses: ./.github/workflows/action-run-component-tests.yaml
     with:
       event-name: ${{ github.event_name }}
