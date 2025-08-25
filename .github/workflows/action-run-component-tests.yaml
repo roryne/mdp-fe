@@ -9,15 +9,9 @@ on:
       ref-name:
         required: true
         type: string
-      playwright-path:
-        required: true
-        type: string
       playwright-version:
         required: true
         type: string
-
-env:
-  PLAYWRIGHT_BROWSERS_PATH: 0
 
 jobs:
   run-component-tests:
@@ -28,12 +22,6 @@ jobs:
         shell: bash
 
     steps:
-      - name: Debug inputs
-        run: |
-          echo "Received playwright-version: ${{ inputs.playwright-version }}"
-          echo "Received playwright-path: ${{ inputs.playwright-path }}"
-          echo "env.PLAYWRIGHT_BROWSERS_PATH: $PLAYWRIGHT_BROWSERS_PATH"
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -46,7 +34,7 @@ jobs:
         id: pw-cache
         uses: actions/cache@v4
         with:
-          path: ${{ inputs.playwright-path }}
+          path: ~/.cache/ms-playwright
           key: |
             playwright-browsers-${{ inputs.playwright-version }}
             playwright-browsers-
@@ -65,12 +53,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: playwright-browsers
-          path: ${{ inputs.playwright-path }}
+          path: ~/.cache/ms-playwright
 
-      # - name: Run changed-only tests
-      #   if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}
-      #   run: npm run pw:ct -- --only-changed=origin/$GITHUB_BASE_REF
-
+      # Run all tests
       - name: Run all tests
-        # if: ${{ inputs.event-name == 'push' && startsWith(inputs.ref-name, 'refs/heads/main') }}
         run: npm run pw:ct
