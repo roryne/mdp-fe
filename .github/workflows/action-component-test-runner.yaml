@@ -15,14 +15,19 @@ jobs:
       - name: Setup project dependencies
         run: npm ci
 
+      - name: Get Playwright version
+        id: playwright-version
+        run: |
+          echo "PLAYWRIGHT_VERSION=$(jq -r '.devDependencies.playwright // .dependencies.playwright' package.json)" >> $GITHUB_ENV
+
       - name: Restore Playwright browser cache
         id: playwright-cache
         uses: actions/cache/restore@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
           restore-keys: |
-            playwright-${{ runner.os }}-
+            playwright-browsers-
 
       - name: Install Playwright browsers if cache missed
         if: steps.playwright-cache.outputs.cache-hit != 'true'
