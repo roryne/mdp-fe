@@ -1,4 +1,4 @@
-name: Run component tests
+name: Run Component Tests
 
 on:
   workflow_call:
@@ -7,30 +7,46 @@ on:
         required: true
         type: string
       review-state:
-        required: true
+        required: false
         type: string
+    secrets: {}
 
 jobs:
-  sanity-tests:
-    if: ${{ inputs.event-name == 'pull_request' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@sanity'
+  run-component-tests:
+    runs-on: ubuntu-latest
+    needs: [setup] # comes from CI Orchestrator
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  a11y-tests:
-    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@a11y'
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
-  interaction-tests:
-    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@interaction'
+      - name: Install dependencies
+        run: npm ci
 
-  visual-tests:
-    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@visual'
+      - name: Install Playwright browsers
+        if: ${{ needs.setup.outputs.playwright-browsers-path != '' }}
+        run: |
+          echo "Using Playwright installed at ${{ needs.setup.outputs.playwright-browsers-path }}"
+          echo "PLAYWRIGHT_BROWSERS_PATH=${{ needs.setup.outputs.playwright-browsers-path }}" >> $GITHUB_ENV
+
+      - name: Run component tests
+        run: |
+          # Default is only-changed
+          CMD="npm run test:component -- --only-changed"
+
+          # If this is a PR and it has an approval, run full suite
+          if [[ "${{ inputs.event-name }}" == "pull_request" ]] && [[ "${{ inputs.review-state }}" == "approved" ]]; then
+            CMD="npm run test:component"
+          fi
+
+          echo "Running: $CMD"
+          $CMD

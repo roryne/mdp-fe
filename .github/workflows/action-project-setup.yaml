@@ -1,16 +1,37 @@
-name: Project environment setup
+name: Project Environment Setup
 
 on:
   workflow_call:
+    inputs:
+      install-playwright:
+        required: true
+        type: boolean
+
+    outputs:
+      playwright-browsers-path:
+        description: 'Path where Playwright browsers are installed'
+        value: ${{ jobs.install-playwright.outputs.playwright-browsers-path || '' }}
+      playwright-version:
+        description: 'Playwright version installed'
+        value: ${{ jobs.install-playwright.outputs.playwright-version || '' }}
 
 jobs:
-  start:
+  project-setup:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    outputs:
+      node-cache-key: ${{ steps.node-cache-key.outputs.key || '' }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Node.js and restore npm cache
+        id: node-cache-key
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -20,29 +41,12 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
-      - name: Get Playwright version
-        id: playwright-version
-        run: |
-          echo "PLAYWRIGHT_VERSION=$(jq -r '.devDependencies.playwright // .dependencies.playwright' package.json)" >> $GITHUB_ENV
-
-      - name: Set browser path env
-        run: echo "PLAYWRIGHT_BROWSERS_PATH=${RUNNER_TEMP}/ms-playwright" >> $GITHUB_ENV
-
-      - name: Restore Playwright browsers from cache
-        id: pw-cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-          restore-keys: playwright-browsers-
-
-      - name: Install Playwright browsers if cache missed
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-
-      - name: Save Playwright browser cache
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+  install-playwright:
+    if: ${{ inputs.install-playwright }}
+    needs: project-setup
+    uses: ./.github/workflows/action-install-playwright.yaml
+    with:
+      fetch-deps: true
+    outputs:
+      playwright-browsers-path: ${{ steps.set-browsers-path.outputs.path }}
+      playwright-version: ${{ steps.get-version.outputs.version }}

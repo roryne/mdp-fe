@@ -12,6 +12,8 @@ on:
 jobs:
   setup:
     uses: ./.github/workflows/action-project-setup.yaml
+    with:
+      install-playwright: true
 
   code-quality:
     needs: setup
@@ -21,5 +23,5 @@ jobs:
     needs: setup
     uses: ./.github/workflows/action-run-component-tests.yaml
     with:
-      event-name: ${{ github.event_name }}
-      review-state: ${{ github.event.review.state || '' }}
+      # Run only-changed tests unless this is a PR approval
+      only-changed: ${{ github.event_name == 'pull_request' && github.event.review.state != 'approved' }}
