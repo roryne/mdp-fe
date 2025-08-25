@@ -6,6 +6,8 @@ on:
 jobs:
   install-playwright:
     runs-on: ubuntu-latest
+    env:
+      CACHE_MISS: ${{ steps.pw-cache.outputs.cache-hit != 'true' && steps.pw-cache.outputs.restore-keys == '' }}
 
     defaults:
       run:
@@ -47,11 +49,11 @@ jobs:
           restore-keys: playwright-browsers-
 
       - name: Install Playwright browsers if cache missed
-        if: steps.pw-cache.outputs.cache-hit != 'true'
+        if: ${{ env.CACHE_MISS }}
         run: npx playwright install --with-deps
 
-      - name: Upload browsers artifact
-        if: steps.pw-cache.outputs.cache-hit != 'true'
+      - name: Upload browsers artifact if install ran
+        if: ${{ env.CACHE_MISS }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-browsers

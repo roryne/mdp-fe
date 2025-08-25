@@ -38,7 +38,7 @@ jobs:
         id: pw-cache
         uses: actions/cache@v4
         with:
-          path: ${{ inputs.playwright-path }}
+          path: ${{ inputs.playwright-path || runner_temp + '/ms-playwright' }}
           key: |
             playwright-browsers-${{ inputs.playwright-version }}
             playwright-browsers-
