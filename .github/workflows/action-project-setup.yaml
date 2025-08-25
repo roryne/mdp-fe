@@ -29,7 +29,7 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
           restore-keys: |
-            playwright-browsers-
+            playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
 
       - name: Install project dependencies
         run: npm ci
