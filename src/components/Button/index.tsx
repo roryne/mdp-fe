@@ -37,7 +37,9 @@ const ButtonBase = forwardRef<HTMLButtonElement, TButtonProps>(
         {...restProps}
       >
         <Icon data-test="btn--icon-left" icon={iconLeft} isHidden={isLoading} />
-        <span className={conditionalClass(classes, isLoading)}>{label}</span>
+        <span className={conditionalClass(styles.hidden, isLoading)}>
+          {label}
+        </span>
         <Spinner shouldShow={isLoading} />
         <Icon
           data-test="btn--icon-right"
