@@ -45,8 +45,3 @@ jobs:
     if: ${{ inputs.install-playwright }}
     needs: project-setup
     uses: ./.github/workflows/action-install-playwright.yaml
-    with:
-      fetch-deps: true
-    outputs:
-      playwright-browsers-path: ${{ steps.set-browsers-path.outputs.path }}
-      playwright-version: ${{ steps.get-version.outputs.version }}
