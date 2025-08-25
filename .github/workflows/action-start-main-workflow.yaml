@@ -68,46 +68,46 @@ jobs:
         run: npm run typecheck
 
   playwright:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-      with:
-        fetch-depth: 0
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        cache: 'npm'
-        cache-dependency-path: 'package-lock.json'
-        node-version: 'lts/*'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
 
-    - name: Setup project dependencies
-      run: npm ci
+      - name: Setup project dependencies
+        run: npm ci
 
-    - name: Get Playwright version
-      id: get-pw-version
-      run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
+      - name: Get Playwright version
+        id: get-pw-version
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
-    - name: Cache Playwright browsers
-      id: pw-cache
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/ms-playwright
-        key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-        restore-keys: playwright-browsers-
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+          restore-keys: playwright-browsers-
 
-    - name: Install Playwright browsers if cache missed
-      if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
-      run: npx playwright install --with-deps --only-shell chromium
+      - name: Install Playwright browsers if cache missed
+        if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
+        run: npx playwright install --with-deps --only-shell chromium
 
-    - name: Run @sanity tests pre-merge
-      run: npm run pw:ct -- --grep @sanity --only-changed=origin/$GITHUB_BASE_REF
+      - name: Run @sanity tests pre-merge
+        run: npm run pw:ct -- --grep @sanity --only-changed=origin/$GITHUB_BASE_REF
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        if-no-files-found: 'ignore'
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 10
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          if-no-files-found: 'ignore'
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 10
