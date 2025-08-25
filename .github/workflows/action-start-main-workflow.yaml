@@ -1,10 +1,74 @@
-playwright:
+name: Main workflow start point
+on:
+  workflow_call:
+    inputs:
+      event-name:
+        required: true
+        type: string
+      ref-name:
+        required: false
+        type: string
+
+jobs:
+  formatter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run Prettier
+        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npx eslint "src/**/*.{ts,tsx,js,jsx}" --max-warnings=0
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          node-version: 'lts/*'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run TypeScript typecheck
+        run: npm run typecheck
+
+  playwright:
   runs-on: ubuntu-latest
-
-  defaults:
-    run:
-      shell: bash
-
   steps:
     - name: Checkout repository
       uses: actions/checkout@v5
@@ -31,9 +95,7 @@ playwright:
       with:
         path: ~/.cache/ms-playwright
         key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-        restore-keys: |
-          playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-          playwright-browsers-
+        restore-keys: playwright-browsers-
 
     - name: Install Playwright browsers if cache missed
       if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
