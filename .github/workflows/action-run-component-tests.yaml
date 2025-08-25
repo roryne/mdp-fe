@@ -25,6 +25,11 @@ jobs:
         shell: bash
 
     steps:
+      - name: Debug inputs from orchestrator
+        run: |
+          echo "Received playwright-version: ${{ inputs.playwright-version }}"
+          echo "Received playwright-path: ${{ inputs.playwright-path }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
