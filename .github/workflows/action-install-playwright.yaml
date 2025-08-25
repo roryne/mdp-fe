@@ -52,6 +52,9 @@ jobs:
 
       - name: Install Playwright browsers if cache missed
         # if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
+        # run: npx playwright install --with-deps chrome
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         run: npx playwright install --with-deps chrome
 
       - name: Upload browsers artifact
