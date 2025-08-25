@@ -33,4 +33,4 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         env:
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install --detect-browsers --with-deps
