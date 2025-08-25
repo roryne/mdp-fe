@@ -3,6 +3,9 @@ name: Project Environment Setup
 on:
   workflow_call:
 
+env:
+  PLAYWRIGHT_BROWSERS_PATH: 0
+
 jobs:
   project-setup:
     runs-on: ubuntu-latest

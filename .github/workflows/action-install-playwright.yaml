@@ -10,6 +10,9 @@ on:
         description: 'Current Playwright version'
         value: ${{ jobs.install-playwright.outputs.pw-version }}
 
+env:
+  PLAYWRIGHT_BROWSERS_PATH: 0
+
 jobs:
   install-playwright:
     runs-on: ubuntu-latest
