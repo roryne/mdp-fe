@@ -1,0 +1,31 @@
+name: Main workflow start point
+on:
+  workflow_call:
+    inputs:
+      event-name:
+        required: true
+        type: string
+      ref-name:
+        required: false
+        type: string
+
+jobs:
+  setup:
+    uses: ./.github/workflows/action-project-setup.yaml
+
+  playwright:
+    needs: setup
+    uses: ./.github/workflows/action-install-playwright.yaml
+
+  code-quality:
+    needs: setup
+    uses: ./.github/workflows/action-code-quality.yaml
+
+  component-tests:
+    needs: [setup, playwright]
+    uses: ./.github/workflows/action-run-component-tests.yaml
+    with:
+      event-name: ${{ inputs.event-name }}
+      playwright-path: ${{ needs.playwright.outputs.playwright-path }}
+      playwright-version: ${{ needs.playwright.outputs.playwright-version }}
+      ref-name: ${{ inputs.ref-name }}

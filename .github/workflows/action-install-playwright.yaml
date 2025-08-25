@@ -3,22 +3,25 @@ name: Install Playwright
 on:
   workflow_call:
     outputs:
+      playwright-path:
+        description: 'Playwright path for downstream reference'
+        value: ${{ jobs.install-playwright.outputs.pw-path }}
       playwright-version:
-        description: 'The version of Playwright installed.'
-        value: ${{ jobs.install-playwright.outputs.playwright-version }}
-      browsers-cache-hit:
-        description: 'Whether the Playwright browsers were restored from cache.'
-        value: ${{ jobs.install-playwright.outputs.browsers-cache-hit }}
+        description: 'Current Playwright version'
+        value: ${{ jobs.install-playwright.outputs.pw-version }}
 
 jobs:
   install-playwright:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         shell: bash
+
+    # Job-level outputs mapped from step outputs
     outputs:
-      playwright-version: ${{ steps.store-version.outputs.version }}
-      browsers-cache-hit: ${{ steps.pw-cache.outputs.cache-hit }}
+      pw-path: ${{ steps.set-pw-path.outputs.path }}
+      pw-version: ${{ steps.get-pw-version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -29,24 +32,42 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
+      - name: Set Playwright browsers path
+        id: set-pw-path
+        run: |
+          path="${RUNNER_TEMP}/ms-playwright"
+          echo "path=$path" >> $GITHUB_OUTPUT
+
       - name: Store Playwright version
-        id: store-version
+        id: get-pw-version
         run: |
           version=$(npx playwright --version | awk '{print $2}')
           echo "version=$version" >> $GITHUB_OUTPUT
-          echo "PLAYWRIGHT_VERSION=$version" >> $GITHUB_ENV
 
-      - name: Set Playwright browsers path env
-        run: echo "PLAYWRIGHT_BROWSERS_PATH=${RUNNER_TEMP}/ms-playwright" >> $GITHUB_ENV
-
-      - name: Restore Playwright browsers from cache if able
+      - name: Restore Playwright browsers from cache
         id: pw-cache
         uses: actions/cache@v4
         with:
-          path: '${{ env.PLAYWRIGHT_BROWSERS_PATH }}'
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+          path: '${{ steps.set-pw-path.outputs.path }}'
+          key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
           restore-keys: playwright-browsers-
 
+      - name: Determine if cache really missed
+        id: check-cache-hit
+        run: |
+          if [[ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" && "${{ steps.pw-cache.outputs.restore-keys }}" == "" ]]; then
+            echo "miss=true" >> $GITHUB_OUTPUT
+          else
+            echo "miss=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install Playwright browsers if cache missed
-        if: steps.pw-cache.outputs.cache-hit != 'true'
+        if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
         run: npx playwright install --with-deps
+
+      # Upload browsers artifact for use by other jobs in the same workflow run
+      - name: Upload browsers artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-browsers
+          path: ${{ steps.set-pw-path.outputs.path }}
