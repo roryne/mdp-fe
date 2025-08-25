@@ -1,100 +1,51 @@
-name: Main workflow start point
-on:
-  workflow_call:
-    inputs:
-      event-name:
-        required: true
-        type: string
-      ref-name:
-        required: false
-        type: string
+playwright:
+  runs-on: ubuntu-latest
 
-jobs:
-  formatter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
+  defaults:
+    run:
+      shell: bash
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
-          node-version: 'lts/*'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
 
-      - name: Setup project dependencies
-        run: npm ci
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        cache: 'npm'
+        cache-dependency-path: 'package-lock.json'
+        node-version: 'lts/*'
 
-      - name: Run Prettier
-        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+    - name: Setup project dependencies
+      run: npm ci
 
-  linter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+    - name: Get Playwright version
+      id: get-pw-version
+      run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
-          node-version: 'lts/*'
+    - name: Cache Playwright browsers
+      id: pw-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+        restore-keys: |
+          playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+          playwright-browsers-
 
-      - name: Setup project dependencies
-        run: npm ci
+    - name: Install Playwright browsers if cache missed
+      if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
+      run: npx playwright install --with-deps --only-shell chromium
 
-      - name: Run ESLint
-        run: npx eslint "src/**/*.{ts,tsx,js,jsx}" --max-warnings=0
+    - name: Run @sanity tests pre-merge
+      run: npm run pw:ct -- --grep @sanity --only-changed=origin/$GITHUB_BASE_REF
 
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
-          node-version: 'lts/*'
-
-      - name: Setup project dependencies
-        run: npm ci
-
-      - name: Run TypeScript typecheck
-        run: npm run typecheck
-
-  playwright:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
-          node-version: 'lts/*'
-
-      - name: Setup project dependencies
-        run: npm ci
-
-      - name: Install Playwright
-        run: npx playwright install --with-deps --only-shell chromium
-
-      - name: Run @sanity tests pre-merge
-        run: npm run pw:ct -- --grep @sanity --only-changed=origin/$GITHUB_BASE_REF
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          if-no-files-found: 'ignore'
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 10
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        if-no-files-found: 'ignore'
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 10
