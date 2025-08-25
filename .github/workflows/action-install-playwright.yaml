@@ -38,6 +38,13 @@ jobs:
           echo "PLAYWRIGHT_BROWSERS_PATH=$path" >> $GITHUB_ENV
           echo "path=$path" >> $GITHUB_OUTPUT
 
+      - name: Debug Playwright outputs
+        run: |
+          echo "Playwright version (step output): ${{ steps.get-pw-version.outputs.version }}"
+          echo "Playwright version (env): $PLAYWRIGHT_VERSION"
+          echo "Playwright path (step output): ${{ steps.set-pw-path.outputs.path }}"
+          echo "Playwright path (env): $PLAYWRIGHT_BROWSERS_PATH"
+
       - name: Restore Playwright browsers from cache if able
         id: pw-cache
         uses: actions/cache@v4
