@@ -5,6 +5,9 @@ on:
         required: true
         type: string
 
+env:
+  PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -20,31 +23,24 @@ jobs:
         run: |
           echo "PLAYWRIGHT_VERSION=$(jq -r '.devDependencies.playwright // .dependencies.playwright' package.json)" >> $GITHUB_ENV
 
-      - name: Restore Playwright cache
+      - name: Restore or cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/ms-playwright
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
           restore-keys: playwright-browsers-
 
       - name: Install Playwright browsers if cache missed
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
         run: npx playwright install --with-deps
-
-      - name: Debug Playwright cache
-        run: |
-          echo $PLAYWRIGHT_BROWSERS_PATH
-          ls -la $PLAYWRIGHT_BROWSERS_PATH
 
       - name: Run component tests matching input tag
         run: npm run pw:ct -- --grep ${{ inputs.run-tag }}
 
-      - name: Save Playwright cache
+      - name: Save Playwright browser cache
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/ms-playwright
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
