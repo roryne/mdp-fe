@@ -2,7 +2,8 @@ import type * as React from 'react'
 
 import { EButton } from './enums'
 
-export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+export type TButtonBaseProps = {
+  disabled?: boolean | undefined
   iconLeft?: React.ReactNode
   iconRight?: React.ReactNode
   isLoading?: boolean
@@ -11,13 +12,16 @@ export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: (typeof EButton.Variant)[keyof typeof EButton.Variant]
 }
 
+export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+  TButtonBaseProps
+
 export type TButtonIconProps = React.HTMLAttributes<HTMLSpanElement> & {
-  readonly icon: React.ReactNode
-  readonly isHidden: boolean
+  icon: React.ReactNode
+  isHidden: boolean
 }
 
 export type TButtonSpinnerProps = React.HTMLAttributes<HTMLSpanElement> & {
-  readonly shouldShow: boolean
+  shouldShow: boolean
 }
 
 export type TButton = React.ForwardRefExoticComponent<
@@ -25,4 +29,14 @@ export type TButton = React.ForwardRefExoticComponent<
 > & {
   Icon: React.FC<TButtonIconProps>
   Spinner: React.FC<TButtonSpinnerProps>
+}
+
+export type TTestTitleProps = {
+  props: TButtonBaseProps
+  ignoredKeys?: string[]
+  // ignoredKeys?: (keyof TButtonBaseProps)[]
+  keysFromPartialMatch?: string[]
+  // keysFromPartialMatch?: string[]
+  returnKeys?: string[]
+  // returnKeys?: (keyof TButtonBaseProps)[]
 }
