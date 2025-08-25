@@ -29,7 +29,7 @@ jobs:
 
       - name: Get Playwright version
         id: get-pw-version
-        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
       - name: Restore Playwright browsers from cache
         id: pw-cache
@@ -50,9 +50,13 @@ jobs:
             echo "miss=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Install Playwright browsers if cache missed
+      - name: Install browsers if cache missed
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
         run: npx playwright install --with-deps chrome
+
+      - name: Install Playwright deps if cache hit
+        if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
+        run: npx playwright install-deps
 
       # Run all tests
       - name: Run all tests
