@@ -31,32 +31,8 @@ jobs:
         id: get-pw-version
         run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
-      - name: Restore Playwright browsers from cache
-        id: pw-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-          restore-keys: |
-            playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-            playwright-browsers-
-
-      - name: Determine if cache really missed
-        id: check-cache-hit
-        run: |
-          if [[ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" && "${{ steps.pw-cache.outputs.restore-keys }}" == "" ]]; then
-            echo "miss=true" >> $GITHUB_OUTPUT
-          else
-            echo "miss=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Install browsers if cache missed
-        if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
+      - name: Install Playwright
         run: npx playwright install --with-deps chrome
-
-      - name: Install Playwright deps if cache hit
-        if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
-        run: npx playwright install-deps
 
       # Run all tests
       - name: Run all tests
