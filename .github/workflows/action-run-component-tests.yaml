@@ -1,4 +1,4 @@
-name: Run component tests
+name: Run Component Tests
 
 on:
   workflow_call:
@@ -6,31 +6,31 @@ on:
       event-name:
         required: true
         type: string
-      review-state:
-        required: true
-        type: string
+      ref-name:
+        required: false
+        type: string # e.g., github.ref
 
 jobs:
-  sanity-tests:
-    if: ${{ inputs.event-name == 'pull_request' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@sanity'
+  run-component-tests:
+    runs-on: ubuntu-latest
 
-  a11y-tests:
-    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@a11y'
+    defaults:
+      run:
+        shell: bash
 
-  interaction-tests:
-    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@interaction'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  visual-tests:
-    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
-    uses: ./.github/workflows/action-component-test-runner.yaml
-    with:
-      run-tag: '@visual'
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run changed only
+        if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}
+        run: npm run pw:ct -- --only-changed=origin/$GITHUB_BASE_REF
+
+      - name: Run all tests
+        if: ${{ inputs.event-name == 'push' && startsWith(inputs.ref-name, 'refs/heads/main') }}
+        run: npm run pw:ct

@@ -1,36 +1,32 @@
-name: Project environment setup
+name: Project Environment Setup
 
 on:
   workflow_call:
 
 jobs:
-  start:
+  project-setup:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    outputs:
+      node-cache-key: ${{ steps.node-cache-key.outputs.key || '' }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js and restore npm cache
+        id: node-cache-key
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
-      - name: Restore or cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-
       - name: Install project dependencies
         run: npm ci
-
-      - name: Install Playwright browsers if cache missed
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
-        run: npx playwright install --with-deps

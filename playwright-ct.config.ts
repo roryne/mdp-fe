@@ -6,7 +6,7 @@ import viteConfig from './vite.config'
  */
 export default defineConfig({
   testDir: 'src/components',
-  testIgnore: ['**\/__tests__/*.{test,stories}.{ts,tsx}'],
+  testIgnore: ['**/__tests__/*.{test,stories}.{ts,tsx}'],
   timeout: 3 * 1000,
   expect: {
     timeout: 1 * 1000,
