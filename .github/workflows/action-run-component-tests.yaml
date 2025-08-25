@@ -9,9 +9,6 @@ on:
       ref-name:
         required: true
         type: string
-      playwright-version:
-        required: true
-        type: string
 
 jobs:
   run-component-tests:
@@ -30,17 +27,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Restore browsers from cache
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+      - name: Get Playwright version
+        id: get-pw-version
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Playwright browsers from cache
         id: pw-cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ inputs.playwright-version }}
-          restore-keys: playwright-browsers-
+          key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+          restore-keys: |
+            playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+            playwright-browsers-
 
-      - name: Check if cache missed
+      - name: Determine if cache really missed
         id: check-cache-hit
         run: |
           if [[ "${{ steps.pw-cache.outputs.cache-hit }}" != "true" && "${{ steps.pw-cache.outputs.restore-keys }}" == "" ]]; then
@@ -49,7 +50,7 @@ jobs:
             echo "miss=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Download browsers artifact if needed
+      - name: Install Playwright browsers if cache missed
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
         run: npx playwright install --with-deps chrome
 
