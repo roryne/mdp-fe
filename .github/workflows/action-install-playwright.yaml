@@ -53,6 +53,7 @@ jobs:
             echo "miss=true" >> $GITHUB_OUTPUT
           else
             echo "miss=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Install Playwright browsers if cache missed
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
