@@ -3,6 +3,7 @@ name: CI Orchestrator
 
 on:
   pull_request:
+    branches: [main]
   push:
     branches: [main]
   workflow_dispatch:
@@ -10,8 +11,6 @@ on:
 jobs:
   setup:
     uses: ./.github/workflows/action-project-setup.yaml
-    with:
-      install-playwright: false # setup itself just handles repo + deps
 
   code-quality:
     needs: setup

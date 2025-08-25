@@ -2,18 +2,6 @@ name: Project Environment Setup
 
 on:
   workflow_call:
-    inputs:
-      install-playwright:
-        required: true
-        type: boolean
-
-    outputs:
-      playwright-browsers-path:
-        description: 'Path where Playwright browsers are installed'
-        value: ${{ jobs.install-playwright.outputs.playwright-browsers-path || '' }}
-      playwright-version:
-        description: 'Playwright version installed'
-        value: ${{ jobs.install-playwright.outputs.playwright-version || '' }}
 
 jobs:
   project-setup:
@@ -40,8 +28,3 @@ jobs:
 
       - name: Install project dependencies
         run: npm ci
-
-  install-playwright:
-    if: ${{ inputs.install-playwright }}
-    needs: project-setup
-    uses: ./.github/workflows/action-install-playwright.yaml
