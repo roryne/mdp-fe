@@ -8,13 +8,15 @@ export default function App() {
 
   const handleClick = useCallback(() => {
     setIsLoading(true)
-    setTimeout(() => setIsLoading(false), 1000) // Simulate a network request
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000) // Simulate a network request
   }, [])
 
   return (
     <div style={{ padding: '1rem' }}>
       <Button
-        iconRight={<img alt="Arrow Icon" src={RightChevronWhite} width={16} />}
+        iconRight={<img alt="Chevron" src={RightChevronWhite} width={16} />}
         isLoading={isLoading}
         label="Click Me"
         onClick={handleClick}

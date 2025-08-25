@@ -26,8 +26,7 @@ const RightIcon = ({ size }: { readonly size: TButtonProps['size'] }) => (
 const meta = {
   argTypes: {
     iconLeft: {
-      // @ts-expect-error
-      control: { type: '-' },
+      control: { type: 'object' },
       table: {
         category: 'Appearance',
         defaultValue: { summary: 'null' },
@@ -35,8 +34,7 @@ const meta = {
       }
     },
     iconRight: {
-      // @ts-expect-error
-      control: { type: '-' },
+      control: { type: 'object' },
       table: {
         category: 'Appearance',
         defaultValue: { summary: 'null' },

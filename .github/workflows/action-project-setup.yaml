@@ -1,4 +1,4 @@
-name: Project setup
+name: Project environment setup
 
 on:
   workflow_call:
@@ -7,17 +7,17 @@ jobs:
   start:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up or restore cached Node
+      - name: Set up Node.js and restore npm cache
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
-      - name: Cache Playwright browsers
+      - name: Restore or cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v4
         with:
@@ -26,17 +26,11 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
 
-      - name: Install dependencies
+      - name: Install project dependencies
         run: npm ci
 
-      - name: Install Playwright browsers (if not cached)
+      - name: Install Playwright browsers if cache missed
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         run: npx playwright install --with-deps
-
-      # TODO look into actions/cache instead of upload-artifact
-      - name: Upload deps for other workflows
-        uses: actions/upload-artifact@v4
-        with:
-          name: deps
-          path: ./
-          retention-days: 30

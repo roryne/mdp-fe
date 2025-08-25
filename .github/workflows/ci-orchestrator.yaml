@@ -1,0 +1,25 @@
+name: CI Orchestrator
+
+concurrency:
+  group: orchestrator-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    uses: ./.github/workflows/action-project-setup.yaml
+
+  code-quality:
+    needs: setup
+    uses: ./.github/workflows/action-code-quality.yaml
+
+  component-tests:
+    needs: setup
+    uses: ./.github/workflows/action-run-component-tests.yaml
+    with:
+      event-name: ${{ github.event_name }}
+      review-state: ${{ github.event.review.state || '' }}

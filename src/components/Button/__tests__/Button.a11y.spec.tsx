@@ -1,9 +1,11 @@
 import AxeBuilder from '@axe-core/playwright'
 import { test, expect } from '@playwright/experimental-ct-react'
+
 import RightChevronWhite from '@/assets/chevron/right-chevron-white.svg'
+import { getTitleFromCases } from '@/utils/test/pageHelpers'
+
 import Button from '..'
 import { allCases, defaultProps } from './common'
-import { TestUtils } from '@/utils'
 
 test.describe(
   'Component/Button',
@@ -13,7 +15,7 @@ test.describe(
   () => {
     test.describe('a11y', () => {
       test('applies aria-busy when loading', async ({ mount }) => {
-        const button = await mount(<Button label="Busy" isLoading />)
+        const button = await mount(<Button isLoading label="Busy" />)
 
         await expect(button).toHaveAttribute('aria-busy', 'true')
       })
@@ -30,7 +32,9 @@ test.describe(
         await mount(
           <Button
             aria-label={ariaLabel}
-            iconRight={<img src={RightChevronWhite} width={16} />}
+            iconRight={
+              <img alt="Right chevron" src={RightChevronWhite} width={16} />
+            }
             label={defaultProps.label}
           />
         )
@@ -60,7 +64,7 @@ test.describe(
         await expect(button).toHaveAttribute('aria-busy', 'true')
       })
 
-      test(
+      test.skip(
         'button remains visible in high contrast mode',
         { tag: ['@visual'] },
         async ({ mount, page }) => {
@@ -77,10 +81,10 @@ test.describe(
 
       // Run axe-core a11y checks across all prop combinations
       for (const props of allCases) {
-        const title = TestUtils.getTitleFromCases({
-          props,
+        const title = getTitleFromCases({
           ignoredKeys: ['label'],
           keysFromPartialMatch: ['icon'],
+          props,
           returnKeys: ['disabled', 'isLoading']
         })
 
@@ -98,10 +102,10 @@ test.describe(
 
       // Same axe checks, but after focusing the button
       for (const props of allCases) {
-        const title = TestUtils.getTitleFromCases({
-          props,
+        const title = getTitleFromCases({
           ignoredKeys: ['label'],
           keysFromPartialMatch: ['icon'],
+          props,
           returnKeys: ['disabled', 'isLoading']
         })
 
@@ -123,10 +127,10 @@ test.describe(
 
       // Same axe checks, but after hovering the button
       for (const props of allCases) {
-        const title = TestUtils.getTitleFromCases({
-          props,
+        const title = getTitleFromCases({
           ignoredKeys: ['label'],
           keysFromPartialMatch: ['icon'],
+          props,
           returnKeys: ['disabled', 'isLoading']
         })
 

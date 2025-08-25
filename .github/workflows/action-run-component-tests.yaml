@@ -1,0 +1,36 @@
+name: Run component tests
+
+on:
+  workflow_call:
+    inputs:
+      event-name:
+        required: true
+        type: string
+      review-state:
+        required: true
+        type: string
+
+jobs:
+  sanity-tests:
+    if: ${{ inputs.event-name == 'pull_request' }}
+    uses: ./.github/workflows/action-component-test-runner.yaml
+    with:
+      run-tag: '@sanity'
+
+  a11y-tests:
+    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
+    uses: ./.github/workflows/action-component-test-runner.yaml
+    with:
+      run-tag: '@a11y'
+
+  interaction-tests:
+    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
+    uses: ./.github/workflows/action-component-test-runner.yaml
+    with:
+      run-tag: '@interaction'
+
+  visual-tests:
+    if: ${{ inputs.event-name == 'pull_request_review' && inputs.review-state == 'approved' }}
+    uses: ./.github/workflows/action-component-test-runner.yaml
+    with:
+      run-tag: '@visual'

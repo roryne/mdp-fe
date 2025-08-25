@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/experimental-ct-react'
+
+import { getTitleFromCases } from '@/utils/test/pageHelpers'
+
 import Button from '..'
 import { allCases, defaultProps } from './common'
-import { TestUtils } from '@/utils'
 
 // Set default viewport for all tests in this file
-test.use({ viewport: { width: 200, height: 100 } })
+test.use({ viewport: { height: 100, width: 200 } })
 
 test.describe(
   'Component/Button',
@@ -13,10 +15,10 @@ test.describe(
   },
   () => {
     for (const props of allCases) {
-      const title = TestUtils.getTitleFromCases({
-        props,
+      const title = getTitleFromCases({
         ignoredKeys: ['label'],
         keysFromPartialMatch: ['icon'],
+        props,
         returnKeys: ['disabled', 'isLoading']
       })
 

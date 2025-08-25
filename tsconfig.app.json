@@ -9,6 +9,7 @@
     "useDefineForClassFields": true, // aligns TS with JS class field semantics
 
     /* Bundler mode (Vite/Webpack-style setup, no emit, leave transforms to bundler) */
+    "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true, // allow `import './file.ts'` (useful in ESM projects)
     "jsx": "react-jsx", // modern JSX transform, no `import React` needed
     "moduleDetection": "auto", // TS infers module vs script automatically
@@ -45,7 +46,7 @@
     "noFallthroughCasesInSwitch": false, // eslint: no-fallthrough
 
     /* Stylistic / preference checks (can enforce in TS or ESLint depending on team choice) */
-    "noImplicitReturns": false, // ESLint handles return consistency (`consistent-return`)
+    "noImplicitReturns": false,
     "noPropertyAccessFromIndexSignature": false // stylistic: `[key]` vs `.key` — not safety-critical
   }
 }

@@ -1,0 +1,43 @@
+name: Code Quality Checks
+
+on:
+  workflow_call:
+
+jobs:
+  formatter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run Prettier
+        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: |
+          npx eslint "src/**/*.{ts,tsx,js,jsx}" --max-warnings=0
+          npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run TypeScript typecheck
+        run: npm run typecheck
