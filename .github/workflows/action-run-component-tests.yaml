@@ -6,9 +6,9 @@ on:
       event-name:
         required: true
         type: string
-      review-state:
+      ref-name:
         required: false
-        type: string
+        type: string # e.g., github.ref
 
 jobs:
   run-component-tests:
@@ -22,16 +22,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-all: true
           fetch-depth: 0
+          fetch-all: true
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run changed only
-        if: ${{ inputs.event-name != 'pull_request' || inputs.review-state != 'approved'}}
+        if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}
         run: npm run pw:ct -- --only-changed=origin/$GITHUB_BASE_REF
 
       - name: Run all tests
-        if: ${{ inputs.event-name == 'pull_request' && inputs.review-state == 'approved'}}
+        if: ${{ inputs.event-name == 'push' && startsWith(inputs.ref-name, 'refs/heads/main') }}
         run: npm run pw:ct
