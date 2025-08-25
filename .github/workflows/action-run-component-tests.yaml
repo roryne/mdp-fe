@@ -28,9 +28,9 @@ jobs:
         run: npm ci
 
       - name: Run changed only
-        if: ${{ inputs.event-name != "pull_request" || inputs.review-state != "approved"}}
+        if: ${{ inputs.event-name != 'pull_request' || inputs.review-state != 'approved'}}
         run: npm pw:ct -- --only-changed=$GITHUB_BASE_REF
 
       - name: Run all tests
-        if: ${{ inputs.event-name == "pull_request" && inputs.review-state == "approved"}}
+        if: ${{ inputs.event-name == 'pull_request' && inputs.review-state == 'approved'}}
         run: npm pw:ct
