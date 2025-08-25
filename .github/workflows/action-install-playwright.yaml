@@ -3,12 +3,12 @@ name: Install Playwright
 on:
   workflow_call:
     outputs:
-      playwright-version:
-        description: 'Current Playwright version'
-        value: ${{ jobs.install-playwright.outputs.pw-version }}
       playwright-path:
         description: 'Playwright path for downstream reference'
         value: ${{ jobs.install-playwright.outputs.pw-path }}
+      playwright-version:
+        description: 'Current Playwright version'
+        value: ${{ jobs.install-playwright.outputs.pw-version }}
 
 jobs:
   install-playwright:
@@ -20,8 +20,8 @@ jobs:
 
     # Map job outputs from step outputs
     outputs:
-      pw-version: ${{ steps.get-pw-version.outputs.version }}
       pw-path: ${{ steps.set-pw-path.outputs.path }}
+      pw-version: ${{ steps.get-pw-version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -32,17 +32,17 @@ jobs:
       - name: Install project dependencies
         run: npm ci
 
-      - name: Store Playwright version
-        id: get-pw-version
-        run: |
-          version=$(npx playwright --version | awk '{print $2}')
-          echo "version=$version" >> $GITHUB_OUTPUT
-
       - name: Set Playwright browsers path
         id: set-pw-path
         run: |
           path="${RUNNER_TEMP}/ms-playwright"
           echo "path=$path" >> $GITHUB_OUTPUT
+
+      - name: Store Playwright version
+        id: get-pw-version
+        run: |
+          version=$(npx playwright --version | awk '{print $2}')
+          echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Restore Playwright browsers from cache
         id: pw-cache
