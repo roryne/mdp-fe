@@ -11,7 +11,7 @@ on:
         value: ${{ jobs.start.outputs.pw-path }}
 
 jobs:
-  start:
+  install-playwright:
     runs-on: ubuntu-latest
 
     defaults:

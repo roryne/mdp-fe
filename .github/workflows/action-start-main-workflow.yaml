@@ -13,7 +13,7 @@ jobs:
   setup:
     uses: ./.github/workflows/action-project-setup.yaml
 
-  install-playwright:
+  playwright:
     needs: setup
     uses: ./.github/workflows/action-install-playwright.yaml
 
@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/action-code-quality.yaml
 
   component-tests:
-    needs: [setup, install-playwright]
+    needs: [setup, playwright]
     uses: ./.github/workflows/action-run-component-tests.yaml
     with:
       event-name: ${{ inputs.event-name }}
