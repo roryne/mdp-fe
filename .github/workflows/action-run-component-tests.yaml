@@ -42,7 +42,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Restore browsers from cache (fast path)
       - name: Restore browsers from cache
         id: pw-cache
         uses: actions/cache@v4
@@ -52,7 +51,6 @@ jobs:
             playwright-browsers-${{ inputs.playwright-version }}
             playwright-browsers-
 
-      # Determine if cache really missed
       - name: Check if cache missed
         id: check-cache-hit
         run: |
@@ -62,7 +60,6 @@ jobs:
             echo "miss=false" >> $GITHUB_OUTPUT
           fi
 
-      # Download artifact if cache missed
       - name: Download browsers artifact if needed
         if: ${{ steps.check-cache-hit.outputs.miss == 'true' }}
         uses: actions/download-artifact@v4
@@ -70,12 +67,10 @@ jobs:
           name: playwright-browsers
           path: ${{ inputs.playwright-path }}
 
-      # Run changed-only tests
-      - name: Run changed-only tests
-        if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}
-        run: npm run pw:ct -- --only-changed=origin/$GITHUB_BASE_REF
+      # - name: Run changed-only tests
+      #   if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}
+      #   run: npm run pw:ct -- --only-changed=origin/$GITHUB_BASE_REF
 
-      # Run all tests
       - name: Run all tests
-        if: ${{ inputs.event-name == 'push' && startsWith(inputs.ref-name, 'refs/heads/main') }}
+        # if: ${{ inputs.event-name == 'push' && startsWith(inputs.ref-name, 'refs/heads/main') }}
         run: npm run pw:ct
