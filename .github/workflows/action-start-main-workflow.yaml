@@ -101,8 +101,13 @@ jobs:
         if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
         run: npx playwright install --with-deps --only-shell chromium
 
-      - name: Run @sanity tests pre-merge
+      - name: Run @sanity tests for changed files
+        if: ${{ inputs.event-name == 'pull_request' }}
         run: npm run pw:ct -- --grep @sanity --only-changed=origin/$GITHUB_BASE_REF
+
+      - name: Run @a11y, @interaction, @visual tests for changed files
+        if: ${{ inputs.event-name == 'push' && startsWith(inputs.ref-name, 'refs/heads/main') }}
+        run: npm run pw:ct -- --grepInvert @sanity --only-changed=origin/$GITHUB_BASE_REF
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
