@@ -24,4 +24,5 @@ jobs:
     uses: ./.github/workflows/action-run-component-tests.yaml
     with:
       event-name: ${{ github.event_name }}
+      playwright-version: ${{ needs.install-playwright.outputs.playwright-version }}
       ref-name: ${{ github.ref }}

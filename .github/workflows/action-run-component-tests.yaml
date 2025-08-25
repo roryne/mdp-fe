@@ -1,4 +1,4 @@
-name: Run Component Tests
+name: Playwright Component Tests
 
 on:
   workflow_call:
@@ -9,6 +9,9 @@ on:
       ref-name:
         required: false
         type: string # e.g., github.ref
+      playwright-version:
+        required: true
+        type: string
 
 jobs:
   run-component-tests:
@@ -26,6 +29,26 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Set Playwright browsers path
+        run:
+          echo "PLAYWRIGHT_BROWSERS_PATH=${RUNNER_TEMP}/ms-playwright" >> $GITHUB_ENV
+
+          # Restore browsers from cache (fast path)
+      - name: Restore browsers from cache
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: playwright-browsers-${{ inputs.playwright-version }}
+
+      # Download artifact if cache missed (ensures browsers are available)
+      - name: Download browsers artifact if cache missed
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-browsers
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
 
       - name: Run changed only
         if: ${{ inputs.event-name != 'push' || !startsWith(inputs.ref-name, 'refs/heads/main') }}

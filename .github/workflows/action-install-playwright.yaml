@@ -2,23 +2,17 @@ name: Install Playwright
 
 on:
   workflow_call:
-    outputs:
-      playwright-version:
-        description: 'The version of Playwright installed.'
-        value: ${{ jobs.install-playwright.outputs.playwright-version }}
-      browsers-cache-hit:
-        description: 'Whether the Playwright browsers were restored from cache.'
-        value: ${{ jobs.install-playwright.outputs.browsers-cache-hit }}
 
 jobs:
   install-playwright:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         shell: bash
+
     outputs:
-      playwright-version: ${{ steps.store-version.outputs.version }}
-      browsers-cache-hit: ${{ steps.pw-cache.outputs.cache-hit }}
+      playwright-version: ${{ steps.get-pw-version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -30,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Store Playwright version
-        id: store-version
+        id: get-pw-version
         run: |
           version=$(npx playwright --version | awk '{print $2}')
           echo "version=$version" >> $GITHUB_OUTPUT
@@ -50,3 +44,10 @@ jobs:
       - name: Install Playwright browsers if cache missed
         if: steps.pw-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
+
+      - name: Upload browsers artifact
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-browsers
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
