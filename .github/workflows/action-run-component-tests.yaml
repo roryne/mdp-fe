@@ -30,7 +30,7 @@ jobs:
 
       - name: Run changed only
         if: ${{ inputs.event-name != 'pull_request' || inputs.review-state != 'approved'}}
-        run: npm run pw:ct -- --only-changed=$GITHUB_BASE_REF
+        run: npm run pw:ct -- --only-changed=origin/$GITHUB_BASE_REF
 
       - name: Run all tests
         if: ${{ inputs.event-name == 'pull_request' && inputs.review-state == 'approved'}}
