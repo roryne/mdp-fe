@@ -6,8 +6,6 @@ on:
 jobs:
   start:
     runs-on: ubuntu-latest
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
