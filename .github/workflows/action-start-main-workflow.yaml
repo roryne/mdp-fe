@@ -99,7 +99,9 @@ jobs:
       with:
         path: ~/.cache/ms-playwright
         key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-        restore-keys: playwright-browsers-
+        restore-keys: |
+          playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+          playwright-browsers-
 
     - name: Install Playwright browsers if cache missed
       if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
@@ -120,7 +122,7 @@ jobs:
 
     - name: Run all-but-@sanity tests for push (merge)
       if: ${{ inputs.event-name == 'push' }}
-      run: npm run pw:ct -- --grepInvert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
+      run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
