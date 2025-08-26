@@ -1,13 +1,13 @@
 name: CI Orchestrator
 on:
   push:
-    branches: [ main ]
+    branches: [ staging ]
   pull_request:
-    branches: [ main ]
+    branches: [ staging ]
 
 jobs:
   kickoff:
-    uses: ./.github/workflows/action-start-main-workflow.yaml
+    uses: ./.github/workflows/action-start-staging-workflow.yaml
     with:
       base-ref-name: ${{ github.base_ref }}
       event-name: ${{ github.event_name }}
