@@ -15,7 +15,7 @@ Only use the admin bypass in exceptional circumstances, such as:
 - CI/CD misbehavior preventing necessary merges
 - Other critical situations that require overriding normal status checks
 
-Regular PRs should **always** pass required checks (e.g., `Sanity Tests (PR)`) before merging.
+Regular PRs should **always** pass required checks (see list of Required Status Checks at bottom) before merging.
 
 ---
 
