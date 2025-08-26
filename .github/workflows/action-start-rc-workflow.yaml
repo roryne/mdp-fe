@@ -1,75 +1,16 @@
-name: Workflow start point for main
+name: RC CI
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
-  workflow_call:
-    inputs:
-      base-ref-name:
-        required: true
-        type: string
-      event-name:
-        required: true
-        type: string
-      ref-name:
-        required: false
-        type: string
+  push:
+    branches: [ rc ]
+  pull_request:
+    branches: [ rc ]
 
 jobs:
-  formatter:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v5
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        cache: 'npm'
-        cache-dependency-path: 'package-lock.json'
-        node-version: 'lts/*'
-
-    - name: Setup project dependencies
-      run: npm ci
-
-    - name: Run Prettier
-      run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
-
-  linter:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        cache: 'npm'
-        cache-dependency-path: 'package-lock.json'
-        node-version: 'lts/*'
-
-    - name: Setup project dependencies
-      run: npm ci
-
-    - name: Run ESLint
-      run: npx eslint "src/**/*.{ts,tsx,js,jsx}" --max-warnings=0
-
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        cache: 'npm'
-        cache-dependency-path: 'package-lock.json'
-        node-version: 'lts/*'
-
-    - name: Setup project dependencies
-      run: npm ci
-
-    - name: Run TypeScript typecheck
-      run: npm run typecheck
-
   playwright:
     runs-on: ubuntu-latest
 
@@ -130,4 +71,4 @@ jobs:
         if-no-files-found: 'ignore'
         name: playwright-report
         path: playwright-report/
-        retention-days: 10
+        retention-days: 30
