@@ -9,5 +9,6 @@ jobs:
   kickoff:
     uses: ./.github/workflows/action-start-main-workflow.yaml
     with:
+      base-ref-name: ${{ github.base_ref }}
       event-name: ${{ github.event_name }}
       ref-name: ${{ github.ref }}
