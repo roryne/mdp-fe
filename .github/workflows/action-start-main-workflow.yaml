@@ -99,7 +99,9 @@ jobs:
       with:
         path: ~/.cache/ms-playwright
         key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-        restore-keys: playwright-browsers-
+        restore-keys: |
+          playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+          playwright-browsers-
 
     - name: Install Playwright browsers if cache missed
       if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
