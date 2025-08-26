@@ -75,6 +75,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Fetch base branch
+      run: git fetch origin $GITHUB_BASE_REF
+
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
