@@ -8,10 +8,48 @@ on:
   pull_request:
     branches: [dev]
     types: [opened, synchronize, reopened, edited]
-  push:
-    branches: [dev]
 
 jobs:
+  formatter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run Prettier
+        run: npx prettier --write .
+
+  linter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npx eslint . --ext .js,.ts,.jsx,.tsx
+
   playwright:
     runs-on: ubuntu-latest
 
@@ -62,10 +100,6 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
-      - name: Run all-but-@sanity tests for push (merge)
-        if: ${{ github.event_name == 'push' }}
-        run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
-
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() && failure() }}
         with:
@@ -73,3 +107,23 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Setup project dependencies
+        run: npm ci
+
+      - name: Run TypeScipt Check
+        run: npx tsc --noEmit

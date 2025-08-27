@@ -28,6 +28,8 @@ const ButtonBase = forwardRef<HTMLButtonElement, TButtonProps>(
       restProps.className
     )
 
+    const _foo = 'bar'
+
     return (
       <button
         aria-busy={isLoading || undefined}
