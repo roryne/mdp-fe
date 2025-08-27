@@ -1,17 +1,12 @@
 name: Release
 
 on:
-  pull_request:
-    branches:
-      - dev
-  #     - staging
-  #     - rc
-  #     - main
-  #   types: [closed]
   push:
     branches:
       - dev
-      - ryne/feature/sc-190/version-labeling-1
+      - staging
+      - rc
+      - main
 
 jobs:
   release:
@@ -36,5 +31,5 @@ jobs:
 
       - name: Run semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release --dry-run
