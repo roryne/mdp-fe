@@ -8,27 +8,41 @@ on:
       - main
 
 jobs:
-  release:
+  release-staging:
     runs-on: ubuntu-latest
-
+    environment: staging
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # needed for tags & full history
+          fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run semantic-release
+      - run: npm ci
+      - run: npx semantic-release --dry-run
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx semantic-release --dry-run
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  release-rc:
+    runs-on: ubuntu-latest
+    environment: rc
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      - run: npm ci
+      - run: npx semantic-release --dry-run
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  release-main:
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      - run: npm ci
+      - run: npx semantic-release --dry-run
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
