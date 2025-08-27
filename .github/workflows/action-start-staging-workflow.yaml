@@ -46,22 +46,8 @@ jobs:
         if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
         run: npx playwright install --with-deps --only-shell chromium
 
-      - name: Determine diff base
-        id: diff-base
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "base=origin/${{ github.base_ref }}" >> $GITHUB_OUTPUT
-          else
-            echo "base=HEAD^" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Run @sanity tests for PRs
-        if: ${{ github.event_name == 'pull_request' }}
-        run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
-
-      - name: Run all-but-@sanity tests for push (merge)
-        if: ${{ github.event_name == 'push' }}
-        run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
+      - name: Run @a11y, @interactions, @visual tests
+        run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ github.base_ref }}
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() && failure() }}
@@ -70,3 +56,18 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+  versioning:
+    environment: staging
+    name: Staging versioning
+    needs: playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      - run: npm ci
+      - run: npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
