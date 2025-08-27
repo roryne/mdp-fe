@@ -6,69 +6,67 @@ concurrency:
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   playwright:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-      with:
-        fetch-depth: 0 # we need history for diffs
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # we need history for diffs
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-        cache: 'npm'
-        cache-dependency-path: 'package-lock.json'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
-    - name: Setup project dependencies
-      run: npm ci
+      - name: Setup project dependencies
+        run: npm ci
 
-    - name: Get Playwright version
-      id: get-pw-version
-      run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
+      - name: Get Playwright version
+        id: get-pw-version
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
-    - name: Cache Playwright browsers
-      id: pw-cache
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/ms-playwright
-        key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-        restore-keys: |
-          playwright-browsers-${{ steps.get-pw-version.outputs.version }}
-          playwright-browsers-
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+          restore-keys: |
+            playwright-browsers-${{ steps.get-pw-version.outputs.version }}
+            playwright-browsers-
 
-    - name: Install Playwright browsers if cache missed
-      if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
-      run: npx playwright install --with-deps --only-shell chromium
+      - name: Install Playwright browsers if cache missed
+        if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
+        run: npx playwright install --with-deps --only-shell chromium
 
-    - name: Determine diff base
-      id: diff-base
-      run: |
-        if [ "${{ github.event_name }}" = "pull_request" ]; then
-          echo "base=origin/${{ github.base_ref }}" >> $GITHUB_OUTPUT
-        else
-          echo "base=HEAD^" >> $GITHUB_OUTPUT
-        fi
+      - name: Determine diff base
+        id: diff-base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "base=origin/${{ github.base_ref }}" >> $GITHUB_OUTPUT
+          else
+            echo "base=HEAD^" >> $GITHUB_OUTPUT
+          fi
 
-    - name: Run @sanity tests for PRs
-      if: ${{ github.event_name == 'pull_request' }}
-      run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
+      - name: Run @sanity tests for PRs
+        if: ${{ github.event_name == 'pull_request' }}
+        run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
-    - name: Run all-but-@sanity tests for push (merge)
-      if: ${{ github.event_name == 'push' }}
-      run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
+      - name: Run all-but-@sanity tests for push (merge)
+        if: ${{ github.event_name == 'push' }}
+        run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() && failure() }}
-      with:
-        if-no-files-found: 'ignore'
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
-
-# trigger commit for PR
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && failure() }}
+        with:
+          if-no-files-found: 'ignore'
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
