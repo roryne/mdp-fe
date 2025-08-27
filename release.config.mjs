@@ -7,30 +7,8 @@ export default {
   ],
   plugins: [
     '@semantic-release/commit-analyzer',
-    [
-      '@semantic-release/release-notes-generator',
-      {
-        preset: 'angular',
-        writerOpts: {
-          transform: (commit) => {
-            // Skip internal/admin commits from public changelog
-            if (commit.type === 'admin') {
-              commit.skip = true
-            }
-            return commit
-          }
-        }
-      }
-    ],
-    [
-      '@semantic-release/changelog',
-      { changelogFile: 'CHANGELOG.md' } // public changelog
-    ],
-    [
-      '@semantic-release/changelog',
-      { changelogFile: 'CHANGELOG_INTERNAL.md' } // internal changelog
-    ],
-    '@semantic-release/github',
-    '@semantic-release/git'
+    '@semantic-release/release-notes-generator',
+    '@semantic-release/npm',
+    '@semantic-release/github'
   ]
 }
