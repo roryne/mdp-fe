@@ -1,4 +1,4 @@
-name: Staging CI
+name: RC CI
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -6,7 +6,7 @@ concurrency:
 
 on:
   pull_request:
-    branches: [ staging ]
+    branches: [ rc ]
 
 jobs:
   playwright:
