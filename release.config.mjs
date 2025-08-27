@@ -6,7 +6,12 @@ export default {
     'main'
   ],
   plugins: [
-    '@semantic-release/changelog',
+    [
+      '@semantic-release/changelog',
+      {
+        changelogFile: 'docs/CHANGELOG.md'
+      }
+    ],
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/npm',
