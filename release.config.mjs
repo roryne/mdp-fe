@@ -1,6 +1,5 @@
 export default {
   branches: [
-    { name: 'dev', prerelease: 'dev' },
     { name: 'staging', prerelease: 'staging' },
     { name: 'rc', prerelease: 'rc' },
     'main'
@@ -9,14 +8,14 @@ export default {
     [
       '@semantic-release/changelog',
       {
-        changelogFile: 'docs/CHANGELOG.md'
+        changelogFile: 'CHANGELOG.md'
       }
     ],
     '@semantic-release/commit-analyzer',
     [
       '@semantic-release/git',
       {
-        assets: ['docs/CHANGELOG.md']
+        assets: ['CHANGELOG.md']
       }
     ],
     '@semantic-release/github',
