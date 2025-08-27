@@ -11,6 +11,7 @@ on:
   push:
     branches:
       - dev
+      - ryne/feature/sc-190/version-labeling-1
 
 jobs:
   release:
