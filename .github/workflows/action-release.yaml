@@ -1,16 +1,19 @@
 name: Release
 
 on:
-  push:
+  pull_request:
     branches:
       - dev
+    types: [closed]
+  push:
+    branches:
       - staging
       - rc
       - main
 
 jobs:
   release:
-    # if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
 
     steps:
@@ -31,5 +34,5 @@ jobs:
 
       - name: Run semantic-release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release --dry-run
