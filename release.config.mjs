@@ -13,8 +13,14 @@ export default {
       }
     ],
     '@semantic-release/commit-analyzer',
-    '@semantic-release/release-notes-generator',
+    [
+      '@semantic-release/git',
+      {
+        assets: ['docs/CHANGELOG.md']
+      }
+    ],
+    '@semantic-release/github',
     '@semantic-release/npm',
-    '@semantic-release/github'
+    '@semantic-release/release-notes-generator'
   ]
 }
