@@ -1,0 +1,20 @@
+name: Development versioning
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  versioning:
+    environment: development
+    runs-on: ubuntu-latest
+    name: Development versioning
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      - run: npm ci
+      - run: npx semantic-release --dry-run
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
