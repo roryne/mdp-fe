@@ -1,12 +1,14 @@
-name: RC CI
+name: Dev CI
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
+  push:
+    branches: [ dev ]
   pull_request:
-    branches: [ rc ]
+    branches: [ dev ]
 
 jobs:
   playwright:
@@ -14,7 +16,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0 # we need history for diffs
 
@@ -49,22 +51,22 @@ jobs:
     - name: Determine diff base
       id: diff-base
       run: |
-        if [ "${{ inputs.event-name }}" = "pull_request" ]; then
-          echo "base=origin/${{ inputs.base-ref-name }}" >> $GITHUB_OUTPUT
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "base=origin/${{ github.base_ref }}" >> $GITHUB_OUTPUT
         else
           echo "base=HEAD^" >> $GITHUB_OUTPUT
         fi
 
     - name: Run @sanity tests for PRs
-      if: ${{ inputs.event-name == 'pull_request' }}
+      if: ${{ github.event_name == 'pull_request' }}
       run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
     - name: Run all-but-@sanity tests for push (merge)
-      if: ${{ inputs.event-name == 'push' }}
+      if: ${{ github.event_name == 'push' }}
       run: npm run pw:ct -- --grep-invert @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
     - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+      if: ${{ !cancelled() && failure() }}
       with:
         if-no-files-found: 'ignore'
         name: playwright-report
