@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0 # we need history for diffs
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -48,11 +48,8 @@ jobs:
         if: ${{ steps.pw-cache.outputs.cache-hit != 'true' }}
         run: npx playwright install --with-deps --only-shell chromium
 
-      - name: Fetch base branch
-        run: git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
-
       - name: Run @a11y, @interactions, @visual tests
-        run: npm run pw:ct -- --grep-invert @sanity --only-changed=origin/${{ github.base_ref }}
+        run: npm run pw:ct -- --grep-invert @sanity
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() && failure() }}
