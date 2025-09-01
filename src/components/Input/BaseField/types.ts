@@ -14,7 +14,7 @@ export type TBaseFieldMessage = {
   info?: string
   success?: string
 }
-export type TBaseCustomProps = Readonly<{
+export type TBaseFieldCustomProps = Readonly<{
   label: string
   endNode?: ReactNode
   message?: TBaseFieldMessage
@@ -24,4 +24,9 @@ export type TBaseCustomProps = Readonly<{
   variant?: 'filled' | 'outline'
 }>
 export type TBaseFieldProps = InputHTMLAttributes<HTMLInputElement> &
-  TBaseCustomProps
+  TBaseFieldCustomProps
+
+export type TMessageCustomProps = Readonly<{
+  message?: string
+}>
+export type TMessageProps = HTMLProps<HTMLDivElement> & TMessageCustomProps

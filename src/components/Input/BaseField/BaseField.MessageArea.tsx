@@ -1,10 +1,6 @@
-import type { FC, HTMLProps } from 'react'
+import type { FC } from 'react'
 
-type TMessageCustomProps = {
-  readonly message?: string
-}
-
-type TMessageProps = HTMLProps<HTMLDivElement> & TMessageCustomProps
+import type { TMessageProps } from './types'
 
 const MessageArea: FC<TMessageProps> = ({ message, ...rest }) => {
   if (message === '' || message === undefined) return null
