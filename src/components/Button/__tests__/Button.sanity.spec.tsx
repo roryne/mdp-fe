@@ -18,6 +18,16 @@ test.describe(
   },
   () => {
     test.describe('Sanity', () => {
+      test.beforeEach(async ({ page }) => {
+        await page.addStyleTag({
+          content: `
+                  * {
+                    font-family: Arial, sans-serif !important;
+                  }
+                `
+        })
+      })
+
       // Basic render + console error check across multiple viewports
       for (const vp of viewports) {
         test(`correctly renders ${vp.name} without errors`, async ({

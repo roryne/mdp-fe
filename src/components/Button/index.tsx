@@ -4,7 +4,7 @@ import { conditionalClass, mergeClasses } from '@/utils/html'
 
 import Icon from './Button.Icon'
 import Spinner from './Button.Spinner'
-import styles from './Button.module.css'
+import styles from './Button.module.scss'
 import { EButton } from './enums'
 import type { TButton, TButtonProps } from './types'
 
