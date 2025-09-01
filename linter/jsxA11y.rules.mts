@@ -18,7 +18,7 @@ const jsxA11y: Linter.RulesRecord = {
   'jsx-a11y/img-redundant-alt': 'error',
   'jsx-a11y/interactive-supports-focus': 'error',
   'jsx-a11y/label-has-associated-control': 'error',
-  'jsx-a11y/label-has-for': 'error',
+  'jsx-a11y/label-has-for': 'off',
   'jsx-a11y/mouse-events-have-key-events': 'error',
   'jsx-a11y/no-access-key': 'error',
   'jsx-a11y/no-aria-hidden-on-focusable': 'error',
