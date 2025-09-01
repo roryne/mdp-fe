@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react-vite'
-import '@/styles/global.css'
+import '@/global/styles.css'
 import '@/storybook/components/storybook-docs.css'
 
 const preview: Preview = {
