@@ -5,8 +5,8 @@ import type { TBaseFieldProps } from '../../BaseField/types'
 import type { TTextInputProps } from '../types'
 
 export const spy = new Spy()
-const _handleOnChangeSpy = spy.fn
-const handleOnClickSpy = spy.fn
+export const handleOnChangeSpy = spy.fn
+export const handleOnClickSpy = spy.fn
 
 export const props = {
   'aria-label': 'Aria Label',
