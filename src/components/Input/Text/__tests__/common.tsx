@@ -4,9 +4,8 @@ import Input from '../..'
 import type { TBaseFieldProps } from '../../BaseField/types'
 import type { TTextInputProps } from '../types'
 
-export const spy = new Spy()
-export const handleOnChangeSpy = spy.fn
-export const handleOnClickSpy = spy.fn
+const spy = new Spy()
+const handleOnClickSpy = spy.fn
 
 export const props = {
   'aria-label': 'Aria Label',
@@ -25,6 +24,7 @@ export const props = {
     success: 'Success message'
   },
   shouldShowLabel: true,
+  spy,
   startNodeDecorational: <span data-testid="start-node">start node</span>,
   startNodeInteractive: (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex

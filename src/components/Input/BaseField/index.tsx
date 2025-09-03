@@ -69,8 +69,6 @@ const BaseField = forwardRef<HTMLInputElement, TBaseFieldProps>(
         info: '',
         success: ''
       },
-      onBlur,
-      onFocus,
       shouldShowLabel = true,
       startNode = null,
       type,

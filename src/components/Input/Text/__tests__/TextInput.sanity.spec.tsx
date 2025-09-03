@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/experimental-ct-react'
 
-import { handleOnChangeSpy, makeWrappedTextInput, props, spy } from './common'
+import { Spy } from '@/utils/test/spy'
+
+import { makeWrappedTextInput, props } from './common'
+
+const spy = new Spy()
+const handleOnChangeSpy = spy.fn
 
 const tags = ['@component', '@input.text', '@sanity']
 
@@ -10,10 +15,10 @@ test.beforeEach(async ({ page }) => {
   spy.reset()
   await page.addStyleTag({
     content: `
-                  * {
-                    font-family: sans-serif !important;
-                  }
-                `
+      * {
+        font-family: sans-serif !important;
+      }
+    `
   })
 })
 
@@ -74,6 +79,7 @@ test.describe('Interactions', { tag: tags }, () => {
 
     await inputField.focus()
     await page.keyboard.type(props.value)
+
     expect(spy.called).toBe(true)
   })
 })

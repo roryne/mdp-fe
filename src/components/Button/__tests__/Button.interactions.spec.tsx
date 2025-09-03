@@ -7,7 +7,18 @@ import Button from '..'
 import { defaultProps } from './common'
 
 const spy = new Spy()
-const handleClickSpy = spy.fn
+const handleOnClickSpy = spy.fn
+
+test.beforeEach(async ({ page }) => {
+  spy.reset()
+  await page.addStyleTag({
+    content: `
+      * {
+        font-family: sans-serif !important;
+      }
+    `
+  })
+})
 
 test.describe(
   'Component/Button',
@@ -16,10 +27,6 @@ test.describe(
   },
   () => {
     test.describe('Interactions', () => {
-      test.beforeEach('Initialize spy', () => {
-        spy.reset()
-      })
-
       test.describe(
         'Happy Paths',
         {
@@ -28,11 +35,10 @@ test.describe(
         () => {
           test('fires onClick when clicked', async ({ mount }) => {
             const button = await mount(
-              <Button label={defaultProps.label} onClick={handleClickSpy} />
+              <Button label={defaultProps.label} onClick={handleOnClickSpy} />
             )
 
             await button.click()
-
             expect(spy.called).toBe(true)
           })
 
@@ -40,7 +46,7 @@ test.describe(
             mount
           }) => {
             const button = await mount(
-              <Button label={defaultProps.label} onClick={handleClickSpy} />
+              <Button label={defaultProps.label} onClick={handleOnClickSpy} />
             )
 
             await button.focus()
@@ -103,7 +109,7 @@ test.describe(
               <Button
                 disabled
                 label={defaultProps.label}
-                onClick={handleClickSpy}
+                onClick={handleOnClickSpy}
               />
             )
 
@@ -133,7 +139,7 @@ test.describe(
               <Button
                 isLoading={isLoading}
                 label={defaultProps.label}
-                onClick={handleClickSpy}
+                onClick={handleOnClickSpy}
               />
             )
 

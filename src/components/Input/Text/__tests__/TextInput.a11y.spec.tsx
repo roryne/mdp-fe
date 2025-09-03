@@ -2,14 +2,20 @@ import { test, expect } from '@playwright/experimental-ct-react'
 
 import { assertAxeScan } from '@/utils/test/axe'
 
-import { axeScenarios, makeWrappedTextInput, props, spy } from './common'
+import { axeScenarios, makeWrappedTextInput, props } from './common'
 
 const tags = ['@component', '@input.text', '@a11y']
 
 test.use({ viewport: { height: 400, width: 400 } })
 
-test.beforeEach(() => {
-  spy.reset()
+test.beforeEach(async ({ page }) => {
+  await page.addStyleTag({
+    content: `
+      * {
+        font-family: sans-serif !important;
+      }
+    `
+  })
 })
 
 test.describe(
