@@ -1,0 +1,30 @@
+name: Update Shortcut Stories on Merge to Staging
+
+on:
+  workflow_call:
+    inputs:
+      DRY_RUN:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  update-shortcut:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Update Shortcut stories
+        env:
+          SHORTCUT_TOKEN: ${{ secrets.SHORTCUT_TOKEN }}
+          VALIDATION_COLUMN_ID: ${{ env.VALIDATION_COLUMN_ID }}
+          QA_COLUMN_ID: ${{ env.QA_COLUMN_ID }}
+          DRY_RUN: ${{ inputs.DRY_RUN }}
+        run: npx node .github/scripts/update-shortcut-on-staging-merge.js
