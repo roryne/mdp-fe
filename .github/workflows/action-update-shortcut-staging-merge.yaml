@@ -32,5 +32,5 @@ jobs:
           SHORTCUT_TOKEN: ${{ secrets.SHORTCUT_TOKEN }}
           VALIDATION_COLUMN_ID: ${{ vars.VALIDATION_COLUMN_ID }}
           QA_COLUMN_ID: ${{ vars.QA_COLUMN_ID }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-        run: node .github/scripts/update-shortcut-on-staging-merge.cjs
+          DRY_RUN: ${{ github.event.inputs.DRY_RUN || false }}
+        run: node .github/scripts/updateShortcutOnStagingMerge.cjs
