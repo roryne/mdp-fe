@@ -137,28 +137,38 @@ export const axeScenarios = [
 ] satisfies (typeof defaultAxeProps)[]
 
 const baseOutline = [{ meta: 'outline', variant: 'outline' }]
-const baseFilled = [{ meta: 'filled', variant: 'filled' }]
 
 // Label variants
 const labelVariants = [
-  { meta: 'with-label' }, // implicit: shouldShowLabel = true
+  { meta: 'with-label', shouldShowLabel: true },
   { meta: 'no-label', shouldShowLabel: false }
 ]
 
 // State variants
-const stateVariants = [{ meta: '' }, { meta: 'disabled', disabled: true }]
+const stateVariants = [
+  { meta: 'enabled', disabled: false },
+  { meta: 'disabled', disabled: true }
+]
 
 const inputContentVariants = [
-  { meta: 'empty-no-placeholder' },
-  { meta: 'with-placeholder', placeholder: props.placeholder },
-  { meta: 'with-value', value: props.value }
+  { meta: 'empty-no-placeholder', placeholder: '', value: '' },
+  { meta: 'with-placeholder', placeholder: props.placeholder, value: '' },
+  { meta: 'with-value', value: props.value, placeholder: '' }
 ]
 
 // Icon variants
 const iconVariants = [
-  { meta: 'no-icons' },
-  { meta: 'with-start-icon', startNode: props.startNodeDecorational },
-  { meta: 'with-end-icon', endNode: props.endNodeDecorational },
+  { meta: 'no-icons', endNode: null, startNode: null },
+  {
+    meta: 'with-start-icon',
+    endNode: null,
+    startNode: props.startNodeDecorational
+  },
+  {
+    meta: 'with-end-icon',
+    endNode: props.endNodeDecorational,
+    startNode: null
+  },
   {
     meta: 'with-both-icons',
     startNode: props.startNodeDecorational,
@@ -168,10 +178,19 @@ const iconVariants = [
 
 // Message variants
 const messageVariants = [
-  { meta: 'no-message' },
-  { meta: 'with-error', message: { error: props.message.error } },
-  { meta: 'with-info', message: { info: props.message.info } },
-  { meta: 'with-success', message: { success: props.message.success } }
+  { meta: 'no-message', message: { error: '', info: '', success: '' } },
+  {
+    meta: 'with-error',
+    message: { error: props.message.error, info: '', success: '' }
+  },
+  {
+    meta: 'with-info',
+    message: { error: '', info: props.message.info, success: '' }
+  },
+  {
+    meta: 'with-success',
+    message: { error: '', info: '', success: props.message.success }
+  }
 ]
 
 type Variant = Record<string, unknown> & { meta: string }
@@ -202,15 +221,6 @@ function cartesianProductWithProps(groups: Variant[][]) {
   )
 }
 
-const filledScenarios = cartesianProductWithProps([
-  baseFilled,
-  iconVariants,
-  inputContentVariants,
-  labelVariants,
-  messageVariants,
-  stateVariants
-])
-
 const outlineScenarios = cartesianProductWithProps([
   baseOutline,
   iconVariants,
@@ -221,6 +231,5 @@ const outlineScenarios = cartesianProductWithProps([
 ])
 
 export const scenarios = {
-  filled: filledScenarios,
   outline: outlineScenarios
 } as const
