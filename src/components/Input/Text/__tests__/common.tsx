@@ -15,7 +15,7 @@ export const props = {
   endNodeInteractive: (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex
     <span data-testid="end-node" onClick={handleOnClickSpy} tabIndex={0}>
-      end node
+      end
     </span>
   ),
   label: 'Label',
@@ -31,7 +31,7 @@ export const props = {
   startNodeInteractive: (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex
     <span data-testid="start-node" onClick={handleOnClickSpy} tabIndex={0}>
-      start node
+      start
     </span>
   ),
   value: 'Value',

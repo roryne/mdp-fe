@@ -4,7 +4,7 @@ import { makeWrappedTextInput, props, scenarios } from './common'
 
 const tags = ['@component', '@input.text', '@visual']
 
-test.use({ viewport: { height: 400, width: 400 } })
+test.use({ viewport: { height: 400, width: 800 } })
 
 test.beforeEach(async ({ page }) => {
   await page.addStyleTag({
