@@ -17,6 +17,8 @@ test.beforeEach(async ({ page }) => {
     content: `
       * {
         font-family: sans-serif !important;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
       }
     `
   })

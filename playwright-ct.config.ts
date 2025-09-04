@@ -28,6 +28,9 @@ export default defineConfig({
         ...viteConfig.resolve
       }
     },
+    launchOptions: {
+      args: ['--font-render-hinting=none']
+    },
     trace: 'on-first-retry'
   },
   /* Configure projects for major browsers */
