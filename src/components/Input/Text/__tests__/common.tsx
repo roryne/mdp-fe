@@ -141,24 +141,35 @@ const baseFilled = [{ meta: 'filled', variant: 'filled' }]
 
 // Label variants
 const labelVariants = [
-  { meta: 'with-label' }, // implicit: shouldShowLabel = true
+  { meta: 'with-label', shouldShowLabel: true },
   { meta: 'no-label', shouldShowLabel: false }
 ]
 
 // State variants
-const stateVariants = [{ meta: '' }, { meta: 'disabled', disabled: true }]
+const stateVariants = [
+  { meta: 'enabled', disabled: false },
+  { meta: 'disabled', disabled: true }
+]
 
 const inputContentVariants = [
-  { meta: 'empty-no-placeholder' },
-  { meta: 'with-placeholder', placeholder: props.placeholder },
-  { meta: 'with-value', value: props.value }
+  { meta: 'empty-no-placeholder', placeholder: '', value: '' },
+  { meta: 'with-placeholder', placeholder: props.placeholder, value: '' },
+  { meta: 'with-value', placeholder: '', value: props.value }
 ]
 
 // Icon variants
 const iconVariants = [
-  { meta: 'no-icons' },
-  { meta: 'with-start-icon', startNode: props.startNodeDecorational },
-  { meta: 'with-end-icon', endNode: props.endNodeDecorational },
+  { meta: 'no-icons', endNode: null, startNode: null },
+  {
+    meta: 'with-start-icon',
+    endNode: null,
+    startNode: props.startNodeDecorational
+  },
+  {
+    meta: 'with-end-icon',
+    endNode: props.endNodeDecorational,
+    startNode: null
+  },
   {
     meta: 'with-both-icons',
     startNode: props.startNodeDecorational,
@@ -168,7 +179,7 @@ const iconVariants = [
 
 // Message variants
 const messageVariants = [
-  { meta: 'no-message' },
+  { meta: 'no-message', message: { error: '', info: '', status: '' } },
   { meta: 'with-error', message: { error: props.message.error } },
   { meta: 'with-info', message: { info: props.message.info } },
   { meta: 'with-success', message: { success: props.message.success } }

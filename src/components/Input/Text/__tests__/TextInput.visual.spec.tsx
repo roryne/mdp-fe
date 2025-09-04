@@ -27,6 +27,18 @@ for (const scenario of scenarios.outline) {
       </main>
     )
 
+    if (scenario.props.endNode !== null) {
+      const endNode = page.getByTestId('end-node')
+      await expect(endNode).toBeVisible()
+      await expect(endNode).toContainText('end node')
+    }
+
+    if (scenario.props.startNode !== null) {
+      const startNode = page.getByTestId('start-node')
+      await expect(startNode).toBeVisible()
+      await expect(startNode).toContainText('start node')
+    }
+
     const container = page.locator('#root')
     await expect(container).toHaveScreenshot({ animations: 'disabled' })
   })
@@ -41,9 +53,22 @@ for (const scenario of scenarios.outline) {
       </main>
     )
 
+    if (scenario.props.endNode !== null) {
+      const endNode = page.getByTestId('end-node')
+      await expect(endNode).toBeVisible()
+      await expect(endNode).toContainText('end node')
+    }
+
+    if (scenario.props.startNode !== null) {
+      const startNode = page.getByTestId('start-node')
+      await expect(startNode).toBeVisible()
+      await expect(startNode).toContainText('start node')
+    }
+
     await page.getByRole('textbox').focus()
 
     const container = page.locator('#root')
+
     await expect(container).toHaveScreenshot({ animations: 'disabled' })
   })
 }
@@ -56,6 +81,18 @@ for (const scenario of scenarios.filled) {
         {makeWrappedTextInput({ ...scenario.props, label: props.label })}
       </main>
     )
+
+    if (scenario.props.endNode !== null) {
+      const endNode = page.getByTestId('end-node')
+      await expect(endNode).toBeVisible()
+      await expect(endNode).toContainText('end node')
+    }
+
+    if (scenario.props.startNode !== null) {
+      const startNode = page.getByTestId('start-node')
+      await expect(startNode).toBeVisible()
+      await expect(startNode).toContainText('start node')
+    }
 
     const container = page.locator('#root')
     await expect(container).toHaveScreenshot({ animations: 'disabled' })
@@ -70,6 +107,18 @@ for (const scenario of scenarios.filled) {
         {makeWrappedTextInput({ ...scenario.props, label: props.label })}
       </main>
     )
+
+    if (scenario.props.endNode !== null) {
+      const endNode = page.getByTestId('end-node')
+      await expect(endNode).toBeVisible()
+      await expect(endNode).toContainText('end node')
+    }
+
+    if (scenario.props.startNode !== null) {
+      const startNode = page.getByTestId('start-node')
+      await expect(startNode).toBeVisible()
+      await expect(startNode).toContainText('start node')
+    }
 
     await page.getByRole('textbox').focus()
 

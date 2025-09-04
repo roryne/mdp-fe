@@ -16,7 +16,7 @@ export default defineConfig({
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 0 : 2,
+  retries: 0,
   reporter: process.env.CI ? 'github' : 'dot',
   snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{testName}{ext}',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
