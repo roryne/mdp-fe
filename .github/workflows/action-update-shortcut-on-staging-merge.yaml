@@ -27,4 +27,4 @@ jobs:
           VALIDATION_COLUMN_ID: ${{ env.VALIDATION_COLUMN_ID }}
           QA_COLUMN_ID: ${{ env.QA_COLUMN_ID }}
           DRY_RUN: ${{ inputs.DRY_RUN }}
-        run: node .github/scripts/update-shortcut-on-staging-merge.js
+        run: npx node .github/scripts/update-shortcut-on-staging-merge.js
