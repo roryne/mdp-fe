@@ -2,7 +2,7 @@
 const token = process.env.SHORTCUT_TOKEN ?? ''
 const validationColumnId = process.env.VALIDATION_COLUMN_ID ?? ''
 const qaColumnId = process.env.QA_COLUMN_ID ?? ''
-const dryRun = process.env.DRY_RUN ?? false
+const dryRun = process.env.DRY_RUN === 'true'
 
 const headers = {
   'Content-Type': 'application/json',
