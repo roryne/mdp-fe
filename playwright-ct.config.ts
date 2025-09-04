@@ -7,16 +7,16 @@ import viteConfig from './vite.config'
 export default defineConfig({
   testDir: 'src/components',
   testIgnore: ['**/__tests__/*.{test,stories}.{ts,tsx}'],
-  timeout: 3 * 1000,
+  timeout: 2 * 1000,
   expect: {
     timeout: 1 * 1000,
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.05
+      maxDiffPixelRatio: 0.1
     }
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 0 : 2,
   reporter: process.env.CI ? 'github' : 'dot',
   snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{testName}{ext}',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

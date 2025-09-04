@@ -266,17 +266,27 @@ test.describe('Props/State', { tag: tags }, () => {
 })
 
 test.describe('Visual', { tag: tags }, () => {
-  test('renders filled variant correctly', async ({ mount }) => {
-    const component = await mount(
-      makeWrappedTextInput({ label: props.label, variant: 'filled' })
+  test('renders filled variant correctly', async ({ mount, page }) => {
+    await mount(
+      <main>
+        <h1>Input.Text</h1>
+        {makeWrappedTextInput({ label: props.label, variant: 'filled' })}
+      </main>
     )
 
-    await expect(component).toHaveScreenshot({ animations: 'disabled' })
+    const container = page.locator('#root')
+    await expect(container).toHaveScreenshot({ animations: 'disabled' })
   })
 
-  test('renders outline variant correctly', async ({ mount }) => {
-    const component = await mount(makeWrappedTextInput({ label: props.label }))
+  test('renders outline variant correctly', async ({ mount, page }) => {
+    await mount(
+      <main>
+        <h1>Input.Text</h1>
+        {makeWrappedTextInput({ label: props.label })}
+      </main>
+    )
 
-    await expect(component).toHaveScreenshot({ animations: 'disabled' })
+    const container = page.locator('#root')
+    await expect(container).toHaveScreenshot({ animations: 'disabled' })
   })
 })
