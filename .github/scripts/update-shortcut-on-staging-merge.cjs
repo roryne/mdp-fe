@@ -1,5 +1,5 @@
 /* eslint-disable */
-import fetch from 'node-fetch'
+const fetch = require('node-fetch')
 
 const token = process.env.SHORTCUT_TOKEN ?? ''
 const validationColumnId = process.env.VALIDATION_COLUMN_ID ?? ''
