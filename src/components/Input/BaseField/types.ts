@@ -17,6 +17,7 @@ export type TBaseFieldMessage = {
 export type TBaseFieldCustomProps = Readonly<{
   label: string
   endNode?: ReactNode
+  key?: number | string
   message?: TBaseFieldMessage
   shouldShowLabel?: boolean
   startNode?: ReactNode

@@ -233,10 +233,3 @@ export const allCases: TButtonProps[] = [
 export const defaultProps = {
   label: 'Submit'
 }
-
-export const viewports = [
-  { height: 900, name: 'desktop-large', width: 1440 },
-  { height: 768, name: 'desktop-small', width: 1024 },
-  { height: 1024, name: 'tablet-portrait', width: 768 },
-  { height: 812, name: 'mobile-portrait', width: 375 }
-]

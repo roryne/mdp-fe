@@ -48,11 +48,12 @@ const hasText = (val: string) => val.trim().length > 0
 
 const getDescribedBy = (
   id: string,
-  message: { error?: string; success?: string }
+  message: { error?: string; info?: string; success?: string }
 ) => {
   const describedByIds: string[] = []
 
   if (hasText(message.error ?? '')) describedByIds.push(`${id}-error`)
+  if (hasText(message.info ?? '')) describedByIds.push(`${id}-info`)
   else if (hasText(message.success ?? '')) describedByIds.push(`${id}-success`)
 
   return describedByIds.length ? describedByIds.join(' ') : undefined
@@ -68,8 +69,6 @@ const BaseField = forwardRef<HTMLInputElement, TBaseFieldProps>(
         info: '',
         success: ''
       },
-      onBlur,
-      onFocus,
       shouldShowLabel = true,
       startNode = null,
       type,
@@ -79,9 +78,13 @@ const BaseField = forwardRef<HTMLInputElement, TBaseFieldProps>(
     ref
   ) => {
     const id = useId()
-    const isAriaInvalidish = Boolean(message.error) || undefined
+    const aria = {
+      describedBy: getDescribedBy(id, message),
+      invalid: Boolean(message.error) || undefined,
+      label: rest['aria-label'] ?? label,
+      readOnly: rest.readOnly ?? undefined
+    }
     const classes = getClasses({ endNode, message, startNode, variant })
-    const describedBy = getDescribedBy(id, message)
     const { error, info, success } = message
     const displayMessage = ((error ?? '') || (success ?? '') || info) ?? ''
 
@@ -96,8 +99,10 @@ const BaseField = forwardRef<HTMLInputElement, TBaseFieldProps>(
             shouldShow={shouldShowLabel}
           />
           <input
-            aria-describedby={describedBy}
-            aria-invalid={isAriaInvalidish}
+            aria-describedby={aria.describedBy}
+            aria-invalid={aria.invalid}
+            aria-label={aria.label}
+            aria-readonly={aria.readOnly}
             className={classes.input}
             id={id}
             ref={ref}
