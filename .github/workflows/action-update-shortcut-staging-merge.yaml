@@ -33,4 +33,4 @@ jobs:
           VALIDATION_COLUMN_ID: ${{ vars.VALIDATION_COLUMN_ID }}
           QA_COLUMN_ID: ${{ vars.QA_COLUMN_ID }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-        run: npx node .github/scripts/update-shortcut-on-staging-merge.js
+        run: node .github/scripts/update-shortcut-on-staging-merge.cjs
