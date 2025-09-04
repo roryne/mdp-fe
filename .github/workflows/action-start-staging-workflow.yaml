@@ -71,3 +71,10 @@ jobs:
       - run: npx semantic-release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  update-shortcut:
+    name: Update Shortcut stories
+    needs: versioning
+    uses: ./.github/workflows/action-update-shortcut-on-staging-merge.yaml
+    with:
+      DRY_RUN: true
