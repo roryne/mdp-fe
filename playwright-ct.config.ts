@@ -14,8 +14,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   outputDir: './test-results',
-  retries: process.env.CI ? 0 : 2,
-  reporter: process.env.CI ? 'html' : 'dot',
+  retries: 0,
+  reporter: process.env.CI ? [['html', 'github']] : 'dot',
   snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{testName}{ext}',
   use: {
     baseURL: 'http://localhost:3100',
