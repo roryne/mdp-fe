@@ -1,3 +1,4 @@
+/* eslint-disable */
 import fetch from 'node-fetch'
 
 const token = process.env.SHORTCUT_TOKEN ?? ''
@@ -5,14 +6,7 @@ const validationColumnId = process.env.VALIDATION_COLUMN_ID ?? ''
 const qaColumnId = process.env.QA_COLUMN_ID ?? ''
 const dryRun = process.env.DRY_RUN === 'true' // 'true' for dry-run mode
 
-type TShortcutStory = {
-  id: number
-  name: string
-  workflow_state_id?: number
-  labels?: { id: number; name: string }[]
-}
-
-async function getValidationStories(): Promise<TShortcutStory[]> {
+async function getValidationStories() {
   const res = await fetch(
     `https://api.app.shortcut.com/api/v3/stories?filter[workflow_state]=${validationColumnId}`,
     { headers: { 'Shortcut-Token': token } }
@@ -25,7 +19,7 @@ async function getValidationStories(): Promise<TShortcutStory[]> {
   return data
 }
 
-async function updateStory(storyId: number, storyName: string) {
+async function updateStory(storyId, storyName) {
   if (dryRun) {
     console.log(
       `[Dry Run] Would update story ${storyId} - "${storyName}" with label "Validation Passed" and move to QA column`
