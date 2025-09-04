@@ -1,0 +1,89 @@
+import { Canvas, Controls, Meta, Story } from '@storybook/addon-docs/blocks'
+import { StorybookExample, StorybookSection } from '@/storybook/components'
+
+import meta, * as InputTextStories from './InputText.stories'
+
+<Meta of={meta} title="Components/Input.Text" />
+
+# Input.Text
+
+The `Input.Text` component is a robust, accessible text-entry field for form and data input.  
+It supports **variants** (`Outline`, `Filled`), optional **labels** (with toggleable visibility), **start and end adornments** (icons, buttons, or text), and a contextual **message area** for `error`, `info`, or `success` feedback.
+
+The component ensures proper `aria-*` attributes (`aria-describedby`, `aria-invalid`, etc.), keyboard navigation, and ref forwarding, making it easy to integrate with forms, validation logic, and higher-order components.
+
+<Canvas of={InputTextStories.Base} />
+<Controls of={InputTextStories.Base} sort="requiredFirst" />
+
+## Adornments
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={InputTextStories.WithStartNode} />
+    <span>Start Node</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.WithEndNode} />
+    <span>End Node</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.WithBothNodes} />
+    <span>Both Nodes</span>
+  </StorybookExample>
+</StorybookSection>
+
+## Label
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={InputTextStories.LabelHidden} />
+    <span>Hidden Label</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.Outline} />
+    <span>Visible Label</span>
+  </StorybookExample>
+</StorybookSection>
+
+## Messages
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={InputTextStories.WithErrorMsg} />
+    <span>Error</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.WithInfoMsg} />
+    <span>Info</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.WithSuccessMsg} />
+    <span>Success</span>
+  </StorybookExample>
+</StorybookSection>
+
+## States
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={InputTextStories.Disabled} />
+    <span>Disabled</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.ReadOnly} />
+    <span>Read Only</span>
+  </StorybookExample>
+</StorybookSection>
+
+## Variants
+
+<StorybookSection>
+  <StorybookExample>
+    <Story of={InputTextStories.Outline} />
+    <span>Outline</span>
+  </StorybookExample>
+  <StorybookExample>
+    <Story of={InputTextStories.Filled} />
+    <span>Filled</span>
+  </StorybookExample>
+</StorybookSection>
