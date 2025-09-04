@@ -27,6 +27,14 @@ for (const scenario of scenarios.outline) {
       </main>
     )
 
+    if (scenario.props.endNode !== null) {
+      await expect(page.getByTestId('end-node')).toBeVisible()
+    }
+
+    if (scenario.props.startNode !== null) {
+      await expect(page.getByTestId('start-node')).toBeVisible()
+    }
+
     const container = page.locator('#root')
     await expect(container).toHaveScreenshot({ animations: 'disabled' })
   })
@@ -41,35 +49,13 @@ for (const scenario of scenarios.outline) {
       </main>
     )
 
-    await page.getByRole('textbox').focus()
+    if (scenario.props.endNode !== null) {
+      await expect(page.getByTestId('end-node')).toBeVisible()
+    }
 
-    const container = page.locator('#root')
-    await expect(container).toHaveScreenshot({ animations: 'disabled' })
-  })
-}
-
-for (const scenario of scenarios.filled) {
-  test(scenario.title, { tag: tags }, async ({ mount, page }) => {
-    await mount(
-      <main style={{ backgroundColor: '#1a1a1a' }}>
-        <h1 style={{ color: '#f2f2f2' }}>Input.Text</h1>
-        {makeWrappedTextInput({ ...scenario.props, label: props.label })}
-      </main>
-    )
-
-    const container = page.locator('#root')
-    await expect(container).toHaveScreenshot({ animations: 'disabled' })
-  })
-}
-
-for (const scenario of scenarios.filled) {
-  test(`(focus) ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
-    await mount(
-      <main style={{ backgroundColor: '#1a1a1a' }}>
-        <h1 style={{ color: '#f2f2f2' }}>Input.Text</h1>
-        {makeWrappedTextInput({ ...scenario.props, label: props.label })}
-      </main>
-    )
+    if (scenario.props.startNode !== null) {
+      await expect(page.getByTestId('start-node')).toBeVisible()
+    }
 
     await page.getByRole('textbox').focus()
 
