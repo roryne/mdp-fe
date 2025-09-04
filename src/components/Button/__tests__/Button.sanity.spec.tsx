@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/experimental-ct-react'
 import type * as React from 'react'
 
-import { getTitleFromCases } from '@/utils/test/pageHelpers'
+import { EViewports, getTitleFromCases } from '@/utils/test/pageHelpers'
 
 import Button from '../'
-import { allCases, defaultProps, viewports } from './common'
+import { allCases, defaultProps } from './common'
 
 // Minimal mock ThemeProvider to wrap buttons for theme-related tests
 const ThemeProvider = ({ children }: React.PropsWithChildren) => (
@@ -18,8 +18,18 @@ test.describe(
   },
   () => {
     test.describe('Sanity', () => {
+      test.beforeEach(async ({ page }) => {
+        await page.addStyleTag({
+          content: `
+                  * {
+                    font-family: Arial, sans-serif !important;
+                  }
+                `
+        })
+      })
+
       // Basic render + console error check across multiple viewports
-      for (const vp of viewports) {
+      for (const vp of EViewports) {
         test(`correctly renders ${vp.name} without errors`, async ({
           mount,
           page
@@ -71,7 +81,7 @@ test.describe(
       }
 
       // Responsive render + screenshot checks
-      for (const vp of viewports) {
+      for (const vp of EViewports) {
         test(`renders correctly at ${vp.width}x${vp.height}`, async ({
           page,
           mount

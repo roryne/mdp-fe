@@ -14,6 +14,16 @@ test.describe(
     tag: ['@component', '@button', '@happy', '@visual']
   },
   () => {
+    test.beforeEach(async ({ page }) => {
+      await page.addStyleTag({
+        content: `
+                * {
+                  font-family: Arial, sans-serif !important;
+                }
+              `
+      })
+    })
+
     for (const props of allCases) {
       const title = getTitleFromCases({
         ignoredKeys: ['label'],

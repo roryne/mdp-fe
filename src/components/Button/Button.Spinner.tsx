@@ -1,6 +1,6 @@
 import type * as React from 'react'
 
-import styles from './Button.module.css'
+import styles from './Button.module.scss'
 import type { TButtonSpinnerProps } from './types'
 
 const Spinner: React.FC<TButtonSpinnerProps> = ({

@@ -1,5 +1,6 @@
 :root {
   --color-blue: #0079c4;
+  --color-blue-rgb: 0, 121, 196;
   --color-blue-s1: #0e6db0;
   --color-blue-s2: #15619d;
   --color-blue-t1: #3883ca;
@@ -13,6 +14,10 @@
   --color-gray-600: #7e7e7e;
   --color-gray-700: #626262;
   --color-gray-800: #515151;
+  --color-gray-900: #404040;
+  --color-gray-1000: #2f2f2f;
+  --color-gray-1100: #1e1e1e;
+  --color-gray-1200: #0d0d0d;
 
   --color-green: #17c400;
   --color-green-s1: #1db00a;
@@ -37,7 +42,59 @@
   --color-yellow-s2: #9e8b0f;
   --color-yellow-t1: #cbb42e;
   --color-yellow-t2: #d1bb47;
+}
 
-  font-family: Arial, Helvetica, sans-serif;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+blockquote,
+body,
+dd,
+dl,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+input,
+button,
+select,
+textarea {
+  all: unset;
+  box-sizing: border-box;
+}
+
+html {
+  line-height: 1.5; /* better default vertical rhythm */
+  -webkit-text-size-adjust: 100%; /* mobile font scaling fix */
+}
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  font-family: system-ui, sans-serif;
   font-size: 16px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

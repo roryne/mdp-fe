@@ -1,2 +1,3 @@
 // Import styles, initialize component theme here.
-import '../src/global/styles.css'
+import '../src/global/styles.module.css'
+import '../src/global/main.scss'
