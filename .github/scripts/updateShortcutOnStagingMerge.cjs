@@ -1,9 +1,8 @@
 /* eslint-disable */
-
 const token = process.env.SHORTCUT_TOKEN ?? ''
 const validationColumnId = process.env.VALIDATION_COLUMN_ID ?? ''
 const qaColumnId = process.env.QA_COLUMN_ID ?? ''
-const dryRun = process.env.DRY_RUN === 'false' // 'true' for no Shortcut actions--only logging
+const dryRun = process.env.DRY_RUN === 'true'
 
 const headers = {
   'Content-Type': 'application/json',
