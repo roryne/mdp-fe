@@ -11,7 +11,7 @@ const handleOnClickSpy = spy.fn
 export const props = {
   'aria-label': 'Aria Label',
   defaultValue: 'Default Value',
-  endNodeDecorational: <span data-testid="end-node">end node</span>,
+  endNodeDecorational: <span data-testid="end-node">end</span>,
   endNodeInteractive: (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex
     <span data-testid="end-node" onClick={handleOnClickSpy} tabIndex={0}>
@@ -27,7 +27,7 @@ export const props = {
   placeholder: 'Placeholder',
   shouldShowLabel: true,
   spy,
-  startNodeDecorational: <span data-testid="start-node">start node</span>,
+  startNodeDecorational: <span data-testid="start-node">start</span>,
   startNodeInteractive: (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex
     <span data-testid="start-node" onClick={handleOnClickSpy} tabIndex={0}>
