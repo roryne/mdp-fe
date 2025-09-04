@@ -1,0 +1,36 @@
+name: Update Shortcut on merge to staging
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+    inputs:
+      DRY_RUN:
+        description: Don't actually hit the Shortcut API
+        type: boolean
+        default: false
+
+jobs:
+  update-shortcut:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Update Shortcut stories
+        env:
+          SHORTCUT_TOKEN: ${{ secrets.SHORTCUT_TOKEN }}
+          VALIDATION_COLUMN_ID: ${{ vars.VALIDATION_COLUMN_ID }}
+          QA_COLUMN_ID: ${{ vars.QA_COLUMN_ID }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: npx node .github/scripts/update-shortcut-on-staging-merge.js
