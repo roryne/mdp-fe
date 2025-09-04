@@ -16,6 +16,8 @@ test.beforeEach(async ({ page }) => {
       }
     `
   })
+
+  await page.evaluateHandle(async () => document.fonts.ready)
 })
 
 for (const scenario of scenarios.outline) {
