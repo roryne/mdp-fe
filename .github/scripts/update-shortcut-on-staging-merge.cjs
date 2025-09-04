@@ -1,5 +1,4 @@
 /* eslint-disable */
-const fetch = require('node-fetch')
 
 const token = process.env.SHORTCUT_TOKEN ?? ''
 const validationColumnId = process.env.VALIDATION_COLUMN_ID ?? ''
@@ -12,6 +11,7 @@ async function getValidationStories() {
     { headers: { 'Shortcut-Token': token } }
   )
   const data = await res.json()
+
   if (!Array.isArray(data)) {
     console.error('Unexpected API response:', data)
     return []
@@ -27,19 +27,28 @@ async function updateStory(storyId, storyName) {
     return
   }
 
-  await fetch(`https://api.app.shortcut.com/api/v3/stories/${storyId}`, {
-    method: 'PUT',
-    headers: {
-      'Shortcut-Token': token,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      labels: ['Validation Passed'],
-      workflow_state_id: qaColumnId
-    })
-  })
+  const res = await fetch(
+    `https://api.app.shortcut.com/api/v3/stories/${storyId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Shortcut-Token': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        labels: ['Validation Passed'],
+        workflow_state_id: qaColumnId
+      })
+    }
+  )
 
-  console.log(`Updated story ${storyId} - "${storyName}"`)
+  if (!res.ok) {
+    console.error(
+      `Failed to update story ${storyId}: ${res.status} ${res.statusText}`
+    )
+  } else {
+    console.log(`Updated story ${storyId} - "${storyName}"`)
+  }
 }
 
 async function main() {
