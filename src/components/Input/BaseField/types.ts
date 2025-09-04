@@ -22,7 +22,7 @@ export type TBaseFieldCustomProps = Readonly<{
   shouldShowLabel?: boolean
   startNode?: ReactNode
   type?: HTMLInputTypeAttribute
-  variant?: 'filled' | 'outline'
+  variant?: 'outline'
 }>
 export type TBaseFieldProps = InputHTMLAttributes<HTMLInputElement> &
   TBaseFieldCustomProps
