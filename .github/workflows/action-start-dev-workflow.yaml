@@ -102,11 +102,11 @@ jobs:
         run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
 
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() && failure() }}
+        if: ${{ !cancelled() }}
         with:
           if-no-files-found: 'ignore'
-          name: playwright-report
-          path: playwright-report/
+          name: playwright-test-results
+          path: test-results/
           retention-days: 30
 
   typecheck:

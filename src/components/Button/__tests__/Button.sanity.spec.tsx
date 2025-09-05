@@ -1,15 +1,10 @@
 import { test, expect } from '@playwright/experimental-ct-react'
 import type * as React from 'react'
 
-import { getTitleFromCases } from '@/utils/test/pageHelpers'
+import { EViewports, getTitleFromCases } from '@/utils/test/pageHelpers'
 
 import Button from '../'
-import { allCases, defaultProps, viewports } from './common'
-
-// Minimal mock ThemeProvider to wrap buttons for theme-related tests
-const ThemeProvider = ({ children }: React.PropsWithChildren) => (
-  <div data-mock-theme>{children}</div>
-)
+import { allCases, defaultProps } from './common'
 
 test.describe(
   'Component/Button',
@@ -18,8 +13,18 @@ test.describe(
   },
   () => {
     test.describe('Sanity', () => {
+      test.beforeEach(async ({ page }) => {
+        await page.addStyleTag({
+          content: `
+                  * {
+                    font-family: Arial, sans-serif !important;
+                  }
+                `
+        })
+      })
+
       // Basic render + console error check across multiple viewports
-      for (const vp of viewports) {
+      for (const vp of EViewports) {
         test(`correctly renders ${vp.name} without errors`, async ({
           mount,
           page
@@ -71,7 +76,7 @@ test.describe(
       }
 
       // Responsive render + screenshot checks
-      for (const vp of viewports) {
+      for (const vp of EViewports) {
         test(`renders correctly at ${vp.width}x${vp.height}`, async ({
           page,
           mount
@@ -81,7 +86,7 @@ test.describe(
           const button = await mount(<Button label="Responsive test" />)
 
           await expect(button).toBeVisible()
-          await expect(button).toHaveScreenshot({ maxDiffPixelRatio: 0.05 })
+          await expect(button).toHaveScreenshot({ animations: 'disabled' })
         })
       }
 
@@ -137,28 +142,6 @@ test.describe(
         expect(
           messages.filter((m) => m.toLowerCase().includes('error'))
         ).toHaveLength(0)
-      })
-
-      // Theme support placeholder
-      test.describe('Theme support', { tag: ['@theme'] }, () => {
-        // TODO: Expand when theming is implemented
-        const themes = ['light', 'dark'] // extend with highContrast, custom, etc.
-
-        for (const theme of themes) {
-          test.skip(`renders correctly in ${theme} theme`, async ({
-            mount
-          }) => {
-            // Mount wrapped in mock ThemeProvider
-            const button = await mount(
-              <ThemeProvider>
-                <Button label="Theme test" />
-              </ThemeProvider>
-            )
-
-            await expect(button).toBeVisible()
-            await expect(button).toHaveScreenshot(`button-${theme}.png`)
-          })
-        }
       })
     })
   }

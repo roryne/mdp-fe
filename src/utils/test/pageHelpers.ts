@@ -2,6 +2,13 @@ import type { Page } from 'playwright/test'
 
 import type { TTestTitleProps } from '@/components/Button/types'
 
+export const EViewports = [
+  { height: 900, name: 'desktop-large', width: 1440 },
+  { height: 768, name: 'desktop-small', width: 1024 },
+  { height: 1024, name: 'tablet-portrait', width: 768 },
+  { height: 812, name: 'mobile-portrait', width: 375 }
+]
+
 /**
  * Check if the global window loading flag is set
  */
