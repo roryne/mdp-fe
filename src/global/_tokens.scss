@@ -187,6 +187,6 @@ $radii: (
   }
 
   @each $key, $value in $size {
-    --size-#{$key}: #{$value};
+    --size-#{"#{$key}"}: #{$value};
   }
 }

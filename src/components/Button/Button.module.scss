@@ -14,7 +14,7 @@
   transition: background-color 0.2s ease;
 
   &:focus-visible {
-    outline: 0.125rem solid var(--color-blue);
+    outline: 0.125rem solid var(--colors-blue-400);
     outline-offset: 0.125rem;
   }
   &:hover:not(:disabled) {
@@ -34,9 +34,9 @@
 
 /* Variant modifiers */
 .btn--primary {
-  --btn-bg-active: var(--color-blue-s2);
-  --btn-bg-color: var(--color-blue);
-  --btn-bg-hover: var(--color-blue-s1);
+  --btn-bg-active: var(--colors-blue-350);
+  --btn-bg-color: var(--colors-blue-400);
+  --btn-bg-hover: var(--colors-blue-450);
   --btn-border: none;
   --btn-border-hover: none;
   --btn-text: white;
@@ -44,21 +44,21 @@
 }
 .btn--secondary,
 .btn--warning {
-  --btn-bg-active: var(--color-gray-200);
-  --btn-bg-color: white;
-  --btn-bg-hover: var(--color-gray-100);
+  --btn-bg-active: var(--colors-bw-900);
+  --btn-bg-color: var(--colors-bw-950);
+  --btn-bg-hover: white;
 }
 .btn--secondary {
-  --btn-border: 0.0625rem solid var(--color-blue);
-  --btn-border-hover: 0.0625rem solid var(--color-blue-s1);
-  --btn-text: var(--color-blue);
-  --btn-text-hover: var(--color-blue-s1);
+  --btn-border: 0.0625rem solid var(--colors-blue-400);
+  --btn-border-hover: 0.0625rem solid var(--colors-blue-450);
+  --btn-text: var(--colors-blue-400);
+  --btn-text-hover: var(--colors-blue-450);
 }
 .btn--warning {
-  --btn-border: 0.125rem solid var(--color-red);
-  --btn-border-hover: 0.125rem solid var(--color-red);
-  --btn-text: var(--color-red);
-  --btn-text-hover: var(--color-red);
+  --btn-border: 0.125rem solid var(--colors-red-500);
+  --btn-border-hover: 0.125rem solid var(--colors-red-550);
+  --btn-text: var(--colors-red-500);
+  --btn-text-hover: var(--colors-red-550);
 }
 
 /* Size modifiers */

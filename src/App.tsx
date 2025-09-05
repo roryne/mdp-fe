@@ -1,7 +1,10 @@
+import './global/main.scss'
+import './global/styles.css'
+
 import { useCallback, useState } from 'react'
 
 import { RightChevronWhite } from '@/assets'
-import { Button } from '@/components'
+import { Button, Input } from '@/components'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -14,13 +17,20 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div
+      style={{
+        display: 'flex',
+        gap: '3rem',
+        padding: '2rem'
+      }}
+    >
       <Button
         iconRight={<img alt="Chevron" src={RightChevronWhite} width={16} />}
         isLoading={isLoading}
-        label="Click Me"
+        label="Button"
         onClick={handleClick}
       />
+      <Input.Text label="Label" />
     </div>
   )
 }
