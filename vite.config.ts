@@ -9,6 +9,15 @@ const dirname =
   )
 
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @use "@/global/tokens";
+        `
+      }
+    }
+  },
   plugins: [react()],
   resolve: {
     alias: {
