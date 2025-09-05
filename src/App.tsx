@@ -1,4 +1,3 @@
-import './global/main.scss'
 import './global/styles.css'
 
 import { useCallback, useState } from 'react'

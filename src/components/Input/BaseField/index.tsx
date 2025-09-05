@@ -4,7 +4,7 @@ import { forwardRef, useId, type ReactNode } from 'react'
 import Label from '../Label'
 import Adornment from './BaseField.Adornment'
 import MessageArea from './BaseField.MessageArea'
-import styles from './BaseField.module.scss'
+import styles from './BaseField.module.css'
 import type { TBaseFieldMessage, TBaseFieldProps } from './types'
 
 const getClasses = ({

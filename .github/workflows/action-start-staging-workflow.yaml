@@ -49,7 +49,7 @@ jobs:
         run: npx playwright install --with-deps --only-shell chromium
 
       - name: Run @a11y, @interactions, @visual tests
-        run: npm run pw:ct -- --grep-invert @sanity --only-changed=origin/dev
+        run: npm run pw:ct -- --grep-invert @sanity --only-changed=origin/staging...origin/dev
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

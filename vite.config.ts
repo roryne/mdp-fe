@@ -10,13 +10,7 @@ const dirname =
 
 export default defineConfig({
   css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `
-          @use "@/global/tokens";
-        `
-      }
-    }
+    postcss: './postcss.config.mts'
   },
   plugins: [react()],
   resolve: {
