@@ -1,5 +1,4 @@
-import '@/global/main.scss'
-import '@/global/styles.module.css'
+import '@/global/styles.css'
 import '@/storybook/components/storybook-docs.css'
 import type { Preview } from '@storybook/react-vite'
 
