@@ -6,11 +6,6 @@ import { EViewports, getTitleFromCases } from '@/utils/test/pageHelpers'
 import Button from '../'
 import { allCases, defaultProps } from './common'
 
-// Minimal mock ThemeProvider to wrap buttons for theme-related tests
-const ThemeProvider = ({ children }: React.PropsWithChildren) => (
-  <div data-mock-theme>{children}</div>
-)
-
 test.describe(
   'Component/Button',
   {
@@ -91,7 +86,7 @@ test.describe(
           const button = await mount(<Button label="Responsive test" />)
 
           await expect(button).toBeVisible()
-          await expect(button).toHaveScreenshot({ maxDiffPixelRatio: 0.05 })
+          await expect(button).toHaveScreenshot({ animations: 'disabled' })
         })
       }
 
@@ -147,28 +142,6 @@ test.describe(
         expect(
           messages.filter((m) => m.toLowerCase().includes('error'))
         ).toHaveLength(0)
-      })
-
-      // Theme support placeholder
-      test.describe('Theme support', { tag: ['@theme'] }, () => {
-        // TODO: Expand when theming is implemented
-        const themes = ['light', 'dark'] // extend with highContrast, custom, etc.
-
-        for (const theme of themes) {
-          test.skip(`renders correctly in ${theme} theme`, async ({
-            mount
-          }) => {
-            // Mount wrapped in mock ThemeProvider
-            const button = await mount(
-              <ThemeProvider>
-                <Button label="Theme test" />
-              </ThemeProvider>
-            )
-
-            await expect(button).toBeVisible()
-            await expect(button).toHaveScreenshot(`button-${theme}.png`)
-          })
-        }
       })
     })
   }

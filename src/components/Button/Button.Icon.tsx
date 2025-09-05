@@ -2,7 +2,7 @@ import type { FC } from 'react'
 
 import { conditionalClass, mergeClasses } from '@/utils/html'
 
-import styles from './Button.module.scss'
+import styles from './Button.module.css'
 import type { TButtonIconProps } from './types'
 
 const Icon: FC<TButtonIconProps> = ({ icon, isHidden, ...restProps }) => {

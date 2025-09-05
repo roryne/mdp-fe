@@ -71,18 +71,5 @@ test.describe(
 
       await expect(button).toHaveScreenshot({ animations: 'disabled' })
     })
-
-    // TODO Flakey - Investigate
-    test.skip('correctly renders hovered button', async ({ mount }) => {
-      const button = await mount(<Button label={defaultProps.label} />)
-
-      // Hover state for visual regression
-      await button.hover()
-
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
-    })
-
-    // TODO cannot be tested in Playwright well atm
-    test.skip('correctly renders active button', () => {})
   }
 )
