@@ -16,6 +16,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ref: staging
+
+      - name: Fetch dev branch
+        run: git fetch origin dev:dev
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -46,14 +53,14 @@ jobs:
         run: npx playwright install --with-deps --only-shell chromium
 
       - name: Run @a11y, @interactions, @visual tests
-        run: npm run pw:ct -- --grep-invert @sanity
+        run: npm run pw:ct -- --grep-invert @sanity --only-changed=origin/staging..origin/dev
 
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() && failure() }}
+        if: ${{ !cancelled() }}
         with:
           if-no-files-found: 'ignore'
-          name: playwright-report
-          path: playwright-report/
+          name: playwright-test-results
+          path: test-results/
           retention-days: 30
 
   versioning:

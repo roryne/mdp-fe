@@ -9,6 +9,9 @@ const dirname =
   )
 
 export default defineConfig({
+  css: {
+    postcss: './postcss.config.mts'
+  },
   plugins: [react()],
   resolve: {
     alias: {

@@ -1,5 +1,4 @@
 export class Spy<TArgs = unknown> {
-  // Private call tracking
   #calls: TArgs[] = []
 
   /** Returns true if the spy was ever called */
@@ -19,11 +18,19 @@ export class Spy<TArgs = unknown> {
 
   /** The spy function to pass as a callback */
   fn = (...args: TArgs[]): void => {
-    this.#calls.push(...args)
+    void (async () => {
+      this.#calls.push(...args)
+
+      await Promise.resolve()
+    })()
   }
 
   /** Reset call tracking */
-  reset(): void {
-    this.#calls = []
+  reset = (): void => {
+    void (async () => {
+      this.#calls = []
+
+      await Promise.resolve()
+    })()
   }
 }
