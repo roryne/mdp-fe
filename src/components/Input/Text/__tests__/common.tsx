@@ -1,4 +1,5 @@
 /* eslint-disable sort-keys */
+import { cartesianProductWithProps } from '@/utils/test/scenarios'
 import { Spy } from '@/utils/test/spy'
 
 import Input from '../..'
@@ -193,35 +194,7 @@ const messageVariants = [
   }
 ]
 
-type Variant = Record<string, unknown> & { meta: string }
-
-function cartesianProductWithProps(groups: Variant[][]) {
-  const initial = [{ title: '', props: {} as Record<string, unknown> }]
-
-  return groups.reduce(
-    (acc, group) =>
-      acc.flatMap((a) =>
-        group.map((b) => {
-          // merge non-meta props
-          const mergedProps = {
-            ...a.props,
-            ...Object.fromEntries(
-              Object.entries(b).filter(([k]) => k !== 'meta')
-            )
-          }
-
-          // build title by concatenating meta strings
-          const titleParts = [a.title, b.meta].filter(Boolean)
-          const title = titleParts.join(' | ')
-
-          return { title, props: mergedProps }
-        })
-      ),
-    initial
-  )
-}
-
-const outlineScenarios = cartesianProductWithProps([
+const outlineScenarios = cartesianProductWithProps<TTextInputProps>([
   baseOutline,
   iconVariants,
   inputContentVariants,

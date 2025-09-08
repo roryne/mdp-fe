@@ -1,49 +1,92 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { LeftChevronWhite, RightChevronWhite } from '@/assets'
-import { Button } from '@/components'
+import ChevronRight from '@/assets/chevron/right.svg?react'
+import { Button, Icon } from '@/components'
 
-import { EIcon, getIconSizePx } from './__tests__/common'
 import { EButton } from './enums'
-import type { TButtonProps } from './types'
+import { getColorVar } from '../Icon/common'
 
-const LeftIcon = ({ size }: { readonly size: TButtonProps['size'] }) => (
-  <img
-    alt="Left Arrow Icon"
-    src={LeftChevronWhite}
-    width={getIconSizePx(size)}
+const iconTheme = {
+  primary: {
+    filled: {
+      default: getColorVar('bw-1000')
+    },
+    outlined: {
+      default: getColorVar('blue-400')
+    }
+  },
+  warning: {
+    filled: {
+      default: getColorVar('bw-1000')
+    },
+    outlined: {
+      default: getColorVar('red-400')
+    }
+  }
+}
+const PrimarySolidIcon = () => (
+  <Icon
+    size={EButton.Size.Medium}
+    svg={ChevronRight}
+    theme={iconTheme.primary.filled}
   />
 )
-
-const RightIcon = ({ size }: { readonly size: TButtonProps['size'] }) => (
-  <img
-    alt="Right Arrow Icon"
-    src={RightChevronWhite}
-    width={getIconSizePx(size)}
+const PrimaryOutlinedIcon = () => (
+  <Icon
+    size={EButton.Size.Medium}
+    svg={ChevronRight}
+    theme={iconTheme.primary.outlined}
+  />
+)
+const WarningSolidIcon = () => (
+  <Icon
+    size={EButton.Size.Medium}
+    svg={ChevronRight}
+    theme={iconTheme.warning.filled}
+  />
+)
+const WarningOutlinedIcon = () => (
+  <Icon
+    size={EButton.Size.Medium}
+    svg={ChevronRight}
+    theme={iconTheme.warning.outlined}
   />
 )
 
 const meta = {
   argTypes: {
-    iconLeft: {
-      control: { type: 'object' },
+    disabled: {
+      control: 'boolean',
+      table: {
+        category: 'State',
+        defaultValue: { summary: 'false' },
+        type: { summary: 'boolean' }
+      }
+    },
+    fill: {
+      control: 'select',
       table: {
         category: 'Appearance',
-        defaultValue: { summary: 'null' },
-        type: { summary: 'ReactNode' }
+        defaultValue: { summary: 'solid' },
+        type: { summary: Object.values(EButton.Fill).join(' | ') }
+      }
+    },
+    iconLeft: {
+      table: {
+        category: 'Appearance',
+        defaultValue: { summary: 'undefined' },
+        type: { summary: 'Icon' }
       }
     },
     iconRight: {
-      control: { type: 'object' },
       table: {
         category: 'Appearance',
-        defaultValue: { summary: 'null' },
-        type: { summary: 'ReactNode' }
+        defaultValue: { summary: 'undefined' },
+        type: { summary: 'Icon' }
       }
     },
     isLoading: {
       control: 'boolean',
-      description: 'Show loading spinner',
       table: {
         category: 'State',
         defaultValue: { summary: 'false' },
@@ -54,12 +97,21 @@ const meta = {
       control: 'text',
       table: {
         category: 'Appearance',
-        defaultValue: { summary: 'undefined' },
+        defaultValue: { summary: '' },
         type: { summary: 'string' }
       }
     },
+    palette: {
+      control: 'select',
+      options: Object.values(EButton.Palette),
+      table: {
+        category: 'Appearance',
+        defaultValue: { summary: EButton.Palette.Primary },
+        type: { summary: Object.values(EButton.Palette).join(' | ') }
+      }
+    },
     size: {
-      control: 'inline-radio',
+      control: 'select',
       options: Object.values(EButton.Size),
       table: {
         category: 'Appearance',
@@ -67,13 +119,12 @@ const meta = {
         type: { summary: Object.values(EButton.Size).join(' | ') }
       }
     },
-    variant: {
-      control: 'select',
-      options: Object.values(EButton.Variant),
+    theme: {
+      control: 'object',
+      description: 'SVG icon colors',
       table: {
         category: 'Appearance',
-        defaultValue: { summary: EButton.Variant.Primary },
-        type: { summary: Object.values(EButton.Variant).join(' | ') }
+        defaultValue: { summary: "{ default: '', focus: '', hover: '' }" }
       }
     }
   },
@@ -81,9 +132,10 @@ const meta = {
     iconLeft: undefined,
     iconRight: undefined,
     isLoading: false,
-    label: 'Click Me',
+    label: 'Button',
+    palette: EButton.Palette.Primary,
     size: EButton.Size.Medium,
-    variant: EButton.Variant.Primary
+    theme: { default: '', focus: '', hover: '' }
   },
   component: Button,
   title: 'Components/Button'
@@ -95,83 +147,272 @@ type Story = StoryObj<typeof Button>
 
 export const Base = {
   args: {
-    variant: EButton.Variant.Primary
+    label: 'Button'
   }
 } satisfies Story
 
 export const Primary = {
   args: {
-    variant: EButton.Variant.Primary
+    label: 'Button',
+    palette: EButton.Palette.Primary
   }
 } satisfies Story
 
-export const Secondary = {
+export const PrimaryOutlined = {
   args: {
-    variant: EButton.Variant.Secondary
+    ...Primary.args,
+    fill: 'outlined'
+  }
+} satisfies Story
+
+export const PrimaryOutlinedDisabled = {
+  args: {
+    ...PrimaryOutlined.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const PrimaryOutlinedLoading = {
+  args: {
+    ...PrimaryOutlined.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const PrimarySolid = {
+  args: {
+    ...Primary.args,
+    fill: 'solid'
+  }
+} satisfies Story
+
+export const PrimarySolidDisabled = {
+  args: {
+    ...PrimarySolid.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const PrimarySolidLoading = {
+  args: {
+    ...PrimarySolid.args,
+    isLoading: true
   }
 } satisfies Story
 
 export const Warning = {
   args: {
-    variant: EButton.Variant.Warning
+    label: 'Button',
+    palette: EButton.Palette.Warning
   }
 } satisfies Story
 
-export const SmallPrimary = {
+export const WarningOutlined = {
   args: {
-    size: 'small'
+    ...Warning.args,
+    fill: 'outlined'
   }
 } satisfies Story
 
-export const MediumPrimary = {
+export const WarningOutlinedDisabled = {
   args: {
-    size: 'medium'
+    ...WarningOutlined.args,
+    disabled: true
   }
 } satisfies Story
 
-export const LargePrimary = {
+export const WarningOutlinedLoading = {
   args: {
-    size: 'large'
-  }
-} satisfies Story
-
-export const PrimaryIconOnly = {
-  args: {
-    iconRight: <RightIcon size={EIcon.Medium} />,
-    size: EButton.Size.Medium
-  }
-} satisfies Story
-
-export const PrimaryWithRightIcon = {
-  args: {
-    iconRight: <RightIcon size={EIcon.Medium} />,
-    size: EButton.Size.Medium
-  }
-} satisfies Story
-
-export const PrimaryWithLeftIcon = {
-  args: {
-    iconLeft: <LeftIcon size={EIcon.Medium} />,
-    size: EButton.Size.Medium
-  }
-} satisfies Story
-
-export const PrimaryWithBothIcons = {
-  args: {
-    iconLeft: <LeftIcon size={EIcon.Medium} />,
-    iconRight: <RightIcon size={EIcon.Medium} />,
-    size: EButton.Size.Medium
-  }
-} satisfies Story
-
-export const PrimaryLoading = {
-  args: {
+    ...WarningOutlined.args,
     isLoading: true
   }
 } satisfies Story
 
-export const PrimaryDisabled = {
+export const WarningSolid = {
   args: {
+    ...Warning.args,
+    fill: 'solid'
+  }
+} satisfies Story
+
+export const WarningSolidDisabled = {
+  args: {
+    ...WarningSolid.args,
     disabled: true
+  }
+} satisfies Story
+
+export const WarningSolidLoading = {
+  args: {
+    ...WarningSolid.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const PrimarySolidLeftIcon = {
+  args: {
+    ...PrimarySolid.args,
+    iconLeft: <PrimarySolidIcon />
+  }
+} satisfies Story
+
+export const PrimarySolidLeftIconDisabled = {
+  args: {
+    ...PrimarySolidLeftIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const PrimarySolidLeftIconLoading = {
+  args: {
+    ...PrimarySolidLeftIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const PrimarySolidRightIcon = {
+  args: {
+    ...PrimarySolid.args,
+    iconRight: <PrimarySolidIcon />
+  }
+} satisfies Story
+
+export const PrimarySolidRightIconDisabled = {
+  args: {
+    ...PrimarySolidRightIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const PrimarySolidRightIconLoading = {
+  args: {
+    ...PrimarySolidRightIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const PrimaryOutlinedLeftIcon = {
+  args: {
+    ...PrimaryOutlined.args,
+    iconLeft: <PrimaryOutlinedIcon />
+  }
+} satisfies Story
+
+export const PrimaryOutlinedLeftIconDisabled = {
+  args: {
+    ...PrimaryOutlinedLeftIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const PrimaryOutlinedLeftIconLoading = {
+  args: {
+    ...PrimaryOutlinedLeftIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const PrimaryOutlinedRightIcon = {
+  args: {
+    ...PrimaryOutlined.args,
+    iconRight: <PrimaryOutlinedIcon />
+  }
+} satisfies Story
+
+export const PrimaryOutlinedRightIconDisabled = {
+  args: {
+    ...PrimaryOutlinedRightIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const PrimaryOutlinedRightIconLoading = {
+  args: {
+    ...PrimaryOutlinedRightIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const WarningSolidLeftIcon = {
+  args: {
+    ...WarningSolid.args,
+    iconLeft: <WarningSolidIcon />
+  }
+} satisfies Story
+
+export const WarningSolidLeftIconDisabled = {
+  args: {
+    ...WarningSolidLeftIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const WarningSolidLeftIconLoading = {
+  args: {
+    ...WarningSolidLeftIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const WarningSolidRightIcon = {
+  args: {
+    ...WarningSolid.args,
+    iconRight: <WarningSolidIcon />
+  }
+} satisfies Story
+
+export const WarningSolidRightIconDisabled = {
+  args: {
+    ...WarningSolidRightIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const WarningSolidRightIconLoading = {
+  args: {
+    ...WarningSolidRightIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const WarningOutlinedLeftIcon = {
+  args: {
+    ...WarningOutlined.args,
+    iconLeft: <WarningOutlinedIcon />
+  }
+} satisfies Story
+
+export const WarningOutlinedLeftIconDisabled = {
+  args: {
+    ...WarningOutlinedLeftIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const WarningOutlinedLeftIconLoading = {
+  args: {
+    ...WarningOutlinedLeftIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const WarningOutlinedRightIcon = {
+  args: {
+    ...WarningOutlined.args,
+    iconRight: <WarningOutlinedIcon />
+  }
+} satisfies Story
+
+export const WarningOutlinedRightIconDisabled = {
+  args: {
+    ...WarningOutlinedRightIcon.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const WarningOutlinedRightIconLoading = {
+  args: {
+    ...WarningOutlinedRightIcon.args,
+    isLoading: true
   }
 } satisfies Story

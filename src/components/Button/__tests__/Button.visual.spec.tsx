@@ -1,75 +1,76 @@
-import { test, expect } from '@playwright/experimental-ct-react'
-
-import { getTitleFromCases } from '@/utils/test/pageHelpers'
+import { expect, test } from '@playwright/experimental-ct-react'
 
 import Button from '..'
-import { allCases, defaultProps } from './common'
+import { scenarios } from './common'
+
+const label = 'Button'
+const tags = ['@component', '@button', '@visual']
 
 // Set default viewport for all tests in this file
-test.use({ viewport: { height: 100, width: 200 } })
+test.use({ viewport: { height: 144, width: 288 } })
 
-test.describe(
-  'Component/Button',
-  {
-    tag: ['@component', '@button', '@happy', '@visual']
-  },
-  () => {
-    test.beforeEach(async ({ page }) => {
-      await page.addStyleTag({
-        content: `
-                * {
-                  font-family: Arial, sans-serif !important;
-                }
-              `
-      })
-    })
+test.beforeEach(async ({ page }) => {
+  await page.addStyleTag({
+    content: `
+      * {
+        font-family: sans-serif !important;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+      }
+    `
+  })
 
-    for (const props of allCases) {
-      const title = getTitleFromCases({
-        ignoredKeys: ['label'],
-        keysFromPartialMatch: ['icon'],
-        props,
-        returnKeys: ['disabled', 'isLoading']
-      })
+  await page.evaluateHandle(async () => document.fonts.ready)
+})
 
-      // Visual tests for all variants, sizes, and icon combinations
-      test(title, async ({ mount }) => {
-        const button = await mount(<Button {...props} />)
+for (const scenario of scenarios.primary) {
+  test(scenario.title, { tag: tags }, async ({ mount, page }) => {
+    await mount(
+      <main>
+        <h1>Button</h1>
+        <section style={{ padding: '1rem 2rem' }}>
+          <Button {...scenario.props} label={label} />
+        </section>
+      </main>
+    )
 
-        // Screenshot test: disables animations to avoid flakiness
-        await expect(button).toHaveScreenshot({
-          animations: 'disabled'
-        })
-      })
+    if (scenario.props.iconLeft !== undefined) {
+      await expect(page.getByTestId('icon-left')).toBeVisible()
     }
 
-    test('correctly renders disabled button', async ({ mount }) => {
-      const button = await mount(
-        <Button disabled={true} label={defaultProps.label} />
-      )
+    if (scenario.props.iconRight !== undefined) {
+      await expect(page.getByTestId('icon-right')).toBeVisible()
+    }
 
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
+    await expect(page.locator('body')).toHaveScreenshot({
+      animations: 'disabled'
     })
+  })
+}
 
-    test('correctly renders loading button', async ({ mount }) => {
-      const button = await mount(
-        <Button isLoading={true} label={defaultProps.label} />
-      )
+for (const scenario of scenarios.primary) {
+  test(`focus | ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
+    await mount(
+      <main>
+        <h1>Button</h1>
+        <section style={{ padding: '1rem 2rem' }}>
+          <Button {...scenario.props} label={label} />
+        </section>
+      </main>
+    )
 
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
+    await page.getByRole('button').focus()
+
+    if (scenario.props.iconLeft !== undefined) {
+      await expect(page.getByTestId('icon-left')).toBeVisible()
+    }
+
+    if (scenario.props.iconRight !== undefined) {
+      await expect(page.getByTestId('icon-right')).toBeVisible()
+    }
+
+    await expect(page.locator('body')).toHaveScreenshot({
+      animations: 'disabled'
     })
-
-    test('correctly renders focused button', async ({ mount, page }) => {
-      const button = await mount(
-        <div style={{ padding: '2rem' }}>
-          <Button label={defaultProps.label} />
-        </div>
-      )
-
-      // Use keyboard to focus the button
-      await page.keyboard.press('Tab')
-
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
-    })
-  }
-)
+  })
+}

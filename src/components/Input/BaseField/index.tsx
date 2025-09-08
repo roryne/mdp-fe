@@ -1,68 +1,24 @@
-import clsx from 'clsx'
-import { forwardRef, useId, type ReactNode } from 'react'
+import { forwardRef, useId } from 'react'
+
+import type { IIconStyle } from '@/global/namespace'
+import { mapIconThemeToStyle } from '@/utils/theme/icons'
 
 import Label from '../Label'
 import Adornment from './BaseField.Adornment'
 import MessageArea from './BaseField.MessageArea'
 import styles from './BaseField.module.css'
-import type { TBaseFieldMessage, TBaseFieldProps } from './types'
-
-const getClasses = ({
-  endNode,
-  startNode,
-  message,
-  variant = 'outline'
-}: {
-  endNode?: ReactNode
-  startNode?: ReactNode
-  message?: TBaseFieldMessage
-  variant?: 'filled' | 'outline'
-}) => {
-  const hasError = Boolean(message?.error)
-  const hasInfo = Boolean(message?.info)
-  const hasSuccess = Boolean(message?.success)
-
-  return {
-    base: clsx(styles.bf, {
-      [styles[`bf--${variant}`]]: variant,
-      [styles['bf--error']]: hasError,
-      [styles['bf--info']]: !hasError && !hasSuccess && hasInfo,
-      [styles['bf--success']]: !hasError && hasSuccess,
-      [styles['bf--end-node']]: endNode,
-      [styles['bf--start-node']]: startNode
-    }),
-    endNode: clsx(styles['bf__end-node']),
-    input: clsx(styles.bf__input),
-    label: clsx(styles.bf__label),
-    messageArea: clsx(styles['bf-ma'], {
-      [styles[`bf-ma--${variant}`]]: variant,
-      [styles['bf-ma--error']]: hasError,
-      [styles['bf-ma--info']]: !hasError && !hasSuccess && hasInfo,
-      [styles['bf-ma--success']]: !hasError && hasSuccess
-    }),
-    startNode: clsx(styles['bf__start-node'])
-  }
-}
-
-const hasText = (val: string) => val.trim().length > 0
-
-const getDescribedBy = (
-  id: string,
-  message: { error?: string; info?: string; success?: string }
-) => {
-  const describedByIds: string[] = []
-
-  if (hasText(message.error ?? '')) describedByIds.push(`${id}-error`)
-  if (hasText(message.info ?? '')) describedByIds.push(`${id}-info`)
-  else if (hasText(message.success ?? '')) describedByIds.push(`${id}-success`)
-
-  return describedByIds.length ? describedByIds.join(' ') : undefined
-}
+import { getClasses, getDescribedBy } from './common'
+import type { TBaseFieldProps } from './types'
 
 const BaseField = forwardRef<HTMLInputElement, TBaseFieldProps>(
   (
     {
       endNode = null,
+      iconTheme = {
+        default: '',
+        focus: '',
+        hover: ''
+      },
       label,
       message = {
         error: '',
@@ -84,13 +40,14 @@ const BaseField = forwardRef<HTMLInputElement, TBaseFieldProps>(
       label: rest['aria-label'] ?? label,
       readOnly: rest.readOnly ?? undefined
     }
-    const classes = getClasses({ endNode, message, startNode, variant })
-    const { error, info, success } = message
-    const displayMessage = ((error ?? '') || (success ?? '') || info) ?? ''
+    const classes = getClasses({ endNode, message, startNode, styles, variant })
+    const displayMessage =
+      ((message.error ?? '') || (message.success ?? '') || message.info) ?? ''
+    const style: IIconStyle = mapIconThemeToStyle(iconTheme)
 
     return (
       <div>
-        <div className={classes.base}>
+        <div className={classes.base} style={style}>
           <Adornment className={classes.startNode} node={startNode} />
           <Label
             className={classes.label}

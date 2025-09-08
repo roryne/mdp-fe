@@ -1,11 +1,13 @@
 /* Base Field */
 .bf {
+  --icon-color: var(--icon-default, currentColor);
+
   background: var(--bf-bg-color);
   border-radius: var(--size-4);
   color: var(--bf-text-color);
   display: inline-flex;
   outline: var(--bf-outline);
-  padding: var(--size-4);
+  padding: 0 var(--size-3);
   position: relative;
 
   &__label {
@@ -23,6 +25,8 @@
   }
 
   &__input {
+    max-height: var(--size-20);
+    min-height: var(--size-16);
     text-indent: 0.5rem;
 
     &::placeholder {
@@ -40,17 +44,27 @@
     }
   }
 
-  &__start-node *,
-  &__end-node * {
-    display: flex;
+  &__end-node,
+  &__start-node {
+    display: inline-flex;
+  }
+
+  &__end-node {
+    margin-left: var(--size-4);
+  }
+  &:hover:not(:disabled) {
+    --icon-color: var(--icon-hover, var(--icon-default, currentColor));
   }
 
   &:focus-within {
+    --icon-color: var(--icon-focus, var(--icon-default, currentColor));
+
     outline: var(--bf-outline-focus, none);
+    outline-offset: var(--size-1);
 
     .bf__label {
       color: var(--bf-label-color-focus);
-      transform: scale(1.05) translateX(5%);
+      transform: scale(1.2) translateX(5%);
     }
   }
 }
@@ -58,9 +72,9 @@
 /* Variants */
 .bf--outline {
   --bf-bg-color: var(--colors-bw-950);
-  --bf-label-color-focus: var(--colors-blue-500);
+  --bf-label-color-focus: var(--colors-blue-450);
   --bf-label-color: var(--colors-bw-450);
-  --bf-outline-focus: var(--size-x) solid var(--colors-blue-500);
+  --bf-outline-focus: var(--size-1) solid var(--colors-blue-450);
   --bf-outline: var(--size-x) solid var(--colors-bw-450);
   --bf-placeholder-color: var(--colors-bw-600);
   --bf-text-color: var(--colors-bw-050);
@@ -85,7 +99,7 @@
 /* Base Field Message Area */
 .bf-ma {
   margin-top: var(--size-4);
-  position: relative;
+  position: absolute;
   text-indent: var(--size-4);
   text-overflow: ellipsis;
   text-wrap: wrap;

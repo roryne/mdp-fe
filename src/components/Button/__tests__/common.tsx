@@ -1,235 +1,102 @@
-import LeftChevronBlue from '@/assets/chevron/left-chevron-blue.svg'
-import LeftChevronRed from '@/assets/chevron/left-chevron-red.svg'
-import LeftChevronWhite from '@/assets/chevron/left-chevron-white.svg'
-import RightChevronBlue from '@/assets/chevron/right-chevron-blue.svg'
-import RightChevronRed from '@/assets/chevron/right-chevron-red.svg'
-import RightChevronWhite from '@/assets/chevron/right-chevron-white.svg'
+/* eslint-disable sort-keys */
+import { getColorVar } from '@/components/Icon/common'
+import { cartesianProductWithProps } from '@/utils/test/scenarios'
+import { Spy } from '@/utils/test/spy'
 
+import { EButton } from '../enums'
 import type { TButtonProps } from '../types'
 
-export const EIcon = {
-  Large: 'large',
-  Medium: 'medium',
-  Size: {
-    Px: {
-      Large: 20,
-      Medium: 16,
-      Small: 12
-    },
-    Rem: {
-      Large: '1.25rem',
-      Medium: '1rem',
-      Small: '0.75rem'
-    }
-  },
-  Small: 'small'
-} as const
+type TTestButtonProps = Partial<Omit<TButtonProps, 'label'>>
+type TTestButtonScenarioProps = Readonly<{
+  meta: string
+}> &
+  TTestButtonProps
 
-export const getIconSizePx = (size: TButtonProps['size']) => {
-  switch (size) {
-    case EIcon.Small:
-      return EIcon.Size.Px.Small
-    case EIcon.Medium:
-      return EIcon.Size.Px.Medium
-    case EIcon.Large:
-      return EIcon.Size.Px.Large
-    default:
-      throw new Error('Could not get icon size pixels')
-  }
+const spy = new Spy()
+const handleClickSpy = spy.fn
+
+const iconTheme = {
+  default: getColorVar('bw-900'),
+  focus: getColorVar('bw-1000'),
+  hover: getColorVar('bw-900')
 }
-
-const getIcon = ({
-  src,
-  size,
-  ...restProps
-}: {
-  src: string
-  size: TButtonProps['size']
-}) => <img alt="Chevron" {...restProps} src={src} width={getIconSizePx(size)} />
-
-export const allCases: TButtonProps[] = [
-  { label: 'Submit', size: 'small', variant: 'primary' },
-  { label: 'Submit', size: 'medium', variant: 'primary' },
-  { label: 'Submit', size: 'large', variant: 'primary' },
-  {
-    iconLeft: getIcon({ size: EIcon.Small, src: LeftChevronWhite }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'primary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Medium, src: LeftChevronWhite }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'primary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Large, src: LeftChevronWhite }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'primary'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Small, src: RightChevronWhite }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'primary'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Medium, src: RightChevronWhite }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'primary'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Large, src: RightChevronWhite }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'primary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Small, src: LeftChevronWhite }),
-    iconRight: getIcon({ size: EIcon.Small, src: RightChevronWhite }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'primary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Medium, src: LeftChevronWhite }),
-    iconRight: getIcon({ size: EIcon.Medium, src: RightChevronWhite }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'primary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Large, src: LeftChevronWhite }),
-    iconRight: getIcon({ size: EIcon.Large, src: RightChevronWhite }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'primary'
-  },
-  { label: 'Submit', size: 'small', variant: 'secondary' },
-  { label: 'Submit', size: 'medium', variant: 'secondary' },
-  { label: 'Submit', size: 'large', variant: 'secondary' },
-  {
-    iconLeft: getIcon({ size: EIcon.Small, src: LeftChevronBlue }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'secondary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Medium, src: LeftChevronBlue }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'secondary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Large, src: LeftChevronBlue }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'secondary'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Small, src: RightChevronBlue }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'secondary'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Medium, src: RightChevronBlue }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'secondary'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Large, src: RightChevronBlue }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'secondary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Small, src: LeftChevronBlue }),
-    iconRight: getIcon({ size: EIcon.Small, src: RightChevronBlue }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'secondary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Medium, src: LeftChevronBlue }),
-    iconRight: getIcon({ size: EIcon.Medium, src: RightChevronBlue }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'secondary'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Large, src: LeftChevronBlue }),
-    iconRight: getIcon({ size: EIcon.Large, src: RightChevronBlue }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'secondary'
-  },
-  { label: 'Submit', size: 'small', variant: 'warning' },
-  { label: 'Submit', size: 'medium', variant: 'warning' },
-  { label: 'Submit', size: 'large', variant: 'warning' },
-  {
-    iconLeft: getIcon({ size: EIcon.Small, src: LeftChevronRed }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'warning'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Medium, src: LeftChevronRed }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'warning'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Large, src: LeftChevronRed }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'warning'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Small, src: RightChevronRed }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'warning'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Medium, src: RightChevronRed }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'warning'
-  },
-  {
-    iconRight: getIcon({ size: EIcon.Large, src: RightChevronRed }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'warning'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Small, src: LeftChevronRed }),
-    iconRight: getIcon({ size: EIcon.Small, src: RightChevronRed }),
-    label: 'Submit',
-    size: 'small',
-    variant: 'warning'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Medium, src: LeftChevronRed }),
-    iconRight: getIcon({ size: EIcon.Medium, src: RightChevronRed }),
-    label: 'Submit',
-    size: 'medium',
-    variant: 'warning'
-  },
-  {
-    iconLeft: getIcon({ size: EIcon.Large, src: LeftChevronRed }),
-    iconRight: getIcon({ size: EIcon.Large, src: RightChevronRed }),
-    label: 'Submit',
-    size: 'large',
-    variant: 'warning'
-  }
-]
 
 export const defaultProps = {
-  label: 'Submit'
-}
+  disabled: false,
+  iconLeft: undefined,
+  iconRight: undefined,
+  isLoading: false,
+  onClick: handleClickSpy,
+  palette: EButton.Palette.Primary,
+  size: EButton.Size.Medium,
+  spy,
+  theme: iconTheme
+} satisfies TTestButtonProps & { spy: Spy }
+
+const iconVariants = [
+  {
+    meta: 'icon-none',
+    iconLeft: undefined,
+    iconRight: undefined
+  },
+  {
+    meta: 'icon-left',
+    iconLeft: <span data-testid="icon-left">Left</span>,
+    iconRight: undefined
+  },
+  {
+    meta: 'icon-right',
+    iconLeft: undefined,
+    iconRight: <span data-testid="icon-right">Right</span>
+  },
+  {
+    meta: 'icon-both',
+    iconLeft: <span data-testid="icon-left">Left</span>,
+    iconRight: <span data-testid="icon-right">Right</span>
+  }
+] satisfies TTestButtonScenarioProps[]
+
+const paletteVariants = [
+  { meta: 'primary', palette: EButton.Palette.Primary },
+  { meta: 'warning', palette: EButton.Palette.Warning }
+] satisfies TTestButtonScenarioProps[]
+
+const sizeVariants = [
+  { meta: 'large', size: EButton.Size.Large },
+  { meta: 'medium', size: EButton.Size.Medium },
+  { meta: 'small', size: EButton.Size.Small }
+] satisfies TTestButtonScenarioProps[]
+
+const stateVariants = [
+  {
+    meta: 'enabled-no-loading',
+    disabled: false,
+    isLoading: false
+  },
+  {
+    meta: 'enabled-loading',
+    disabled: false,
+    isLoading: true
+  },
+  {
+    meta: 'disabled-no-loading',
+    disabled: true,
+    isLoading: false
+  },
+  {
+    meta: 'disabled-loading',
+    disabled: true,
+    isLoading: true
+  }
+] satisfies TTestButtonScenarioProps[]
+
+const primaryScenarios = cartesianProductWithProps<TTestButtonScenarioProps>([
+  iconVariants,
+  paletteVariants,
+  sizeVariants,
+  stateVariants
+])
+
+export const scenarios = {
+  primary: primaryScenarios
+} as const

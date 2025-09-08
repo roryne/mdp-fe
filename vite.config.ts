@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react'
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
+import svgr from 'vite-plugin-svgr'
 
 const dirname =
   typeof __dirname !== 'undefined' ? __dirname : (
@@ -12,7 +13,10 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.mts'
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    svgr({ include: '**/*.svg?react', svgrOptions: { icon: true } })
+  ],
   resolve: {
     alias: {
       '@': path.resolve(dirname, 'src')

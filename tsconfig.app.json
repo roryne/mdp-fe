@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "esModuleInterop": true,
     "module": "esnext",
     "skipLibCheck": true, // speeds up builds, but means type errors in .d.ts files are ignored
     "target": "ES2022",
@@ -48,5 +49,6 @@
     /* Stylistic / preference checks (can enforce in TS or ESLint depending on team choice) */
     "noImplicitReturns": false,
     "noPropertyAccessFromIndexSignature": false // stylistic: `[key]` vs `.key` — not safety-critical
-  }
+  },
+  "include": ["src/**/*"]
 }

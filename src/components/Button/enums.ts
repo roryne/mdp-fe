@@ -1,12 +1,15 @@
 export const EButton = {
-  Size: {
-    Large: 'large',
-    Medium: 'medium',
-    Small: 'small'
+  Fill: {
+    Outline: 'outlined',
+    Solid: 'solid'
   },
-  Variant: {
+  Palette: {
     Primary: 'primary',
-    Secondary: 'secondary',
     Warning: 'warning'
+  },
+  Size: {
+    Large: 'lg',
+    Medium: 'md',
+    Small: 'sm'
   }
 } as const

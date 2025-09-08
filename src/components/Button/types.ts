@@ -1,42 +1,37 @@
-import type * as React from 'react'
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  ReactElement,
+  Ref
+} from 'react'
 
 import { EButton } from './enums'
+import type { TDecorativeIcon, TIconTheme } from '../Icon/types'
 
-export type TButtonBaseProps = {
-  disabled?: boolean | undefined
-  iconLeft?: React.ReactNode
-  iconRight?: React.ReactNode
-  isLoading?: boolean
-  size?: (typeof EButton.Size)[keyof typeof EButton.Size]
+export type TButtonCustomProps = {
   label: string
-  variant?: (typeof EButton.Variant)[keyof typeof EButton.Variant]
+  disabled?: boolean | undefined
+  fill?: 'outlined' | 'solid'
+  iconLeft?:
+    | ReactElement<HTMLSpanElement, 'span'> // for testing
+    | ReactElement<TDecorativeIcon>
+    | undefined
+  iconRight?:
+    | ReactElement<HTMLSpanElement, 'span'> // for testing
+    | ReactElement<TDecorativeIcon>
+    | undefined
+  isLoading?: boolean
+  palette?: (typeof EButton.Palette)[keyof typeof EButton.Palette]
+  ref?: Ref<HTMLButtonElement> | undefined
+  size?: (typeof EButton.Size)[keyof typeof EButton.Size]
+  theme?: TIconTheme
 }
 
-export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  TButtonBaseProps
+export type TButtonProps = ButtonHTMLAttributes<
+  Omit<HTMLButtonElement, 'style'>
+> &
+  TButtonCustomProps
 
-export type TButtonIconProps = React.HTMLAttributes<HTMLSpanElement> & {
-  icon: React.ReactNode
-  isHidden: boolean
-}
-
-export type TButtonSpinnerProps = React.HTMLAttributes<HTMLSpanElement> & {
+export type TButtonSpinnerProps = HTMLAttributes<HTMLSpanElement> & {
   shouldShow: boolean
-}
-
-export type TButton = React.ForwardRefExoticComponent<
-  React.RefAttributes<HTMLButtonElement> & TButtonProps
-> & {
-  Icon: React.FC<TButtonIconProps>
-  Spinner: React.FC<TButtonSpinnerProps>
-}
-
-export type TTestTitleProps = {
-  props: TButtonBaseProps
-  ignoredKeys?: string[]
-  // ignoredKeys?: (keyof TButtonBaseProps)[]
-  keysFromPartialMatch?: string[]
-  // keysFromPartialMatch?: string[]
-  returnKeys?: string[]
-  // returnKeys?: (keyof TButtonBaseProps)[]
 }

@@ -9,6 +9,7 @@ export type TAdornmentCustomProps = Readonly<{
   node?: ReactNode
 }>
 export type TAdornmentProps = HTMLProps<HTMLDivElement> & TAdornmentCustomProps
+
 export type TBaseFieldMessage = {
   error?: string
   info?: string
@@ -17,6 +18,7 @@ export type TBaseFieldMessage = {
 export type TBaseFieldCustomProps = Readonly<{
   label: string
   endNode?: ReactNode
+  iconTheme?: Record<'default' | 'focus' | 'hover', string>
   key?: number | string
   message?: TBaseFieldMessage
   shouldShowLabel?: boolean

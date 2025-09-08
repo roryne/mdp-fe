@@ -1,20 +1,14 @@
 /* eslint-disable sort-keys */
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { LeftChevronBlue, RightChevronBlue } from '@/assets'
-import { Input } from '@/components'
+import { Icon, Input } from '@/components'
 
 import { props } from './__tests__/common'
 import type { TTextInputProps } from './types'
+import ChevronRight from '../../../assets/chevron/right.svg?react'
 
-const StartNode = () => (
-  <div>
-    <img alt="left chevron" src={LeftChevronBlue} width={24} />
-  </div>
-)
-const EndNode = () => (
-  <img alt="left chevron" src={RightChevronBlue} width={24} />
-)
+const StartNode = () => <Icon svg={ChevronRight} />
+const EndNode = () => <Icon svg={ChevronRight} />
 
 const meta = {
   argTypes: {
@@ -38,7 +32,7 @@ const meta = {
       table: {
         category: 'Appearance',
         defaultValue: { summary: 'null' },
-        type: { summary: 'ReactNode' }
+        type: { summary: 'Icon' }
       }
     },
     message: {
@@ -70,7 +64,7 @@ const meta = {
       table: {
         category: 'Appearance',
         defaultValue: { summary: 'null' },
-        type: { summary: 'ReactNode' }
+        type: { summary: 'Icon' }
       }
     },
     variant: {
