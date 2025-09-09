@@ -1,0 +1,146 @@
+:root {
+  /* --------------------
+   1. Foundations
+  -------------------- */
+  /* Type scale — derived from spacing scale, can be adjusted independently */
+  --type-scale-x: var(--size-x);
+  --type-scale-0: var(--size-0);
+  --type-scale-1: var(--size-1);
+  --type-scale-2: var(--size-2);
+  --type-scale-3: var(--size-4);
+  --type-scale-4: var(--size-8);
+  --type-scale-5: var(--size-12);
+  --type-scale-6: var(--size-14);
+  --type-scale-7: var(--size-16);
+  --type-scale-8: var(--size-20);
+  --type-scale-9: var(--size-24);
+  --type-scale-10: var(--size-28);
+  --type-scale-11: var(--size-30);
+  --type-scale-12: var(--size-32);
+
+  /* Font weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Letter spacing */
+  --letter-spacing-dense: -0.02rem;
+  --letter-spacing-normal: 0;
+  --letter-spacing-loose: 0.02rem;
+
+  /* Line heights (unitless for scalability) */
+  --line-height-dense: 1;
+  --line-height-default: 1.25;
+  --line-height-loose: 1.5;
+
+  /* --------------------
+     2. Role Tokens
+  -------------------- */
+  /* Headings */
+  --typography-h1-size: var(--type-scale-9);
+  --typography-h1-weight: var(--font-weight-bold);
+  --typography-h1-line-height: var(--line-height-dense);
+  --typography-h1-letter-spacing: var(--letter-spacing-dense);
+
+  --typography-h2-size: var(--type-scale-8);
+  --typography-h2-weight: var(--font-weight-bold);
+  --typography-h2-line-height: var(--line-height-dense);
+  --typography-h2-letter-spacing: var(--letter-spacing-dense);
+
+  --typography-h3-size: var(--type-scale-7);
+  --typography-h3-weight: var(--font-weight-semibold);
+  --typography-h3-line-height: var(--line-height-default);
+  --typography-h3-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-h4-size: var(--type-scale-6);
+  --typography-h4-weight: var(--font-weight-semibold);
+  --typography-h4-line-height: var(--line-height-default);
+  --typography-h4-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-h5-size: var(--type-scale-5);
+  --typography-h5-weight: var(--font-weight-medium);
+  --typography-h5-line-height: var(--line-height-default);
+  --typography-h5-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-h6-size: var(--type-scale-4);
+  --typography-h6-weight: var(--font-weight-medium);
+  --typography-h6-line-height: var(--line-height-loose);
+  --typography-h6-letter-spacing: var(--letter-spacing-normal);
+
+  /* Body text */
+  --typography-body-large-size: var(--type-scale-4);
+  --typography-body-large-weight: var(--font-weight-regular);
+  --typography-body-large-line-height: var(--line-height-loose);
+  --typography-body-large-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-body-size: var(--type-scale-3);
+  --typography-body-weight: var(--font-weight-regular);
+  --typography-body-line-height: var(--line-height-loose);
+  --typography-body-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-body-small-size: var(--type-scale-2);
+  --typography-body-small-weight: var(--font-weight-regular);
+  --typography-body-small-line-height: var(--line-height-loose);
+  --typography-body-small-letter-spacing: var(--letter-spacing-normal);
+
+  /* Subtitles */
+  --typography-subtitle1-size: var(--type-scale-4);
+  --typography-subtitle1-weight: var(--font-weight-medium);
+  --typography-subtitle1-line-height: var(--line-height-default);
+  --typography-subtitle1-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-subtitle2-size: var(--type-scale-3);
+  --typography-subtitle2-weight: var(--font-weight-medium);
+  --typography-subtitle2-line-height: var(--line-height-default);
+  --typography-subtitle2-letter-spacing: var(--letter-spacing-normal);
+
+  /* Label */
+  --typography-label-compact-size: var(--type-scale-2);
+  --typography-label-compact-weight: var(--font-weight-medium);
+  --typography-label-compact-line-height: var(--line-height-default);
+  --typography-label-compact-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-label-regular-size: var(--type-scale-3);
+  --typography-label-regular-weight: var(--font-weight-medium);
+  --typography-label-regular-line-height: var(--line-height-default);
+  --typography-label-regular-letter-spacing: var(--letter-spacing-normal);
+
+  /* Button */
+  --typography-button-compact-size: var(--type-scale-4);
+  --typography-button-compact-weight: var(--font-weight-medium);
+  --typography-button-compact-line-height: var(--line-height-dense);
+  --typography-button-compact-letter-spacing: var(--letter-spacing-dense);
+
+  --typography-button-regular-size: var(--type-scale-4);
+  --typography-button-regular-weight: var(--font-weight-medium);
+  --typography-button-regular-line-height: var(--line-height-default);
+  --typography-button-regular-letter-spacing: var(--letter-spacing-normal);
+
+  /* Link */
+  --typography-link-size: var(--type-scale-3);
+  --typography-link-weight: var(--font-weight-medium);
+  --typography-link-line-height: var(--line-height-default);
+  --typography-link-letter-spacing: var(--letter-spacing-normal);
+
+  /* Aux/Decorative */
+  --typography-caption-size: var(--type-scale-2);
+  --typography-caption-weight: var(--font-weight-regular);
+  --typography-caption-line-height: var(--line-height-default);
+  --typography-caption-letter-spacing: var(--letter-spacing-loose);
+
+  --typography-overline-size: var(--type-scale-1);
+  --typography-overline-weight: var(--font-weight-medium);
+  --typography-overline-line-height: var(--line-height-default);
+  --typography-overline-letter-spacing: var(--letter-spacing-loose);
+
+  --typography-small-size: var(--type-scale-2);
+  --typography-small-weight: var(--font-weight-regular);
+  --typography-small-line-height: var(--line-height-loose);
+  --typography-small-letter-spacing: var(--letter-spacing-normal);
+
+  --typography-code-size: var(--type-scale-2);
+  --typography-code-weight: var(--font-weight-medium);
+  --typography-code-line-height: var(--line-height-default);
+  --typography-code-letter-spacing: var(--letter-spacing-normal);
+}

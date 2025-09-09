@@ -8,7 +8,7 @@ import meta, * as ButtonStories from './Button.stories'
 # Button
 
 The `Button` component is a flexible, accessible, and customizable UI element designed for a wide range of interactive scenarios.
-It supports multiple **sizes** (`Small`, `Medium`, `Large`) and **variants** (`Primary`, `Secondary`, `Warning`), optional **left and right icons**,
+It supports two **sizes** (`Regular`, `Compact`) and **variants** (`Primary`, `Warning`), optional **left and right icons**,
 and a **loading state**. The component handles proper focus management, `aria-*` attributes, and ref forwarding for integration with forms
 or higher-order components.
 
@@ -93,6 +93,43 @@ or higher-order components.
     </StorybookExample>
     <StorybookExample>
       <Story of={ButtonStories.WarningOutlinedRightIcon} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+
+## Sizes
+
+<div>
+  ### Solid - Compact
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidRightIconCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidRightIconCompact} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+<div>
+  ### Outlined - Compact
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedRightIconCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedRightIconCompact} />
     </StorybookExample>
   </StorybookSection>
 </div>

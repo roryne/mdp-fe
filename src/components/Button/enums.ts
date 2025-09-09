@@ -8,8 +8,7 @@ export const EButton = {
     Warning: 'warning'
   },
   Size: {
-    Large: 'lg',
-    Medium: 'md',
-    Small: 'sm'
+    Compact: 'co',
+    Regular: 'rg'
   }
 } as const

@@ -1,0 +1,44 @@
+@import './_tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+blockquote,
+body,
+dd,
+dl,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+input,
+button,
+select,
+textarea {
+  all: unset;
+  box-sizing: border-box;
+}
+
+html {
+  line-height: 1.5; /* better default vertical rhythm */
+  -webkit-text-size-adjust: 100%; /* mobile font scaling fix */
+}
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+}

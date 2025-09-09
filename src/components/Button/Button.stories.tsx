@@ -5,6 +5,7 @@ import { Button, Icon } from '@/components'
 
 import { EButton } from './enums'
 import { getColorVar } from '../Icon/common'
+import type { TIconProps } from '../Icon/types'
 
 const iconTheme = {
   primary: {
@@ -24,30 +25,38 @@ const iconTheme = {
     }
   }
 }
-const PrimarySolidIcon = () => (
+const PrimarySolidIcon = ({ size }: { readonly size?: TIconProps['size'] }) => (
   <Icon
-    size={EButton.Size.Medium}
+    size={size ?? 'md'}
     svg={ChevronRight}
     theme={iconTheme.primary.filled}
   />
 )
-const PrimaryOutlinedIcon = () => (
+const PrimaryOutlinedIcon = ({
+  size
+}: {
+  readonly size?: TIconProps['size']
+}) => (
   <Icon
-    size={EButton.Size.Medium}
+    size={size ?? 'md'}
     svg={ChevronRight}
     theme={iconTheme.primary.outlined}
   />
 )
-const WarningSolidIcon = () => (
+const WarningSolidIcon = ({ size }: { readonly size?: TIconProps['size'] }) => (
   <Icon
-    size={EButton.Size.Medium}
+    size={size ?? 'md'}
     svg={ChevronRight}
     theme={iconTheme.warning.filled}
   />
 )
-const WarningOutlinedIcon = () => (
+const WarningOutlinedIcon = ({
+  size
+}: {
+  readonly size?: TIconProps['size']
+}) => (
   <Icon
-    size={EButton.Size.Medium}
+    size={size ?? 'md'}
     svg={ChevronRight}
     theme={iconTheme.warning.outlined}
   />
@@ -115,7 +124,7 @@ const meta = {
       options: Object.values(EButton.Size),
       table: {
         category: 'Appearance',
-        defaultValue: { summary: EButton.Size.Medium },
+        defaultValue: { summary: EButton.Size.Regular },
         type: { summary: Object.values(EButton.Size).join(' | ') }
       }
     },
@@ -134,7 +143,7 @@ const meta = {
     isLoading: false,
     label: 'Button',
     palette: EButton.Palette.Primary,
-    size: EButton.Size.Medium,
+    size: EButton.Size.Regular,
     theme: { default: '', focus: '', hover: '' }
   },
   component: Button,
@@ -153,7 +162,7 @@ export const Base = {
 
 export const Primary = {
   args: {
-    label: 'Button',
+    ...Base.args,
     palette: EButton.Palette.Primary
   }
 } satisfies Story
@@ -162,6 +171,13 @@ export const PrimaryOutlined = {
   args: {
     ...Primary.args,
     fill: 'outlined'
+  }
+} satisfies Story
+
+export const PrimaryOutlinedCompact = {
+  args: {
+    ...PrimaryOutlined.args,
+    size: 'co'
   }
 } satisfies Story
 
@@ -186,6 +202,13 @@ export const PrimarySolid = {
   }
 } satisfies Story
 
+export const PrimarySolidCompact = {
+  args: {
+    ...PrimarySolid.args,
+    size: 'co'
+  }
+} satisfies Story
+
 export const PrimarySolidDisabled = {
   args: {
     ...PrimarySolid.args,
@@ -200,59 +223,10 @@ export const PrimarySolidLoading = {
   }
 } satisfies Story
 
-export const Warning = {
-  args: {
-    label: 'Button',
-    palette: EButton.Palette.Warning
-  }
-} satisfies Story
-
-export const WarningOutlined = {
-  args: {
-    ...Warning.args,
-    fill: 'outlined'
-  }
-} satisfies Story
-
-export const WarningOutlinedDisabled = {
-  args: {
-    ...WarningOutlined.args,
-    disabled: true
-  }
-} satisfies Story
-
-export const WarningOutlinedLoading = {
-  args: {
-    ...WarningOutlined.args,
-    isLoading: true
-  }
-} satisfies Story
-
-export const WarningSolid = {
-  args: {
-    ...Warning.args,
-    fill: 'solid'
-  }
-} satisfies Story
-
-export const WarningSolidDisabled = {
-  args: {
-    ...WarningSolid.args,
-    disabled: true
-  }
-} satisfies Story
-
-export const WarningSolidLoading = {
-  args: {
-    ...WarningSolid.args,
-    isLoading: true
-  }
-} satisfies Story
-
 export const PrimarySolidLeftIcon = {
   args: {
     ...PrimarySolid.args,
-    iconLeft: <PrimarySolidIcon />
+    iconLeft: <PrimarySolidIcon size="md" />
   }
 } satisfies Story
 
@@ -274,6 +248,14 @@ export const PrimarySolidRightIcon = {
   args: {
     ...PrimarySolid.args,
     iconRight: <PrimarySolidIcon />
+  }
+} satisfies Story
+
+export const PrimarySolidRightIconCompact = {
+  args: {
+    ...PrimarySolid.args,
+    iconRight: <PrimarySolidIcon size="sm" />,
+    size: 'co'
   }
 } satisfies Story
 
@@ -319,6 +301,14 @@ export const PrimaryOutlinedRightIcon = {
   }
 } satisfies Story
 
+export const PrimaryOutlinedRightIconCompact = {
+  args: {
+    ...PrimaryOutlined.args,
+    iconRight: <PrimaryOutlinedIcon size="sm" />,
+    size: 'co'
+  }
+} satisfies Story
+
 export const PrimaryOutlinedRightIconDisabled = {
   args: {
     ...PrimaryOutlinedRightIcon.args,
@@ -329,6 +319,69 @@ export const PrimaryOutlinedRightIconDisabled = {
 export const PrimaryOutlinedRightIconLoading = {
   args: {
     ...PrimaryOutlinedRightIcon.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const Warning = {
+  args: {
+    ...Base.args,
+    palette: EButton.Palette.Warning
+  }
+} satisfies Story
+
+export const WarningOutlined = {
+  args: {
+    ...Warning.args,
+    fill: 'outlined'
+  }
+} satisfies Story
+
+export const WarningOutlinedCompact = {
+  args: {
+    ...WarningOutlined.args,
+    size: 'co'
+  }
+} satisfies Story
+
+export const WarningOutlinedDisabled = {
+  args: {
+    ...WarningOutlined.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const WarningOutlinedLoading = {
+  args: {
+    ...WarningOutlined.args,
+    isLoading: true
+  }
+} satisfies Story
+
+export const WarningSolid = {
+  args: {
+    ...Warning.args,
+    fill: 'solid'
+  }
+} satisfies Story
+
+export const WarningSolidCompact = {
+  args: {
+    ...WarningSolid.args,
+    size: 'co'
+  }
+} satisfies Story
+
+export const WarningSolidDisabled = {
+  args: {
+    ...WarningSolid.args,
+    disabled: true
+  }
+} satisfies Story
+
+export const WarningSolidLoading = {
+  args: {
+    ...WarningSolid.args,
     isLoading: true
   }
 } satisfies Story
@@ -358,6 +411,14 @@ export const WarningSolidRightIcon = {
   args: {
     ...WarningSolid.args,
     iconRight: <WarningSolidIcon />
+  }
+} satisfies Story
+
+export const WarningSolidRightIconCompact = {
+  args: {
+    ...WarningSolid.args,
+    iconRight: <WarningSolidIcon size="sm" />,
+    size: 'co'
   }
 } satisfies Story
 
@@ -400,6 +461,14 @@ export const WarningOutlinedRightIcon = {
   args: {
     ...WarningOutlined.args,
     iconRight: <WarningOutlinedIcon />
+  }
+} satisfies Story
+
+export const WarningOutlinedRightIconCompact = {
+  args: {
+    ...WarningOutlined.args,
+    iconRight: <WarningOutlinedIcon size="sm" />,
+    size: 'co'
   }
 } satisfies Story
 

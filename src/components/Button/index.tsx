@@ -21,7 +21,7 @@ const ButtonBase = ({
   label,
   palette = EButton.Palette.Primary,
   ref,
-  size = EButton.Size.Medium,
+  size = EButton.Size.Regular,
   theme = initialTheme,
   ...props
 }: TButtonProps) => {

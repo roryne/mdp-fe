@@ -1,0 +1,16 @@
+:root {
+  /* Base layers */
+  --zindex-default: 0; /* normal content */
+  --zindex-dropdown: 1000; /* dropdown menus */
+  --zindex-sticky: 1100; /* sticky headers */
+  --zindex-modal: 1200; /* modals, dialogs */
+  --zindex-toast: 1300; /* toast notifications */
+  --zindex-tooltip: 1400; /* tooltips, popovers */
+  --zindex-overlay: 1500; /* full-screen overlays */
+  --zindex-max: 9999; /* extreme cases, e.g., loading screens */
+
+  /* Optional semantic layers for clarity */
+  --zindex-header: var(--zindex-sticky);
+  --zindex-menu: var(--zindex-dropdown);
+  --zindex-alert: var(--zindex-toast);
+}

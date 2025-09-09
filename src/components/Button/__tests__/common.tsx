@@ -28,7 +28,7 @@ export const defaultProps = {
   isLoading: false,
   onClick: handleClickSpy,
   palette: EButton.Palette.Primary,
-  size: EButton.Size.Medium,
+  size: EButton.Size.Regular,
   spy,
   theme: iconTheme
 } satisfies TTestButtonProps & { spy: Spy }
@@ -62,9 +62,8 @@ const paletteVariants = [
 ] satisfies TTestButtonScenarioProps[]
 
 const sizeVariants = [
-  { meta: 'large', size: EButton.Size.Large },
-  { meta: 'medium', size: EButton.Size.Medium },
-  { meta: 'small', size: EButton.Size.Small }
+  { meta: 'compact', size: EButton.Size.Compact },
+  { meta: 'regular', size: EButton.Size.Regular }
 ] satisfies TTestButtonScenarioProps[]
 
 const stateVariants = [
@@ -90,7 +89,7 @@ const stateVariants = [
   }
 ] satisfies TTestButtonScenarioProps[]
 
-const primaryScenarios = cartesianProductWithProps<TTestButtonScenarioProps>([
+const allScenarios = cartesianProductWithProps<TTestButtonScenarioProps>([
   iconVariants,
   paletteVariants,
   sizeVariants,
@@ -98,5 +97,5 @@ const primaryScenarios = cartesianProductWithProps<TTestButtonScenarioProps>([
 ])
 
 export const scenarios = {
-  primary: primaryScenarios
+  all: allScenarios
 } as const

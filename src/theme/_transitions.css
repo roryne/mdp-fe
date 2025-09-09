@@ -1,0 +1,34 @@
+:root {
+  /* _transitions.css */
+
+  /* --------------------
+   Durations
+-------------------- */
+  --transition-duration-fast: 100ms;
+  --transition-duration-medium: 250ms;
+  --transition-duration-slow: 1000ms;
+  --transition-duration-extra-slow: 1500ms;
+
+  /* --------------------
+   Easing / Timing functions
+-------------------- */
+  --transition-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --transition-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --transition-easing-linear: linear;
+  --transition-easing-ease-in-out: ease-in-out;
+
+  /* --------------------
+   Semantic transition tokens
+-------------------- */
+  --transition-hover: var(--transition-duration-fast)
+    var(--transition-easing-standard);
+  --transition-focus: var(--transition-duration-fast)
+    var(--transition-easing-standard);
+  --transition-modal: var(--transition-duration-medium)
+    var(--transition-easing-decelerate);
+  --transition-toast: var(--transition-duration-medium)
+    var(--transition-easing-accelerate);
+  --transition-collapse: var(--transition-duration-slow)
+    var(--transition-easing-ease-in-out);
+}

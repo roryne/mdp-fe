@@ -1,4 +1,4 @@
-import './global/styles/styles.css'
+import './theme/styles.css'
 
 import { Button } from '@/components'
 

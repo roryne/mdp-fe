@@ -1,4 +1,4 @@
-import { ETokens, type TTokens } from '@/global/styles/tokens'
+import { ETokens, type TTokens } from '@/theme/tokens'
 
 export const getColorVar = (color: TTokens['Color'] | 'currentColor') =>
   color === 'currentColor' ? color : `var(--colors-${color})`

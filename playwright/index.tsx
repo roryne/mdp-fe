@@ -1,4 +1,5 @@
 // Import styles, initialize component theme here.
 
-import '../src/global/styles/styles.css'
-import '../src/global/styles/'
+import '../src/theme/styles.css'
+import '../src/theme/index'
+import '../src/theme/tokens'

@@ -23,8 +23,37 @@ test.beforeEach(async ({ page }) => {
   await page.evaluateHandle(async () => document.fonts.ready)
 })
 
-for (const scenario of scenarios.primary) {
-  test(scenario.title, { tag: tags }, async ({ mount, page }) => {
+for (const scenario of scenarios.all) {
+  test(
+    `default | ${scenario.title}`,
+    { tag: tags },
+    async ({ mount, page }) => {
+      await mount(
+        <main>
+          <h1>Button</h1>
+          <section style={{ padding: '1rem 2rem' }}>
+            <Button {...scenario.props} label={label} />
+          </section>
+        </main>
+      )
+
+      if (scenario.props.iconLeft !== undefined) {
+        await expect(page.getByTestId('icon-left')).toBeVisible()
+      }
+
+      if (scenario.props.iconRight !== undefined) {
+        await expect(page.getByTestId('icon-right')).toBeVisible()
+      }
+
+      await expect(page.locator('body')).toHaveScreenshot({
+        animations: 'disabled'
+      })
+    }
+  )
+}
+
+for (const scenario of scenarios.all) {
+  test(`focus | ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
     await mount(
       <main>
         <h1>Button</h1>
@@ -33,6 +62,8 @@ for (const scenario of scenarios.primary) {
         </section>
       </main>
     )
+
+    await page.getByRole('button').focus()
 
     if (scenario.props.iconLeft !== undefined) {
       await expect(page.getByTestId('icon-left')).toBeVisible()
@@ -48,8 +79,8 @@ for (const scenario of scenarios.primary) {
   })
 }
 
-for (const scenario of scenarios.primary) {
-  test(`focus | ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
+for (const scenario of scenarios.all) {
+  test(`hover | ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
     await mount(
       <main>
         <h1>Button</h1>
@@ -59,7 +90,7 @@ for (const scenario of scenarios.primary) {
       </main>
     )
 
-    await page.getByRole('button').focus()
+    await page.getByRole('button').hover()
 
     if (scenario.props.iconLeft !== undefined) {
       await expect(page.getByTestId('icon-left')).toBeVisible()
