@@ -41,8 +41,6 @@ test.describe('Axe', { tag: [...tags, '@axe'] }, () => {
   }
 
   for (const scenario of scenarios.all) {
-    if (scenario.props.disabled) return
-
     test(`axe (focus) ${scenario.title}`, async ({ mount, page }) => {
       await mount(
         <main>
@@ -60,6 +58,9 @@ test.describe('Axe', { tag: [...tags, '@axe'] }, () => {
   }
 
   for (const scenario of scenarios.all) {
+    // Cannot hover in these states so tests will fail without early return
+    if (scenario.props.disabled || scenario.props.isLoading) return
+
     test(`axe (hover) ${scenario.title}`, async ({ mount, page }) => {
       await mount(
         <main>

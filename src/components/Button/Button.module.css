@@ -18,11 +18,11 @@
     --icon-color: var(--icon-hover, var(--icon-default, currentColor));
 
     background-color: var(--bg-hover);
-    transform: scale(101%);
+    transform: scale(var(--button-scale-hover));
 
     &:active {
       background-color: var(--bg-active);
-      transform: scale(99%);
+      transform: scale(var(--button-scale-active));
     }
   }
   &:active:not(:hover) {
@@ -31,8 +31,9 @@
     background-color: var(--bg-hover);
   }
   &:disabled {
-    cursor: not-allowed;
     opacity: var(--opacity-disabled);
+    pointer-events: none;
+    user-select: none;
   }
 }
 
@@ -54,25 +55,15 @@
 /* ==============================
    Fill styles (solid / outlined)
    ============================== */
-.solid.co,
-.outlined.co {
-  &:hover {
-    &:not(:disabled) {
-      &:not(:active) {
-        box-shadow: var(--shadow-xs);
-      }
-    }
-  }
+.co {
+  --shadow-hover: var(--shadow-xs);
 }
-.solid.rg,
-.outlined.rg {
-  &:hover {
-    &:not(:disabled) {
-      &:not(:active) {
-        box-shadow: var(--shadow-sm);
-      }
-    }
-  }
+.rg {
+  --shadow-hover: var(--shadow-sm);
+}
+.solid:hover:not(:disabled):not(:active),
+.outlined:hover:not(:disabled):not(:active) {
+  box-shadow: var(--shadow-hover);
 }
 .solid {
   --border: var(--border-width-thin) var(--border-style-solid) transparent;
@@ -127,6 +118,7 @@
 .icon {
   align-self: center;
   display: inline-flex;
+  user-select: none;
 }
 .spinner {
   animation: spin var(--transition-duration-slow) linear infinite;

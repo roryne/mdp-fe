@@ -23,85 +23,101 @@ test.beforeEach(async ({ page }) => {
   await page.evaluateHandle(async () => document.fonts.ready)
 })
 
-for (const scenario of scenarios.all) {
-  test(
-    `default | ${scenario.title}`,
-    { tag: tags },
-    async ({ mount, page }) => {
-      await mount(
-        <main>
-          <h1>Button</h1>
-          <section style={{ padding: '1rem 2rem' }}>
-            <Button {...scenario.props} label={label} />
-          </section>
-        </main>
-      )
+test.describe('Visual', () => {
+  for (const scenario of scenarios.all) {
+    test(
+      `default | ${scenario.title}`,
+      { tag: tags },
+      async ({ mount, page }) => {
+        await mount(
+          <main>
+            <h1>Button</h1>
+            <section style={{ padding: '1rem 2rem' }}>
+              <Button {...scenario.props} label={label} />
+            </section>
+          </main>
+        )
 
-      if (scenario.props.iconLeft !== undefined) {
-        await expect(page.getByTestId('icon-left')).toBeVisible()
+        if (scenario.props.iconLeft !== undefined) {
+          await expect(page.getByTestId('icon-left')).toBeVisible()
+        }
+
+        if (scenario.props.iconRight !== undefined) {
+          await expect(page.getByTestId('icon-right')).toBeVisible()
+        }
+
+        await expect(page.locator('body')).toHaveScreenshot({
+          animations: 'disabled'
+        })
       }
+    )
+  }
 
-      if (scenario.props.iconRight !== undefined) {
-        await expect(page.getByTestId('icon-right')).toBeVisible()
+  for (const scenario of scenarios.all) {
+    // Cannot focus in these states so tests are useless
+    if (scenario.props.disabled || scenario.props.isLoading) return
+
+    test(
+      `focus | ${scenario.title}`,
+      { tag: tags },
+      async ({ mount, page }) => {
+        await mount(
+          <main>
+            <h1>Button</h1>
+            <section style={{ padding: '1rem 2rem' }}>
+              <Button {...scenario.props} label={label} />
+            </section>
+          </main>
+        )
+
+        await page.getByRole('button').focus()
+
+        if (scenario.props.iconLeft !== undefined) {
+          await expect(page.getByTestId('icon-left')).toBeVisible()
+        }
+
+        if (scenario.props.iconRight !== undefined) {
+          await expect(page.getByTestId('icon-right')).toBeVisible()
+        }
+
+        await expect(page.locator('body')).toHaveScreenshot({
+          animations: 'disabled'
+        })
       }
-
-      await expect(page.locator('body')).toHaveScreenshot({
-        animations: 'disabled'
-      })
-    }
-  )
-}
-
-for (const scenario of scenarios.all) {
-  test(`focus | ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
-    await mount(
-      <main>
-        <h1>Button</h1>
-        <section style={{ padding: '1rem 2rem' }}>
-          <Button {...scenario.props} label={label} />
-        </section>
-      </main>
     )
+  }
 
-    await page.getByRole('button').focus()
+  for (const scenario of scenarios.all) {
+    // Cannot hover in these states so tests are useless
+    if (scenario.props.disabled || scenario.props.isLoading) return
 
-    if (scenario.props.iconLeft !== undefined) {
-      await expect(page.getByTestId('icon-left')).toBeVisible()
-    }
+    test(
+      `hover | ${scenario.title}`,
+      { tag: tags },
+      async ({ mount, page }) => {
+        await mount(
+          <main>
+            <h1>Button</h1>
+            <section style={{ padding: '1rem 2rem' }}>
+              <Button {...scenario.props} label={label} />
+            </section>
+          </main>
+        )
 
-    if (scenario.props.iconRight !== undefined) {
-      await expect(page.getByTestId('icon-right')).toBeVisible()
-    }
+        await page.getByRole('button').hover()
 
-    await expect(page.locator('body')).toHaveScreenshot({
-      animations: 'disabled'
-    })
-  })
-}
+        if (scenario.props.iconLeft !== undefined) {
+          await expect(page.getByTestId('icon-left')).toBeVisible()
+        }
 
-for (const scenario of scenarios.all) {
-  test(`hover | ${scenario.title}`, { tag: tags }, async ({ mount, page }) => {
-    await mount(
-      <main>
-        <h1>Button</h1>
-        <section style={{ padding: '1rem 2rem' }}>
-          <Button {...scenario.props} label={label} />
-        </section>
-      </main>
+        if (scenario.props.iconRight !== undefined) {
+          await expect(page.getByTestId('icon-right')).toBeVisible()
+        }
+
+        await expect(page.locator('body')).toHaveScreenshot({
+          animations: 'disabled'
+        })
+      }
     )
-
-    await page.getByRole('button').hover()
-
-    if (scenario.props.iconLeft !== undefined) {
-      await expect(page.getByTestId('icon-left')).toBeVisible()
-    }
-
-    if (scenario.props.iconRight !== undefined) {
-      await expect(page.getByTestId('icon-right')).toBeVisible()
-    }
-
-    await expect(page.locator('body')).toHaveScreenshot({
-      animations: 'disabled'
-    })
-  })
-}
+  }
+})
