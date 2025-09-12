@@ -1,12 +1,12 @@
 :root {
   /* Outline widths */
-  --outline-width-thin: 1px;
-  --outline-width-medium: 2px;
-  --outline-width-thick: 4px;
+  ---outline-width-thin: 1px;
+  ---outline-width-medium: 2px;
+  ---outline-width-thick: 4px;
 
   /* Outline styles */
-  --outline-style-solid: solid;
-  --outline-style-dashed: dashed;
-  --outline-style-dotted: dotted;
-  --outline-style-none: none;
+  ---outline-style-solid: solid;
+  ---outline-style-dashed: dashed;
+  ---outline-style-dotted: dotted;
+  ---outline-style-none: none;
 }

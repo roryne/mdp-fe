@@ -2,65 +2,28 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import ChevronRight from '@/assets/chevron/right.svg?react'
 import { Button, Icon } from '@/components'
+import { ETheme } from '@/theme/enums'
 
-import { EButton } from './enums'
 import { getColorVar } from '../Icon/common'
-import type { TIconProps } from '../Icon/types'
 
 const iconTheme = {
   primary: {
-    filled: {
-      default: getColorVar('bw-1000')
-    },
     outlined: {
       default: getColorVar('blue-400')
+    },
+    solid: {
+      default: getColorVar('bw-1000')
     }
   },
   warning: {
-    filled: {
-      default: getColorVar('bw-1000')
-    },
     outlined: {
       default: getColorVar('red-400')
+    },
+    solid: {
+      default: getColorVar('bw-1000')
     }
   }
 }
-const PrimarySolidIcon = ({ size }: { readonly size?: TIconProps['size'] }) => (
-  <Icon
-    size={size ?? 'md'}
-    svg={ChevronRight}
-    theme={iconTheme.primary.filled}
-  />
-)
-const PrimaryOutlinedIcon = ({
-  size
-}: {
-  readonly size?: TIconProps['size']
-}) => (
-  <Icon
-    size={size ?? 'md'}
-    svg={ChevronRight}
-    theme={iconTheme.primary.outlined}
-  />
-)
-const WarningSolidIcon = ({ size }: { readonly size?: TIconProps['size'] }) => (
-  <Icon
-    size={size ?? 'md'}
-    svg={ChevronRight}
-    theme={iconTheme.warning.filled}
-  />
-)
-const WarningOutlinedIcon = ({
-  size
-}: {
-  readonly size?: TIconProps['size']
-}) => (
-  <Icon
-    size={size ?? 'md'}
-    svg={ChevronRight}
-    theme={iconTheme.warning.outlined}
-  />
-)
 
 const meta = {
   argTypes: {
@@ -74,10 +37,11 @@ const meta = {
     },
     fill: {
       control: 'select',
+      options: Object.values(ETheme.Fill),
       table: {
         category: 'Appearance',
-        defaultValue: { summary: 'solid' },
-        type: { summary: Object.values(EButton.Fill).join(' | ') }
+        defaultValue: { summary: ETheme.Fill.Solid },
+        type: { summary: Object.values(ETheme.Fill).join(' | ') }
       }
     },
     iconLeft: {
@@ -102,30 +66,30 @@ const meta = {
         type: { summary: 'boolean' }
       }
     },
-    label: {
+    palette: {
+      control: 'select',
+      options: Object.values(ETheme.Palette),
+      table: {
+        category: 'Appearance',
+        defaultValue: { summary: ETheme.Palette.Primary },
+        type: { summary: Object.values(ETheme.Palette).join(' | ') }
+      }
+    },
+    size: {
+      control: 'select',
+      options: Object.values(ETheme.Size.Component),
+      table: {
+        category: 'Appearance',
+        defaultValue: { summary: ETheme.Size.Component.Regular },
+        type: { summary: Object.values(ETheme.Size).join(' | ') }
+      }
+    },
+    text: {
       control: 'text',
       table: {
         category: 'Appearance',
         defaultValue: { summary: '' },
         type: { summary: 'string' }
-      }
-    },
-    palette: {
-      control: 'select',
-      options: Object.values(EButton.Palette),
-      table: {
-        category: 'Appearance',
-        defaultValue: { summary: EButton.Palette.Primary },
-        type: { summary: Object.values(EButton.Palette).join(' | ') }
-      }
-    },
-    size: {
-      control: 'select',
-      options: Object.values(EButton.Size),
-      table: {
-        category: 'Appearance',
-        defaultValue: { summary: EButton.Size.Regular },
-        type: { summary: Object.values(EButton.Size).join(' | ') }
       }
     },
     theme: {
@@ -138,12 +102,13 @@ const meta = {
     }
   },
   args: {
+    fill: ETheme.Fill.Solid,
     iconLeft: undefined,
     iconRight: undefined,
     isLoading: false,
-    label: 'Button',
-    palette: EButton.Palette.Primary,
-    size: EButton.Size.Regular,
+    palette: ETheme.Palette.Primary,
+    size: ETheme.Size.Component.Regular,
+    text: 'Button',
     theme: { default: '', focus: '', hover: '' }
   },
   component: Button,
@@ -156,14 +121,14 @@ type Story = StoryObj<typeof Button>
 
 export const Base = {
   args: {
-    label: 'Button'
+    text: 'Button'
   }
 } satisfies Story
 
 export const Primary = {
   args: {
     ...Base.args,
-    palette: EButton.Palette.Primary
+    palette: ETheme.Palette.Primary
   }
 } satisfies Story
 
@@ -226,7 +191,9 @@ export const PrimarySolidLoading = {
 export const PrimarySolidLeftIcon = {
   args: {
     ...PrimarySolid.args,
-    iconLeft: <PrimarySolidIcon size="md" />
+    iconLeft: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.primary.solid} />
+    )
   }
 } satisfies Story
 
@@ -247,14 +214,18 @@ export const PrimarySolidLeftIconLoading = {
 export const PrimarySolidRightIcon = {
   args: {
     ...PrimarySolid.args,
-    iconRight: <PrimarySolidIcon />
+    iconRight: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.primary.solid} />
+    )
   }
 } satisfies Story
 
 export const PrimarySolidRightIconCompact = {
   args: {
     ...PrimarySolid.args,
-    iconRight: <PrimarySolidIcon size="sm" />,
+    iconRight: (
+      <Icon size="sm" svg={ChevronRight} theme={iconTheme.primary.solid} />
+    ),
     size: 'co'
   }
 } satisfies Story
@@ -276,7 +247,9 @@ export const PrimarySolidRightIconLoading = {
 export const PrimaryOutlinedLeftIcon = {
   args: {
     ...PrimaryOutlined.args,
-    iconLeft: <PrimaryOutlinedIcon />
+    iconLeft: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.primary.outlined} />
+    )
   }
 } satisfies Story
 
@@ -297,14 +270,18 @@ export const PrimaryOutlinedLeftIconLoading = {
 export const PrimaryOutlinedRightIcon = {
   args: {
     ...PrimaryOutlined.args,
-    iconRight: <PrimaryOutlinedIcon />
+    iconRight: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.primary.outlined} />
+    )
   }
 } satisfies Story
 
 export const PrimaryOutlinedRightIconCompact = {
   args: {
     ...PrimaryOutlined.args,
-    iconRight: <PrimaryOutlinedIcon size="sm" />,
+    iconRight: (
+      <Icon size="sm" svg={ChevronRight} theme={iconTheme.primary.outlined} />
+    ),
     size: 'co'
   }
 } satisfies Story
@@ -326,7 +303,7 @@ export const PrimaryOutlinedRightIconLoading = {
 export const Warning = {
   args: {
     ...Base.args,
-    palette: EButton.Palette.Warning
+    palette: ETheme.Palette.Warning
   }
 } satisfies Story
 
@@ -389,7 +366,9 @@ export const WarningSolidLoading = {
 export const WarningSolidLeftIcon = {
   args: {
     ...WarningSolid.args,
-    iconLeft: <WarningSolidIcon />
+    iconLeft: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.warning.solid} />
+    )
   }
 } satisfies Story
 
@@ -410,14 +389,18 @@ export const WarningSolidLeftIconLoading = {
 export const WarningSolidRightIcon = {
   args: {
     ...WarningSolid.args,
-    iconRight: <WarningSolidIcon />
+    iconRight: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.warning.solid} />
+    )
   }
 } satisfies Story
 
 export const WarningSolidRightIconCompact = {
   args: {
     ...WarningSolid.args,
-    iconRight: <WarningSolidIcon size="sm" />,
+    iconRight: (
+      <Icon size="sm" svg={ChevronRight} theme={iconTheme.warning.solid} />
+    ),
     size: 'co'
   }
 } satisfies Story
@@ -439,7 +422,9 @@ export const WarningSolidRightIconLoading = {
 export const WarningOutlinedLeftIcon = {
   args: {
     ...WarningOutlined.args,
-    iconLeft: <WarningOutlinedIcon />
+    iconLeft: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.warning.solid} />
+    )
   }
 } satisfies Story
 
@@ -460,14 +445,18 @@ export const WarningOutlinedLeftIconLoading = {
 export const WarningOutlinedRightIcon = {
   args: {
     ...WarningOutlined.args,
-    iconRight: <WarningOutlinedIcon />
+    iconRight: (
+      <Icon size="md" svg={ChevronRight} theme={iconTheme.warning.outlined} />
+    )
   }
 } satisfies Story
 
 export const WarningOutlinedRightIconCompact = {
   args: {
     ...WarningOutlined.args,
-    iconRight: <WarningOutlinedIcon size="sm" />,
+    iconRight: (
+      <Icon size="sm" svg={ChevronRight} theme={iconTheme.warning.outlined} />
+    ),
     size: 'co'
   }
 } satisfies Story

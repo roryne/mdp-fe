@@ -116,14 +116,9 @@ export const ETypographyTokens = {
   h1: ETypographyTokenProps,
   h2: ETypographyTokenProps,
   h3: ETypographyTokenProps,
-  h4: ETypographyTokenProps,
-  h5: ETypographyTokenProps,
-  h6: ETypographyTokenProps,
 
   // Body text
-  bodyLarge: ETypographyTokenProps,
   body: ETypographyTokenProps,
-  bodySmall: ETypographyTokenProps,
 
   // Subtitles / supporting text
   subtitle1: ETypographyTokenProps,
@@ -137,13 +132,12 @@ export const ETypographyTokens = {
   // Decorative / auxiliary
   caption: ETypographyTokenProps, // annotations under content
   overline: ETypographyTokenProps, // all-caps labels above headings
-  small: ETypographyTokenProps, // smaller emphasis text
   code: ETypographyTokenProps // monospace / inline code
 } as const
 
-type TTypographyGroup = keyof typeof ETypographyTokens
+export type TTypographyVariant = keyof typeof ETypographyTokens
 type TTypographyProps = (typeof ETypographyTokenProps)[number]
-type TTypographyToken = Record<TTypographyGroup, TTypographyProps>
+type TTypographyToken = Record<TTypographyVariant, TTypographyProps>
 
 export const ETokens = {
   Color: EColorTokens,

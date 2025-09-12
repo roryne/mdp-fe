@@ -7,19 +7,24 @@ export type TIconTheme = Readonly<{
 }>
 
 type TIconCommonProps = Readonly<{
-  svg: FC<
-    SVGProps<SVGSVGElement> & {
-      title?: string
-      titleId?: string
-      desc?: string
-      descId?: string
-    }
-  >
-  size?: 'lg' | 'md' | 'sm'
-  theme?: TIconTheme
+  svg?:
+    | FC<
+        SVGProps<SVGSVGElement> & {
+          title?: string
+          titleId?: string
+          desc?: string
+          descId?: string
+        }
+      >
+    | undefined
+  size?: 'lg' | 'md' | 'sm' | undefined
+  theme?: TIconTheme | undefined
 }>
 
-export type TDecorativeIconProps = TIconCommonProps
+export type TDecorativeIconProps = Readonly<{
+  className?: HTMLProps<SVGElement>['className']
+}> &
+  TIconCommonProps
 export type TInteractiveIconProps = Readonly<{
   label: string
   tabIndex?: HTMLProps<SVGElement>['tabIndex']

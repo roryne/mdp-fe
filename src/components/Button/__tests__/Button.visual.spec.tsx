@@ -3,11 +3,10 @@ import { expect, test } from '@playwright/experimental-ct-react'
 import Button from '..'
 import { scenarios } from './common'
 
-const label = 'Button'
+const text = 'Button'
 const tags = ['@component', '@button', '@visual']
 
-// Set default viewport for all tests in this file
-test.use({ viewport: { height: 144, width: 288 } })
+test.use({ viewport: { height: 120, width: 240 } })
 
 test.beforeEach(async ({ page }) => {
   await page.addStyleTag({
@@ -33,16 +32,22 @@ test.describe('Visual', () => {
           <main>
             <h1>Button</h1>
             <section style={{ padding: '1rem 2rem' }}>
-              <Button {...scenario.props} label={label} />
+              <Button {...scenario.props} text={text} />
             </section>
           </main>
         )
 
-        if (scenario.props.iconLeft !== undefined) {
+        if (
+          scenario.props.iconLeft !== undefined &&
+          scenario.props.isLoading === false
+        ) {
           await expect(page.getByTestId('icon-left')).toBeVisible()
         }
 
-        if (scenario.props.iconRight !== undefined) {
+        if (
+          scenario.props.iconRight !== undefined &&
+          scenario.props.isLoading === false
+        ) {
           await expect(page.getByTestId('icon-right')).toBeVisible()
         }
 
@@ -54,9 +59,7 @@ test.describe('Visual', () => {
   }
 
   for (const scenario of scenarios.all) {
-    // Cannot focus in these states so tests are useless
-    if (scenario.props.disabled || scenario.props.isLoading) return
-
+    if (scenario.props.disabled === true) continue
     test(
       `focus | ${scenario.title}`,
       { tag: tags },
@@ -65,18 +68,24 @@ test.describe('Visual', () => {
           <main>
             <h1>Button</h1>
             <section style={{ padding: '1rem 2rem' }}>
-              <Button {...scenario.props} label={label} />
+              <Button {...scenario.props} text={text} />
             </section>
           </main>
         )
 
         await page.getByRole('button').focus()
 
-        if (scenario.props.iconLeft !== undefined) {
+        if (
+          scenario.props.iconLeft !== undefined &&
+          scenario.props.isLoading === false
+        ) {
           await expect(page.getByTestId('icon-left')).toBeVisible()
         }
 
-        if (scenario.props.iconRight !== undefined) {
+        if (
+          scenario.props.iconRight !== undefined &&
+          scenario.props.isLoading === false
+        ) {
           await expect(page.getByTestId('icon-right')).toBeVisible()
         }
 
@@ -88,9 +97,6 @@ test.describe('Visual', () => {
   }
 
   for (const scenario of scenarios.all) {
-    // Cannot hover in these states so tests are useless
-    if (scenario.props.disabled || scenario.props.isLoading) return
-
     test(
       `hover | ${scenario.title}`,
       { tag: tags },
@@ -99,18 +105,24 @@ test.describe('Visual', () => {
           <main>
             <h1>Button</h1>
             <section style={{ padding: '1rem 2rem' }}>
-              <Button {...scenario.props} label={label} />
+              <Button {...scenario.props} text={text} />
             </section>
           </main>
         )
 
-        await page.getByRole('button').hover()
+        await page.getByRole('button').hover({ force: true })
 
-        if (scenario.props.iconLeft !== undefined) {
+        if (
+          scenario.props.iconLeft !== undefined &&
+          scenario.props.isLoading === false
+        ) {
           await expect(page.getByTestId('icon-left')).toBeVisible()
         }
 
-        if (scenario.props.iconRight !== undefined) {
+        if (
+          scenario.props.iconRight !== undefined &&
+          scenario.props.isLoading === false
+        ) {
           await expect(page.getByTestId('icon-right')).toBeVisible()
         }
 

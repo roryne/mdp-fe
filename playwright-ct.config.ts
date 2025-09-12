@@ -10,11 +10,11 @@ const dirname =
 export default defineConfig({
   testDir: 'src/components',
   testIgnore: ['**/__tests__/*.{test,stories}.{ts,tsx}'],
-  timeout: 2 * 1000,
+  timeout: 1000,
   expect: {
-    timeout: 1 * 1000,
+    timeout: 500,
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.1
+      maxDiffPixelRatio: 0.03
     }
   },
   fullyParallel: true,

@@ -2,16 +2,18 @@ import type {
   ButtonHTMLAttributes,
   HTMLAttributes,
   ReactElement,
+  ReactNode,
   Ref
 } from 'react'
 
-import { EButton } from './enums'
+import type { TTheme } from '@/theme/types'
+
 import type { TDecorativeIcon, TIconTheme } from '../Icon/types'
 
 export type TButtonCustomProps = {
-  label: string
+  text: string
   disabled?: boolean | undefined
-  fill?: 'outlined' | 'solid'
+  fill?: TTheme['fill'] | undefined
   iconLeft?:
     | ReactElement<HTMLSpanElement, 'span'> // for testing
     | ReactElement<TDecorativeIcon>
@@ -20,10 +22,10 @@ export type TButtonCustomProps = {
     | ReactElement<HTMLSpanElement, 'span'> // for testing
     | ReactElement<TDecorativeIcon>
     | undefined
-  isLoading?: boolean
-  palette?: (typeof EButton.Palette)[keyof typeof EButton.Palette]
+  isLoading?: boolean | undefined
+  palette?: TTheme['palette'] | undefined
   ref?: Ref<HTMLButtonElement> | undefined
-  size?: (typeof EButton.Size)[keyof typeof EButton.Size]
+  size?: TTheme['size'] | undefined
   theme?: TIconTheme
 }
 
@@ -31,6 +33,11 @@ export type TButtonProps = ButtonHTMLAttributes<
   Omit<HTMLButtonElement, 'style'>
 > &
   TButtonCustomProps
+
+export type TButtonIconProps = Readonly<{
+  className?: string
+  icon: ReactNode
+}>
 
 export type TButtonSpinnerProps = HTMLAttributes<HTMLSpanElement> & {
   shouldShow: boolean

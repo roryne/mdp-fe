@@ -1,10 +1,7 @@
 :root {
-  --button-scale-active: 0.99;
-  --button-scale-hover: 1.01;
-
-  --component-control-height-xs: var(--size-8);
-  --component-control-height-sm: var(--size-12);
-  --component-control-height-md: var(--size-16);
-  --component-control-height-lg: var(--size-20);
-  --component-control-height-xl: var(--size-24);
+  ---component-control-height-xs: var(--size-8);
+  ---component-control-height-sm: var(--size-12);
+  ---component-control-height-md: var(--size-16);
+  ---component-control-height-lg: var(--size-20);
+  ---component-control-height-xl: var(--size-24);
 }

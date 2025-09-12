@@ -1,0 +1,128 @@
+.typography {
+  &--h1 {
+    border: 1px solid red;
+    font-family: var(--font-heading);
+    font-size: var(--typography-h1-size);
+    font-weight: var(--typography-h1-weight);
+    line-height: var(--typography-h1-line-height);
+    letter-spacing: var(--typography-h1-letter-spacing);
+  }
+
+  &--h2 {
+    border: 1px solid red;
+    font-family: var(--font-heading);
+    font-size: var(--typography-h2-size);
+    font-weight: var(--typography-h2-weight);
+    line-height: var(--typography-h2-line-height);
+    letter-spacing: var(--typography-h2-letter-spacing);
+  }
+
+  &--h3 {
+    border: 1px solid red;
+    font-family: var(--font-heading);
+    font-size: var(--typography-h3-size);
+    font-weight: var(--typography-h3-weight);
+    line-height: var(--typography-h3-line-height);
+    letter-spacing: var(--typography-h3-letter-spacing);
+  }
+
+  &--body {
+    &--lg {
+      border: 1px solid red;
+      font-family: var(--font-body);
+      font-size: var(--typography-body-lg-size);
+      font-weight: var(--typography-body-lg-weight);
+      line-height: var(--typography-body-lg-line-height);
+      letter-spacing: var(--typography-body-lg-letter-spacing);
+    }
+
+    &--md {
+      border: 1px solid red;
+      font-family: var(--font-body);
+      font-size: var(--typography-body-md-size);
+      font-weight: var(--typography-body-md-weight);
+      line-height: var(--typography-body-md-line-height);
+      letter-spacing: var(--typography-body-md-letter-spacing);
+    }
+
+    &--sm {
+      border: 1px solid red;
+      font-family: var(--font-body);
+      font-size: var(--typography-body-sm-size);
+      font-weight: var(--typography-body-sm-weight);
+      line-height: var(--typography-body-sm-line-height);
+      letter-spacing: var(--typography-body-sm-letter-spacing);
+    }
+  }
+
+  &--button {
+    &.co {
+      font-family: var(--font-body);
+      font-size: var(--typography-button-co-size);
+      font-weight: var(--typography-button-co-weight);
+      letter-spacing: var(--typography-button-co-letter-spacing);
+      line-height: var(--typography-button-co-line-height);
+    }
+    &.rg {
+      font-family: var(--font-body);
+      font-size: var(--typography-button-rg-size);
+      font-weight: var(--typography-button-rg-weight);
+      letter-spacing: var(--typography-button-rg-letter-spacing);
+      line-height: var(--typography-button-rg-line-height);
+    }
+  }
+
+  &--caption {
+    border: 1px solid red;
+    font-family: var(--font-body);
+    font-size: var(--typography-caption-size);
+    font-weight: var(--typography-caption-weight);
+    line-height: var(--typography-caption-line-height);
+    letter-spacing: var(--typography-caption-letter-spacing);
+  }
+
+  &--overline {
+    border: 1px solid red;
+    font-family: var(--font-body);
+    font-size: var(--typography-overline-size);
+    font-weight: var(--typography-overline-weight);
+    line-height: var(--typography-overline-line-height);
+    letter-spacing: var(--typography-overline-letter-spacing);
+    text-transform: uppercase;
+  }
+
+  &--code {
+    border: 1px solid red;
+    font-family: var(--font-mono);
+    font-size: var(--typography-monospace-size);
+    font-weight: var(--typography-monospace-weight);
+    line-height: var(--typography-monospace-line-height);
+    letter-spacing: var(--typography-monospace-letter-spacing);
+  }
+}
+
+.typography--label {
+  &.co {
+    font-family: var(--font-body);
+    font-size: var(--typography-label-co-size);
+    font-weight: var(--typography-label-co-weight);
+    letter-spacing: var(
+      --typography-label-co-letter-spacing,
+      -0.05em
+    ); /* usually wider */
+    line-height: var(--typography-label-co-line-height);
+    text-transform: uppercase;
+  }
+
+  &.rg {
+    font-family: var(--font-body);
+    font-size: var(--typography-label-rg-size);
+    font-weight: var(--typography-label-rg-weight);
+    letter-spacing: var(
+      --typography-label-rg-letter-spacing,
+      0.05em
+    ); /* usually wider */
+    line-height: var(--typography-label-rg-line-height);
+    text-transform: uppercase;
+  }
+}
