@@ -1,14 +1,20 @@
 import { defineConfig, devices } from '@playwright/experimental-ct-react'
-import viteConfig from './vite.config'
+import * as path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const dirname =
+  typeof __dirname !== 'undefined' ? __dirname : (
+    path.dirname(fileURLToPath(import.meta.url))
+  )
 
 export default defineConfig({
   testDir: 'src/components',
   testIgnore: ['**/__tests__/*.{test,stories}.{ts,tsx}'],
-  timeout: 2 * 1000,
+  timeout: 1000,
   expect: {
-    timeout: 1 * 1000,
+    timeout: 500,
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.1
+      maxDiffPixelRatio: 0.03
     }
   },
   fullyParallel: true,
@@ -21,14 +27,19 @@ export default defineConfig({
     baseURL: 'http://localhost:3100',
     ctPort: 3100,
     ctViteConfig: {
+      assetsInclude: ['**/*.svg?react'],
+      css: {
+        postcss: './postcss.config.mts'
+      },
       resolve: {
-        ...viteConfig.resolve
+        alias: {
+          '@': path.resolve(dirname, 'src')
+        }
       }
     },
     launchOptions: {
       args: ['--font-render-hinting=none']
-    },
-    trace: 'on-first-retry'
+    }
   },
   projects: [
     {

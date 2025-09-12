@@ -1,27 +1,12 @@
-// utils/html/classNames.ts
+export function stripClasses(el: Node): string {
+  const clone = el.cloneNode(true)
 
-/**
- * Toggle a class name based on a boolean condition
- */
-export function conditionalClass(
-  className: string,
-  condition: boolean
-): string {
-  return condition ? className : ''
-}
+  if (!(clone instanceof HTMLElement)) return ''
 
-/**
- * Combine multiple classes
- */
-export function mergeClasses(
-  ...classes: (string | false | null | undefined)[]
-): string {
-  return classes.filter(Boolean).join(' ')
-}
+  clone.removeAttribute('class')
 
-/**
- * Ensure a string is a valid CSS identifier (basic sanitization)
- */
-export function sanitizeClassName(name: string): string {
-  return name.replace(/[^\w-]/g, '_')
+  clone.querySelectorAll('*').forEach((node) => {
+    node.removeAttribute('class')
+  })
+  return clone.outerHTML
 }

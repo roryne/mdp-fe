@@ -7,71 +7,219 @@ import meta, * as ButtonStories from './Button.stories'
 
 # Button
 
-The `Button` component is a flexible, accessible, and customizable UI element designed for a wide range of interactive scenarios. It supports multiple **sizes** (`Small`, `Medium`, `Large`) and **variants** (`Primary`, `Secondary`, `Warning`), optional **left and right icons**, and a **loading state**. The component handles proper focus management, `aria-*` attributes, and ref forwarding for integration with forms or higher-order components.
+The `Button` component is a flexible, accessible, and customizable UI element designed for a wide range of interactive scenarios.
+It supports two **sizes** (`Regular`, `Compact`) and **variants** (`Primary`, `Warning`), optional **left and right icons**,
+and a **loading state**. The component handles proper focus management, `aria-*` attributes, and ref forwarding for integration with forms
+or higher-order components.
 
 <Canvas of={ButtonStories.Base} />
 <Controls of={ButtonStories.Base} sort="requiredFirst" />
 
-## Icons
+## Tone
 
-<StorybookSection>
-  <StorybookExample>
-    <Story of={ButtonStories.PrimaryWithLeftIcon} />
-    <span>Left</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.PrimaryWithRightIcon} />
-    <span>Right</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.PrimaryWithBothIcons} />
-    <span>Both</span>
-  </StorybookExample>
-</StorybookSection>
+<div>
+  ### Primary
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.Primary} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+<div>
+  ### Warning
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.Warning} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+
+## Fill
+
+<div>
+  ### Solid
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolid} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolid} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+<div>
+  ### Outlined
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlined} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlined} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+
+## Icon
+
+<div>
+  ### Primary
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidLeftIcon} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedLeftIcon} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidRightIcon} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedRightIcon} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+
+<div>
+  ### Warning
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidLeftIcon} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedLeftIcon} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidRightIcon} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedRightIcon} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
 
 ## Sizes
 
-<StorybookSection>
-  <StorybookExample>
-    <Story of={ButtonStories.SmallPrimary} />
-    <span>Small</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.MediumPrimary} />
-    <span>Medium</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.LargePrimary} />
-    <span>Large</span>
-  </StorybookExample>
-</StorybookSection>
+<div>
+  ### Solid - Compact
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidRightIconCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidRightIconCompact} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
+<div>
+  ### Outlined - Compact
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedRightIconCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedCompact} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedRightIconCompact} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
 
-## States
+## State
 
-<StorybookSection>
-  <StorybookExample>
-    <Story of={ButtonStories.PrimaryDisabled} />
-    <span>Disabled</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.PrimaryLoading} />
-    <span>Loading</span>
-  </StorybookExample>
-</StorybookSection>
+<div>
+  ### Disabled
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidLeftIconDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedLeftIconDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidRightIconDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedRightIconDisabled} />
+    </StorybookExample>
+  </StorybookSection>
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidLeftIconDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedLeftIconDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidRightIconDisabled} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedRightIconDisabled} />
+    </StorybookExample>
+  </StorybookSection>
+</div>
 
-## Variants
-
-<StorybookSection>
-  <StorybookExample>
-    <Story of={ButtonStories.Primary} />
-    <span>Primary</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.Secondary} />
-    <span>Secondary</span>
-  </StorybookExample>
-  <StorybookExample>
-    <Story of={ButtonStories.Warning} />
-    <span>Warning</span>
-  </StorybookExample>
-</StorybookSection>
+<div>
+  ### Loading
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidLeftIconLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedLeftIconLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimarySolidRightIconLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.PrimaryOutlinedRightIconLoading} />
+    </StorybookExample>
+  </StorybookSection>
+  <StorybookSection>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidLeftIconLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedLeftIconLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningSolidRightIconLoading} />
+    </StorybookExample>
+    <StorybookExample>
+      <Story of={ButtonStories.WarningOutlinedRightIconLoading} />
+    </StorybookExample>
+  </StorybookSection>
+</div>

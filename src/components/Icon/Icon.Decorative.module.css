@@ -1,0 +1,5 @@
+Svg {
+  align-self: center;
+  color: var(--icon-color, currentColor);
+  outline: none;
+}

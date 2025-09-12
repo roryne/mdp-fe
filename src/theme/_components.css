@@ -1,0 +1,7 @@
+:root {
+  ---component-control-height-xs: var(--size-8);
+  ---component-control-height-sm: var(--size-12);
+  ---component-control-height-md: var(--size-16);
+  ---component-control-height-lg: var(--size-20);
+  ---component-control-height-xl: var(--size-24);
+}

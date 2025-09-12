@@ -1,0 +1,43 @@
+.co {
+  --button-border-radius: var(---radius-2);
+
+  --button-padding: 0 var(---size-4);
+
+  --button-font-size: var(---typography-button-co-size);
+  --button-font-weight: var(---typography-button-co-weight);
+  --button-height: var(---component-control-height-sm);
+  --button-letter-spacing: var(---typography-button-co-letter-spacing);
+  --button-line-height: var(---typography-button-co-line-height);
+
+  --button-shadow-hover: var(---shadow-xs);
+
+  --button-spinner-height: var(---size-8);
+  --button-spinner-width: var(---size-8);
+}
+.rg {
+  --button-border-radius: var(---radius-4);
+
+  --button-padding: var(---size-2) var(---size-8);
+
+  --button-font-size: var(---typography-button-rg-size);
+  --button-font-weight: var(---typography-button-rg-weight);
+  --button-gap: var(---button-no-icon-gap);
+  --button-height: var(---component-control-height-md);
+  --button-letter-spacing: var(---typography-button-rg-letter-spacing);
+  --button-line-height: var(---typography-button-rg-line-height);
+
+  --button-shadow-hover: var(---shadow-sm);
+
+  --button-spinner-height: var(---size-10);
+  --button-spinner-width: var(---size-10);
+}
+.with-icon {
+  &.co {
+    --button-gap: var(---size-3);
+  }
+  &.rg {
+    --button-padding: var(---size-2) var(---size-6);
+
+    --button-gap: var(---size-7);
+  }
+}
