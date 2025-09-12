@@ -1,12 +1,12 @@
 .sb-container--section {
   display: flex;
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: var(---size-16);
+  padding: var(---size-8) 0;
 }
 
 .sb-container--example {
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(---size-4);
 }

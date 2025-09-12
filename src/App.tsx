@@ -1,35 +1,26 @@
-import './global/styles.css'
+import './theme/styles.css'
 
-import { useCallback, useState } from 'react'
-
-import { RightChevronWhite } from '@/assets'
-import { Button, Input } from '@/components'
+import Chevron from '@/assets/chevron/right.svg?react'
+import { Button, Icon } from '@/components'
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleClick = useCallback(() => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1000) // Simulate a network request
-  }, [])
-
   return (
-    <div
+    <main
       style={{
+        alignItems: 'center',
         display: 'flex',
-        gap: '3rem',
-        padding: '2rem'
+        flexDirection: 'column',
+        gap: '2rem',
+        padding: '1rem 2rem'
       }}
     >
-      <Button
-        iconRight={<img alt="Chevron" src={RightChevronWhite} width={16} />}
-        isLoading={isLoading}
-        label="Button"
-        onClick={handleClick}
-      />
-      <Input.Text label="Label" />
-    </div>
+      <Button text="Button" />
+      <Button iconRight={<Icon svg={Chevron} />} text="Button" />
+      <Button isLoading text="Button" />
+      <Button iconRight={<Icon svg={Chevron} />} isLoading text="Button" />
+      <Button iconRight={<span>Right</span>} text="Button" />
+      <Button size="co" text="Button" />
+      <Button isLoading size="co" text="Button" />
+    </main>
   )
 }

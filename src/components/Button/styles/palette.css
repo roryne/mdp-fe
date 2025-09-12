@@ -1,0 +1,11 @@
+.primary {
+  --button-color: var(---colors-blue-450);
+  --button-color-active: var(---colors-blue-350);
+  --button-color-hover: var(---colors-blue-400);
+}
+
+.warning {
+  --button-color: var(---colors-red-450);
+  --button-color-active: var(---colors-red-350);
+  --button-color-hover: var(---colors-red-400);
+}

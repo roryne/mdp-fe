@@ -1,0 +1,28 @@
+/* Interactive Icon */
+.ii {
+  display: flex;
+  align-items: center;
+  color: var(--icon-color, currentColor);
+  justify-content: center;
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active,
+    &:focus-visible {
+      border-radius: var(--radius-2);
+      outline: var(--size-1) dotted var(--icon-focus);
+      outline-offset: var(--size-1);
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    svg {
+      outline: none;
+    }
+  }
+}

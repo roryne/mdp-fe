@@ -1,42 +1,44 @@
-import type * as React from 'react'
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  ReactElement,
+  ReactNode,
+  Ref
+} from 'react'
 
-import { EButton } from './enums'
+import type { TTheme } from '@/theme/types'
 
-export type TButtonBaseProps = {
+import type { TDecorativeIcon, TIconTheme } from '../Icon/types'
+
+export type TButtonCustomProps = {
+  text: string
   disabled?: boolean | undefined
-  iconLeft?: React.ReactNode
-  iconRight?: React.ReactNode
-  isLoading?: boolean
-  size?: (typeof EButton.Size)[keyof typeof EButton.Size]
-  label: string
-  variant?: (typeof EButton.Variant)[keyof typeof EButton.Variant]
+  fill?: TTheme['fill'] | undefined
+  iconLeft?:
+    | ReactElement<HTMLSpanElement, 'span'> // for testing
+    | ReactElement<TDecorativeIcon>
+    | undefined
+  iconRight?:
+    | ReactElement<HTMLSpanElement, 'span'> // for testing
+    | ReactElement<TDecorativeIcon>
+    | undefined
+  isLoading?: boolean | undefined
+  palette?: TTheme['palette'] | undefined
+  ref?: Ref<HTMLButtonElement> | undefined
+  size?: TTheme['size'] | undefined
+  theme?: TIconTheme
 }
 
-export type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  TButtonBaseProps
+export type TButtonProps = ButtonHTMLAttributes<
+  Omit<HTMLButtonElement, 'style'>
+> &
+  TButtonCustomProps
 
-export type TButtonIconProps = React.HTMLAttributes<HTMLSpanElement> & {
-  icon: React.ReactNode
-  isHidden: boolean
-}
+export type TButtonIconProps = Readonly<{
+  className?: string
+  icon: ReactNode
+}>
 
-export type TButtonSpinnerProps = React.HTMLAttributes<HTMLSpanElement> & {
+export type TButtonSpinnerProps = HTMLAttributes<HTMLSpanElement> & {
   shouldShow: boolean
-}
-
-export type TButton = React.ForwardRefExoticComponent<
-  React.RefAttributes<HTMLButtonElement> & TButtonProps
-> & {
-  Icon: React.FC<TButtonIconProps>
-  Spinner: React.FC<TButtonSpinnerProps>
-}
-
-export type TTestTitleProps = {
-  props: TButtonBaseProps
-  ignoredKeys?: string[]
-  // ignoredKeys?: (keyof TButtonBaseProps)[]
-  keysFromPartialMatch?: string[]
-  // keysFromPartialMatch?: string[]
-  returnKeys?: string[]
-  // returnKeys?: (keyof TButtonBaseProps)[]
 }

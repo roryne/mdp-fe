@@ -1,0 +1,23 @@
+.outlined,
+.solid {
+  --button-outline: var(---outline-width-medium) solid var(--button-color);
+  --button-outline-offset: var(---size-1);
+}
+.solid {
+  --button-border: var(---border-width-thin) solid transparent;
+
+  --button-bg-slot: var(--button-color);
+  --button-bg-slot-active: var(--button-color-active);
+  --button-bg-slot-hover: var(--button-color-hover);
+
+  --button-text-slot: var(---colors-bw-1000);
+}
+.outlined {
+  --button-border: var(---border-width-thin) solid var(--button-color);
+
+  --button-bg-slot: var(---colors-bw-1000);
+  --button-bg-slot-active: var(---colors-bw-950);
+  --button-bg-slot-hover: var(---colors-bw-1000);
+
+  --button-text-slot: var(--button-color);
+}

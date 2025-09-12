@@ -1,58 +1,64 @@
-import { forwardRef } from 'react'
+import clsx from 'clsx'
 
-import { conditionalClass, mergeClasses } from '@/utils/html'
+import { Spinner, Typography } from '@/components'
+import { ETheme } from '@/theme/enums'
+import { mapIconThemeToStyle } from '@/utils/theme/icons'
 
-import Icon from './Button.Icon'
-import Spinner from './Button.Spinner'
-import styles from './Button.module.css'
-import { EButton } from './enums'
-import type { TButton, TButtonProps } from './types'
+import ButtonIcon from './Button.Icon'
+import styles from './styles/index.module.css'
+import type { TButtonProps } from './types'
 
-const ButtonBase = forwardRef<HTMLButtonElement, TButtonProps>(
-  (
-    {
-      label,
-      iconLeft = null,
-      iconRight = null,
-      isLoading = false,
-      size = EButton.Size.Medium,
-      variant = EButton.Variant.Primary,
-      ...restProps
-    },
-    ref
-  ) => {
-    const classes = mergeClasses(
-      styles.button,
-      styles[`btn--${variant}`],
-      styles[`btn--${size}`],
-      restProps.className
-    )
+const initialTheme = Object.freeze({
+  default: '',
+  focus: '',
+  hover: ''
+})
 
-    return (
-      <button
-        aria-busy={isLoading || undefined}
-        className={classes}
-        disabled={restProps.disabled ?? isLoading}
-        ref={ref}
-        {...restProps}
-      >
-        <Icon data-test="btn--icon-left" icon={iconLeft} isHidden={isLoading} />
-        <span className={conditionalClass(styles.hidden, isLoading)}>
-          {label}
-        </span>
-        <Spinner shouldShow={isLoading} />
-        <Icon
-          data-test="btn--icon-right"
-          icon={iconRight}
-          isHidden={isLoading}
-        />
-      </button>
-    )
+const Button = ({
+  fill = ETheme.Fill.Solid,
+  iconLeft,
+  iconRight,
+  isLoading = false,
+  text,
+  palette = ETheme.Palette.Primary,
+  ref,
+  size = ETheme.Size.Component.Regular,
+  theme = initialTheme,
+  ...props
+}: TButtonProps) => {
+  const classes = {
+    button: clsx(styles.button, {
+      [styles[fill]]: fill,
+      [styles[size]]: size,
+      [styles[palette]]: palette,
+      [styles['with-icon']]: Boolean(iconLeft) || Boolean(iconRight)
+    }),
+    icon: clsx(styles.icon, { [styles.hidden]: isLoading }),
+    spinner: clsx(styles.spinner),
+    text: clsx(styles.text, { [styles.hidden]: isLoading })
   }
-)
 
-ButtonBase.displayName = 'Button'
+  return (
+    <button
+      aria-busy={isLoading || undefined}
+      aria-label={isLoading ? text : undefined}
+      className={classes.button}
+      disabled={props.disabled ?? isLoading}
+      ref={ref}
+      style={mapIconThemeToStyle(theme)}
+      type={props.type ?? 'button'}
+      {...props}
+    >
+      <ButtonIcon className={classes.icon} icon={iconLeft} />
+      <Typography className={classes.text} size={size} variant="button">
+        {text}
+      </Typography>
+      <Spinner className={classes.spinner} shouldShow={isLoading} />
+      <ButtonIcon className={classes.icon} icon={iconRight} />
+    </button>
+  )
+}
 
-const Button: TButton = Object.assign(ButtonBase, { Icon, Spinner })
+Button.displayName = 'Button'
 
 export default Button

@@ -1,75 +1,135 @@
-import { test, expect } from '@playwright/experimental-ct-react'
-
-import { getTitleFromCases } from '@/utils/test/pageHelpers'
+import { expect, test } from '@playwright/experimental-ct-react'
 
 import Button from '..'
-import { allCases, defaultProps } from './common'
+import { scenarios } from './common'
 
-// Set default viewport for all tests in this file
-test.use({ viewport: { height: 100, width: 200 } })
+const text = 'Button'
+const tags = ['@component', '@button', '@visual']
 
-test.describe(
-  'Component/Button',
-  {
-    tag: ['@component', '@button', '@happy', '@visual']
-  },
-  () => {
-    test.beforeEach(async ({ page }) => {
-      await page.addStyleTag({
-        content: `
-                * {
-                  font-family: Arial, sans-serif !important;
-                }
-              `
-      })
-    })
+test.use({ viewport: { height: 120, width: 240 } })
 
-    for (const props of allCases) {
-      const title = getTitleFromCases({
-        ignoredKeys: ['label'],
-        keysFromPartialMatch: ['icon'],
-        props,
-        returnKeys: ['disabled', 'isLoading']
-      })
+test.beforeEach(async ({ page }) => {
+  await page.addStyleTag({
+    content: `
+      * {
+        font-family: sans-serif !important;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+      }
+    `
+  })
 
-      // Visual tests for all variants, sizes, and icon combinations
-      test(title, async ({ mount }) => {
-        const button = await mount(<Button {...props} />)
+  await page.evaluateHandle(async () => document.fonts.ready)
+})
 
-        // Screenshot test: disables animations to avoid flakiness
-        await expect(button).toHaveScreenshot({
+test.describe('Visual', () => {
+  for (const scenario of scenarios.all) {
+    test(
+      `default | ${scenario.title}`,
+      { tag: tags },
+      async ({ mount, page }) => {
+        await mount(
+          <main>
+            <h1>Button</h1>
+            <section style={{ padding: '1rem 2rem' }}>
+              <Button {...scenario.props} text={text} />
+            </section>
+          </main>
+        )
+
+        if (
+          scenario.props.iconLeft !== undefined &&
+          scenario.props.isLoading === false
+        ) {
+          await expect(page.getByTestId('icon-left')).toBeVisible()
+        }
+
+        if (
+          scenario.props.iconRight !== undefined &&
+          scenario.props.isLoading === false
+        ) {
+          await expect(page.getByTestId('icon-right')).toBeVisible()
+        }
+
+        await expect(page.locator('body')).toHaveScreenshot({
           animations: 'disabled'
         })
-      })
-    }
-
-    test('correctly renders disabled button', async ({ mount }) => {
-      const button = await mount(
-        <Button disabled={true} label={defaultProps.label} />
-      )
-
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
-    })
-
-    test('correctly renders loading button', async ({ mount }) => {
-      const button = await mount(
-        <Button isLoading={true} label={defaultProps.label} />
-      )
-
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
-    })
-
-    test('correctly renders focused button', async ({ mount, page }) => {
-      const button = await mount(
-        <div style={{ padding: '2rem' }}>
-          <Button label={defaultProps.label} />
-        </div>
-      )
-
-      // Use keyboard to focus the button
-      await page.keyboard.press('Tab')
-
-      await expect(button).toHaveScreenshot({ animations: 'disabled' })
-    })
+      }
+    )
   }
-)
+
+  for (const scenario of scenarios.all) {
+    if (scenario.props.disabled === true) continue
+    test(
+      `focus | ${scenario.title}`,
+      { tag: tags },
+      async ({ mount, page }) => {
+        await mount(
+          <main>
+            <h1>Button</h1>
+            <section style={{ padding: '1rem 2rem' }}>
+              <Button {...scenario.props} text={text} />
+            </section>
+          </main>
+        )
+
+        await page.getByRole('button').focus()
+
+        if (
+          scenario.props.iconLeft !== undefined &&
+          scenario.props.isLoading === false
+        ) {
+          await expect(page.getByTestId('icon-left')).toBeVisible()
+        }
+
+        if (
+          scenario.props.iconRight !== undefined &&
+          scenario.props.isLoading === false
+        ) {
+          await expect(page.getByTestId('icon-right')).toBeVisible()
+        }
+
+        await expect(page.locator('body')).toHaveScreenshot({
+          animations: 'disabled'
+        })
+      }
+    )
+  }
+
+  for (const scenario of scenarios.all) {
+    test(
+      `hover | ${scenario.title}`,
+      { tag: tags },
+      async ({ mount, page }) => {
+        await mount(
+          <main>
+            <h1>Button</h1>
+            <section style={{ padding: '1rem 2rem' }}>
+              <Button {...scenario.props} text={text} />
+            </section>
+          </main>
+        )
+
+        await page.getByRole('button').hover({ force: true })
+
+        if (
+          scenario.props.iconLeft !== undefined &&
+          scenario.props.isLoading === false
+        ) {
+          await expect(page.getByTestId('icon-left')).toBeVisible()
+        }
+
+        if (
+          scenario.props.iconRight !== undefined &&
+          scenario.props.isLoading === false
+        ) {
+          await expect(page.getByTestId('icon-right')).toBeVisible()
+        }
+
+        await expect(page.locator('body')).toHaveScreenshot({
+          animations: 'disabled'
+        })
+      }
+    )
+  }
+})

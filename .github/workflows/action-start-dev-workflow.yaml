@@ -99,7 +99,7 @@ jobs:
 
       - name: Run @sanity tests for PRs
         if: ${{ github.event_name == 'pull_request' }}
-        run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }}
+        run: npm run pw:ct -- --grep @sanity --only-changed=${{ steps.diff-base.outputs.base }} -x
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
